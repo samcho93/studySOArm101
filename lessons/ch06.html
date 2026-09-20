@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>06. LeRobot 개발 환경 설치 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="conda/uv 환경, PyTorch·ffmpeg·feetech SDK, Windows/WSL/Ubuntu/Jetson별 주의사항.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" class="active" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch06">
+  <div class="lesson-head">
+    <div class="crumbs">PART 2 서보 설정과 환경 구축 &middot; 약 30분</div>
+    <h1><span class="lesson-no">06</span>LeRobot 개발 환경 설치</h1>
+    <p class="lede">conda/uv 환경, PyTorch·ffmpeg·feetech SDK, Windows/WSL/Ubuntu/Jetson별 주의사항.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="설치-전략">설치 전략<a class="anchor" href="#설치-전략">#</a></h2>
+<p>LeRobot은 기본 패키지를 <strong>가볍게</strong> 유지하고, 필요한 기능을 <strong>extras</strong>로 추가하는 구조입니다. SO-ARM101에 필요한 조합은 정해져 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>목적</th><th>필요한 extra</th></tr></thead><tbody><tr><td>실기 제어 (녹화·재생·캘리브레이션)</td><td><code>core_scripts</code> (= <code>dataset</code> + <code>hardware</code> + <code>viz</code>)</td></tr><tr><td><strong>Feetech 서보 제어</strong></td><td><code>feetech</code> ← <strong>SO-ARM101 필수</strong></td></tr><tr><td>정책 학습</td><td><code>training</code></td></tr><tr><td>SmolVLA / π0 등</td><td><code>smolvla</code>, <code>pi</code>, <code>diffusion</code></td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">원문 위키의 최소 조합</div><div class="callout-body"><p>원문 튜토리얼은 소스 클론 후 **<code>pip install -e &quot;.[feetech]&quot;</code>** 하나만 실행합니다. 이것으로 텔레오퍼레이션까지는 충분합니다. 데이터 녹화와 학습까지 하려면 <code>&quot;.[feetech,core_scripts,training]&quot;</code> 을 권장합니다.</p></div></div>
+<hr>
+<h2 id="공통-절차">공통 절차<a class="anchor" href="#공통-절차">#</a></h2>
+<h3 id="1-miniconda-miniforge-설치">1. Miniconda / Miniforge 설치<a class="anchor" href="#1-miniconda-miniforge-설치">#</a></h3>
+<ul><li>배포 페이지: <a href="https://www.anaconda.com/download" target="_blank" rel="noopener">anaconda.com/download</a></li><li>Windows 직접 다운로드: <code>https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe</code></li><li>Linux/macOS는 miniforge도 좋습니다.</li></ul>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">wget &quot;https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh&quot;
+bash Miniforge3-$(uname)-$(uname -m).sh</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">uv를 선호한다면</div><div class="callout-body"><p><code>conda</code> 대신 <code>uv</code>나 <code>venv</code>를 써도 됩니다. <strong>Python ≥ 3.12</strong>, <strong>PyTorch ≥ 2.10</strong> 을 만족하면 됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">uv python install 3.12
+uv venv --python 3.12</code></pre></div></div></div>
+<h3 id="2-가상환경-생성과-활성화">2. 가상환경 생성과 활성화<a class="anchor" href="#2-가상환경-생성과-활성화">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">conda create -y -n lerobot python=3.12
+conda activate lerobot</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">매번 활성화해야 합니다</div><div class="callout-body"><p>새 터미널을 열 때마다 <code>conda activate lerobot</code>을 실행해야 합니다. 이걸 빼먹어서 &quot;명령을 찾을 수 없음&quot; 오류를 겪는 경우가 가장 흔합니다.</p></div></div>
+<h3 id="3-ffmpeg-설치-영상-디코딩">3. ffmpeg 설치 (영상 디코딩)<a class="anchor" href="#3-ffmpeg-설치-영상-디코딩">#</a></h3>
+<p>LeRobot은 기본적으로 <strong>TorchCodec</strong>으로 영상을 디코딩하며, 이는 <code>ffmpeg</code>를 필요로 합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">conda install ffmpeg=7.1.1 -c conda-forge -y</code></pre></div>
+<p>설치 확인:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ffmpeg</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">버전을 왜 7.1.1로 고정하나</div><div class="callout-body"><p><code>conda install ffmpeg -c conda-forge</code>는 보통 ffmpeg 8.x(libsvtav1 인코더 포함)를 설치합니다. 하지만 torchcodec과 버전이 어긋나거나 <code>libsvtav1</code>이 빠지는 사례가 있어, 원문 튜토리얼은 <strong>7.1.1 고정</strong>을 권장합니다. <code>ffmpeg -encoders</code>로 <code>libsvtav1</code> 존재를 확인할 수 있습니다.</p>
+<p>PyTorch ≥ 2.10 (TorchCodec ≥ 0.10)부터는 시스템 ffmpeg에 동적 링크가 가능해서 <code>sudo apt install ffmpeg</code>로도 됩니다. 그 이전 버전은 반드시 conda 쪽 ffmpeg를 쓰세요.</p>
+<p>TorchCodec을 지원하지 않는 플랫폼(macOS Intel, Linux ARM, PyTorch &lt; 2.8인 Windows)에서는 LeRobot이 자동으로 <code>pyav</code>로 폴백하므로 ffmpeg 설치를 건너뛰어도 됩니다.</p></div></div>
+<h3 id="4-lerobot-소스-받기">4. LeRobot 소스 받기<a class="anchor" href="#4-lerobot-소스-받기">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">git clone https://github.com/huggingface/lerobot.git
+cd lerobot</code></pre></div>
+<h3 id="5-설치">5. 설치<a class="anchor" href="#5-설치">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install -e &quot;.[feetech]&quot;</code></pre></div>
+<p>데이터 녹화·학습까지 한 번에 하려면:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install -e &quot;.[feetech,core_scripts,training]&quot;</code></pre></div>
+<p>전부 설치하려면:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install -e &quot;.[all]&quot;</code></pre></div>
+<p>PyPI에서 바로 설치하는 방법도 있습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install &#x27;lerobot[feetech,core_scripts]&#x27;</code></pre></div>
+<h3 id="6-설치-검증">6. 설치 검증<a class="anchor" href="#6-설치-검증">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-info</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">import lerobot
+lerobot.__version__
+
+import torch
+torch.cuda.is_available()      # NVIDIA GPU가 있으면 True
+
+import scservo_sdk             # Feetech SDK. 오류 없이 import되면 OK</code></pre></div>
+<div class="callout callout-check"><div class="callout-title">성공 기준</div><div class="callout-body"><ul><li><code>lerobot-info</code> 가 버전과 환경 정보를 출력</li><li><code>import scservo_sdk</code> 가 오류 없음 ← <strong>Feetech extra가 제대로 설치된 증거</strong></li><li>(GPU 사용 시) <code>torch.cuda.is_available()</code> 이 <code>True</code></li></ul></div></div>
+<hr>
+<h2 id="플랫폼별-추가-사항">플랫폼별 추가 사항<a class="anchor" href="#플랫폼별-추가-사항">#</a></h2>
+<h3 id="ubuntu">Ubuntu<a class="anchor" href="#ubuntu">#</a></h3>
+<p>빌드 오류가 난다면 시스템 의존성을 먼저 설치하세요.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt-get install cmake build-essential python3-dev pkg-config \
+  libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev \
+  libswscale-dev libswresample-dev libavfilter-dev</code></pre></div>
+<p>시리얼 포트 권한은 <a href="../lessons/ch07.html">7장</a>에서 다룹니다.</p>
+<h3 id="windows">Windows<a class="anchor" href="#windows">#</a></h3>
+<ul><li>Miniconda 설치 시 <strong>&quot;Add to PATH&quot;</strong> 를 체크하거나, &quot;Anaconda Prompt&quot;를 사용하세요.</li><li>Windows에서는 <code>lerobot-record</code>의 <strong>키보드 원격조작</strong>이 동작하지만, WSL이나 헤드리스 환경에서는 제약이 있습니다.</li><li>CUDA는 PyPI 기본 휠이 Windows용 CUDA 빌드를 포함합니다. 별도 인덱스 지정이 보통 필요 없습니다.</li></ul>
+<div class="callout callout-tip"><div class="callout-title">Windows에서 ROS 2까지 하려면</div><div class="callout-body"><p>15~20장의 ROS 2 실습은 <strong>WSL2 + Ubuntu 22.04(Humble)</strong> 또는 <strong>Ubuntu 24.04(Jazzy)</strong> 를 권장합니다. WSL에서 USB 시리얼을 쓰려면 <code>usbipd-win</code>으로 장치를 WSL에 연결해야 합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">powershell</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-powershell">winget install usbipd
+usbipd list
+usbipd bind --busid &lt;BUSID&gt;
+usbipd attach --wsl --busid &lt;BUSID&gt;</code></pre></div></div></div>
+<h3 id="wsl-windows-subsystem-for-linux">WSL (Windows Subsystem for Linux)<a class="anchor" href="#wsl-windows-subsystem-for-linux">#</a></h3>
+<p>키보드 입력 처리를 위해 <code>evdev</code>가 추가로 필요합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">conda install evdev -c conda-forge</code></pre></div>
+<p>uv 사용 시:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install libevdev-dev
+uv pip install evdev</code></pre></div>
+<h3 id="macos">macOS<a class="anchor" href="#macos">#</a></h3>
+<ul><li>시리얼 장치 권한을 먼저 부여합니다.</li></ul>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">chmod 666 /dev/tty.*</code></pre></div>
+<ul><li>Apple Silicon에서는 학습 시 <code>--policy.device=mps</code>를 사용합니다.</li><li>키보드 원격조작은 <strong>시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용 / 입력 모니터링</strong> 권한을 터미널에 부여해야 동작합니다.</li></ul>
+<h3 id="jetson-orin-nano-nx">Jetson (Orin Nano / NX)<a class="anchor" href="#jetson-orin-nano-nx">#</a></h3>
+<ul><li>JetPack에 포함된 PyTorch를 쓰거나 NVIDIA가 배포하는 aarch64 휠을 설치하세요. PyPI의 기본 torch는 Jetson에서 동작하지 않습니다.</li><li>Linux ARM(aarch64)은 TorchCodec 미지원이므로 <code>pyav</code>로 자동 폴백됩니다.</li></ul>
+<hr>
+<h2 id="네트워크가-느릴-때-미러-설정-선택">네트워크가 느릴 때 — 미러 설정 (선택)<a class="anchor" href="#네트워크가-느릴-때-미러-설정-선택">#</a></h2>
+<p>중국 등 특정 지역에서 패키지 다운로드가 느릴 때 쓰는 설정입니다. 국내(한국)에서는 보통 필요 없습니다.</p>
+<p>pip 미러:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip config set global.index-url https://mirrors.aliyun.com/pypi/simple</code></pre></div>
+<p>conda 미러 (Linux/macOS):</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">echo &quot;&quot; &gt; ~/.condarc
+cat &lt;&lt; EOF &gt; ~/.condarc
+channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+EOF
+conda clean -i</code></pre></div>
+<p>conda 미러 (Windows):</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">conda config --remove-key channels
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+conda config --set show_channel_urls yes
+conda clean -i
+conda config --show-sources</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">한국에서는</div><div class="callout-body"><p>기본 PyPI/conda-forge 속도가 충분합니다. 미러를 잘못 설정하면 오히려 패키지 충돌이 나므로 <strong>문제가 없다면 건드리지 마세요.</strong></p></div></div>
+<hr>
+<h2 id="hugging-face-계정-연동-선택-11장-이후-필요">Hugging Face 계정 연동 (선택, 11장 이후 필요)<a class="anchor" href="#hugging-face-계정-연동-선택-11장-이후-필요">#</a></h2>
+<p>데이터셋과 모델을 Hub에 올리려면 <strong>쓰기 권한이 있는 토큰</strong>이 필요합니다. <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noopener">huggingface.co/settings/tokens</a> 에서 발급합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">hf auth login --token ${HUGGINGFACE_TOKEN} --add-to-git-credential</code></pre></div>
+<p>사용자 이름을 변수에 저장해 두면 이후 명령이 편합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">HF_USER=$(NO_COLOR=1 hf auth whoami | awk -F&#x27;: *&#x27; &#x27;NR==1 {print $2}&#x27;)
+echo $HF_USER</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">토큰은 비밀입니다</div><div class="callout-body"><p>토큰을 스크립트나 저장소에 하드코딩하지 마세요. 환경 변수나 <code>hf auth login</code>으로만 관리하세요.</p></div></div>
+<hr>
+<h2 id="설치-문제-해결">설치 문제 해결<a class="anchor" href="#설치-문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td><code>lerobot-find-port: command not found</code></td><td>가상환경 미활성화</td><td><code>conda activate lerobot</code></td></tr><tr><td><code>ModuleNotFoundError: scservo_sdk</code></td><td>feetech extra 미설치</td><td><code>pip install -e &quot;.[feetech]&quot;</code></td></tr><tr><td><code>torchcodec</code> 관련 오류</td><td>ffmpeg 버전 불일치</td><td><code>conda install ffmpeg=7.1.1 -c conda-forge</code></td></tr><tr><td><code>libsvtav1</code> 없음</td><td>ffmpeg 빌드에 인코더 누락</td><td>위와 동일 / <code>ffmpeg -encoders</code>로 확인</td></tr><tr><td>PyAV 빌드 실패</td><td>시스템 ffmpeg 개발 헤더 없음</td><td>위 <code>apt-get install</code> 목록 실행</td></tr><tr><td><code>torch.cuda.is_available()</code> 가 False</td><td>CPU 전용 휠 설치됨</td><td>드라이버 확인 후 CUDA 인덱스 지정 재설치</td></tr></tbody></table></div>
+<p>Linux에서 특정 CUDA 버전을 지정하려면:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install --index-url https://download.pytorch.org/whl/cu128 torch torchvision
+pip install -e &quot;.[all]&quot;</code></pre></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch07.html">7장 시리얼 포트 확인과 권한 설정</a>에서 리더와 팔로워의 포트를 구분합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch05.html"><span>이전</span>STS3215 서보 ID와 보레이트 설정</a><a class="pager-next" href="ch07.html"><span>다음</span>시리얼 포트 확인과 권한 설정</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#설치-전략">설치 전략</a><a class="toc-l2" href="#공통-절차">공통 절차</a><a class="toc-l3" href="#1-miniconda-miniforge-설치">1. Miniconda / Miniforge 설치</a><a class="toc-l3" href="#2-가상환경-생성과-활성화">2. 가상환경 생성과 활성화</a><a class="toc-l3" href="#3-ffmpeg-설치-영상-디코딩">3. ffmpeg 설치 (영상 디코딩)</a><a class="toc-l3" href="#4-lerobot-소스-받기">4. LeRobot 소스 받기</a><a class="toc-l3" href="#5-설치">5. 설치</a><a class="toc-l3" href="#6-설치-검증">6. 설치 검증</a><a class="toc-l2" href="#플랫폼별-추가-사항">플랫폼별 추가 사항</a><a class="toc-l3" href="#ubuntu">Ubuntu</a><a class="toc-l3" href="#windows">Windows</a><a class="toc-l3" href="#wsl-windows-subsystem-for-linux">WSL (Windows Subsystem for Linux)</a><a class="toc-l3" href="#macos">macOS</a><a class="toc-l3" href="#jetson-orin-nano-nx">Jetson (Orin Nano / NX)</a><a class="toc-l2" href="#네트워크가-느릴-때-미러-설정-선택">네트워크가 느릴 때 — 미러 설정 (선택)</a><a class="toc-l2" href="#hugging-face-계정-연동-선택-11장-이후-필요">Hugging Face 계정 연동 (선택, 11장 이후 필요)</a><a class="toc-l2" href="#설치-문제-해결">설치 문제 해결</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

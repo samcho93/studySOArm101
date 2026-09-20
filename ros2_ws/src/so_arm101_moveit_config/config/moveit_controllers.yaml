@@ -1,0 +1,26 @@
+# MoveIt 이 궤적을 넘길 컨트롤러.
+# 이름이 so_arm101_description/config/controllers.yaml 과 반드시 일치해야 합니다.
+# 여기서 어긋나면 "Plan 은 되는데 Execute 를 눌러도 안 움직이는" 증상이 납니다.
+
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - joint_trajectory_controller
+
+  joint_trajectory_controller:
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
+    default: true
+    joints:
+      - shoulder_pan
+      - shoulder_lift
+      - elbow_flex
+      - wrist_flex
+      - wrist_roll
+      - gripper
+
+trajectory_execution:
+  allowed_execution_duration_scaling: 2.0
+  allowed_goal_duration_margin: 0.5
+  allowed_start_tolerance: 0.05

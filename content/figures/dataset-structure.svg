@@ -1,0 +1,53 @@
+<svg viewBox="0 0 600 296" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="LeRobotDataset의 디렉터리 구조와 프레임 구성">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">LeRobotDataset 한 프레임에 담기는 것</text>
+
+  <!-- 프레임 구성 -->
+  <rect class="box-hi" x="16" y="44" width="568" height="92" rx="8"/>
+  <g>
+    <rect class="box" x="32"  y="60" width="128" height="60" rx="6"/>
+    <rect class="box" x="172" y="60" width="128" height="60" rx="6"/>
+    <rect class="box" x="312" y="60" width="128" height="60" rx="6"/>
+    <rect class="box" x="452" y="60" width="116" height="60" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="hi mono" x="96"  y="80" font-size="11">action</text>
+    <text class="sub" x="96"  y="97" font-size="10.5">리더 관절 6개</text>
+    <text class="tag" x="96"  y="111" font-size="10">← 정답 레이블</text>
+
+    <text class="hi mono" x="236" y="80" font-size="11">observation.state</text>
+    <text class="sub" x="236" y="97" font-size="10.5">팔로워 관절 6개</text>
+    <text class="tag" x="236" y="111" font-size="10">← 입력</text>
+
+    <text class="hi mono" x="376" y="80" font-size="10.5">observation.images.*</text>
+    <text class="sub" x="376" y="97" font-size="10.5">카메라별 프레임</text>
+    <text class="tag" x="376" y="111" font-size="10">← 입력</text>
+
+    <text class="lbl mono" x="510" y="80" font-size="11">task</text>
+    <text class="sub" x="510" y="97" font-size="10.5">작업 설명 텍스트</text>
+    <text class="tag" x="510" y="111" font-size="10">← 언어 조건</text>
+  </g>
+
+  <!-- 디렉터리 -->
+  <rect class="box" x="16" y="152" width="290" height="128" rx="8"/>
+  <text class="lbl" x="32" y="174" font-size="12">디스크에 저장되는 모습</text>
+  <g class="sub mono" font-size="10.5">
+    <text x="32" y="196">datasets/so101_pick_cube/</text>
+    <text x="44" y="212">├── meta/info.json     <tspan class="tag">fps · 특징 shape</tspan></text>
+    <text x="44" y="228">│   ├── episodes/      <tspan class="tag">에피소드 메타</tspan></text>
+    <text x="44" y="244">│   ├── stats.json     <tspan class="tag">정규화 통계</tspan></text>
+    <text x="44" y="260">│   └── tasks.parquet</text>
+    <text x="44" y="276">├── data/  └── videos/</text>
+  </g>
+
+  <!-- 주의 -->
+  <rect class="box" x="322" y="152" width="262" height="128" rx="8"/>
+  <text class="wr" x="338" y="174" font-size="12" font-weight="700">이름이 곧 계약입니다</text>
+  <g class="sub" font-size="10.5">
+    <text x="338" y="196">녹화할 때 쓴 카메라 이름이</text>
+    <text x="338" y="212">학습·추론에서도 <tspan class="hi">똑같아야</tspan> 합니다.</text>
+    <text x="338" y="234">중간에 <tspan class="mono">wrist</tspan> → <tspan class="mono">hand</tspan> 로 바꾸면</text>
+    <text x="338" y="250">이전 데이터로 학습한 모델을</text>
+    <text x="338" y="266">쓸 수 없습니다.</text>
+  </g>
+</svg>

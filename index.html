@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SO-ARM101 한국어 실습 강좌</title>
+<meta name="description" content="SO-ARM101 6자유도 오픈소스 로봇팔을 조립·캘리브레이션부터 LeRobot 모방학습, ROS 2/MoveIt 2 연동까지 배우는 한국어 강좌.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body class="home">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">오픈소스 6자유도 로봇팔 &middot; LeRobot &middot; ROS 2</div>
+    <h1>SO-ARM101<br><span>한국어 실습 강좌</span></h1>
+    <p class="hero-lede">
+      3D 프린팅 부품 조립부터 서보 캘리브레이션, LeRobot 텔레오퍼레이션과 모방학습,
+      그리고 ROS 2 / MoveIt 2 / Gazebo 연동까지. 실제 장비가 없어도 브라우저에서
+      바로 돌려볼 수 있는 3D 시뮬레이터를 포함한 23개 챕터 강좌입니다.
+    </p>
+    <div class="hero-cta">
+      <a class="btn primary" href="lessons/ch01.html">강좌 시작하기</a>
+      <a class="btn" href="sim/index.html">3D 시뮬레이터 체험</a>
+      <a class="btn" href="tools/cli-builder.html">명령어 생성기</a>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+      <div class="progress-text"><span id="progText">0 / 23 챕터 완료</span>
+      <button class="link-btn" id="resetProg" type="button">진행률 초기화</button></div>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="hero-canvas-wrap"><canvas id="heroCanvas"></canvas></div>
+    <div class="hero-art-cap">URDF 기구학 그대로 움직이는 SO-ARM101 미니 뷰어</div>
+  </div>
+</header>
+
+<section class="facts">
+  <div class="fact"><div class="fact-n">6+1</div><div class="fact-l">자유도 + 그리퍼</div></div>
+  <div class="fact"><div class="fact-n">STS3215</div><div class="fact-l">피드백 버스 서보</div></div>
+  <div class="fact"><div class="fact-n">$122~</div><div class="fact-l">팔로워 1대 부품가</div></div>
+  <div class="fact"><div class="fact-n">100%</div><div class="fact-l">하드웨어 &middot; 소프트웨어 오픈소스</div></div>
+</section>
+
+<section class="roadmap">
+  <h2>학습 로드맵</h2>
+  <div class="road">
+    <div class="road-step"><b>1</b><span>기구학 &middot; 하드웨어 이해</span></div>
+    <div class="road-step"><b>2</b><span>조립 &amp; 서보 설정</span></div>
+    <div class="road-step"><b>3</b><span>캘리브레이션 &amp; 텔레오퍼레이션</span></div>
+    <div class="road-step"><b>4</b><span>데이터셋 수집</span></div>
+    <div class="road-step"><b>5</b><span>정책 학습 &amp; 추론</span></div>
+    <div class="road-step"><b>6</b><span>ROS 2 &middot; MoveIt 2 &middot; Gazebo</span></div>
+  </div>
+</section>
+
+<section class="curriculum">
+  <h2>커리큘럼</h2>
+  <section class="part"><header class="part-head"><div class="part-no">PART 1</div><div><h3>기초 다지기</h3><p>로봇팔이 무엇인지, SO-ARM101이 어떤 하드웨어인지부터 정확히 이해합니다.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch01.html" data-slug="ch01"><div class="lc-no">01</div><div class="lc-main"><div class="lc-title">SO-ARM101이란 무엇인가</div><div class="lc-sum">LeRobot 생태계와 SO-ARM101의 위치, 이 강좌에서 무엇을 만들게 되는지 로드맵을 잡습니다.</div><div class="lc-meta"><span class="lc-min">15분</span><span class="tag">개요</span><span class="tag">로드맵</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch02.html" data-slug="ch02"><div class="lc-no">02</div><div class="lc-main"><div class="lc-title">로봇팔 기초 지식</div><div class="lc-sum">자유도·링크·조인트·좌표계와 정기구학/역기구학을 시뮬레이터로 직접 확인하며 익힙니다.</div><div class="lc-meta"><span class="lc-min">35분</span><span class="tag">기구학</span><span class="tag">FK/IK</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch03.html" data-slug="ch03"><div class="lc-no">03</div><div class="lc-main"><div class="lc-title">하드웨어 완전 해부</div><div class="lc-sum">리더/팔로워 구조, STS3215 버스 서보, 드라이버 보드, 전원과 배선을 스펙 수준까지 뜯어봅니다.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">하드웨어</span><span class="tag">BOM</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch04.html" data-slug="ch04"><div class="lc-no">04</div><div class="lc-main"><div class="lc-title">3D 프린팅과 조립</div><div class="lc-sum">출력 설정부터 관절 1~6 조립 순서, 조립 중 흔한 실수와 검수 포인트를 정리합니다.</div><div class="lc-meta"><span class="lc-min">40분</span><span class="tag">조립</span><span class="tag">3D프린팅</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section><section class="part"><header class="part-head"><div class="part-no">PART 2</div><div><h3>서보 설정과 환경 구축</h3><p>STS3215 서보를 길들이고 LeRobot 개발 환경을 완성합니다.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch05.html" data-slug="ch05"><div class="lc-no">05</div><div class="lc-main"><div class="lc-title">STS3215 서보 ID와 보레이트 설정</div><div class="lc-sum">버스 서보의 동작 원리, EEPROM 파라미터, FD 디버그 툴과 lerobot-setup-motors 사용법.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">서보</span><span class="tag">Feetech</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch06.html" data-slug="ch06"><div class="lc-no">06</div><div class="lc-main"><div class="lc-title">LeRobot 개발 환경 설치</div><div class="lc-sum">conda/uv 환경, PyTorch·ffmpeg·feetech SDK, Windows/WSL/Ubuntu/Jetson별 주의사항.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">설치</span><span class="tag">LeRobot</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch07.html" data-slug="ch07"><div class="lc-no">07</div><div class="lc-main"><div class="lc-title">시리얼 포트 확인과 권한 설정</div><div class="lc-sum">lerobot-find-port로 리더/팔로워 포트를 구분하고, udev 규칙으로 포트를 고정합니다.</div><div class="lc-meta"><span class="lc-min">20분</span><span class="tag">시리얼</span><span class="tag">udev</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch08.html" data-slug="ch08"><div class="lc-no">08</div><div class="lc-main"><div class="lc-title">로봇 캘리브레이션</div><div class="lc-sum">왜 캘리브레이션이 정책 전이의 핵심인지 이해하고, 리더·팔로워를 정확히 보정합니다.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">캘리브레이션</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section><section class="part"><header class="part-head"><div class="part-no">PART 3</div><div><h3>텔레오퍼레이션과 데이터 수집</h3><p>리더 암으로 팔로워를 조종하고, 학습용 데이터셋을 만듭니다.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch09.html" data-slug="ch09"><div class="lc-no">09</div><div class="lc-main"><div class="lc-title">텔레오퍼레이션 기초</div><div class="lc-sum">리더 암으로 팔로워를 조종합니다. 시뮬레이터의 리더/팔로워 모드로 감을 먼저 잡습니다.</div><div class="lc-meta"><span class="lc-min">25분</span><span class="tag">텔레오퍼레이션</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch10.html" data-slug="ch10"><div class="lc-no">10</div><div class="lc-main"><div class="lc-title">카메라 연동과 시각화</div><div class="lc-sum">손목/전역 카메라 구성, OpenCV·RealSense 설정, rerun으로 관측값을 실시간 확인합니다.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">카메라</span><span class="tag">rerun</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch11.html" data-slug="ch11"><div class="lc-no">11</div><div class="lc-main"><div class="lc-title">실기 데이터셋 수집</div><div class="lc-sum">lerobot-record로 에피소드를 녹화하고, 좋은 데이터셋이 갖춰야 할 조건을 배웁니다.</div><div class="lc-meta"><span class="lc-min">40분</span><span class="tag">데이터셋</span><span class="tag">record</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch12.html" data-slug="ch12"><div class="lc-no">12</div><div class="lc-main"><div class="lc-title">시뮬레이션 데이터 수집 (LeIsaac)</div><div class="lc-sum">Isaac Lab 기반 LeIsaac으로 가상 환경에서 원격조작 데이터를 모으고 LeRobot 포맷으로 변환합니다.</div><div class="lc-meta"><span class="lc-min">35분</span><span class="tag">Isaac Lab</span><span class="tag">Sim2Real</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section><section class="part"><header class="part-head"><div class="part-no">PART 4</div><div><h3>정책 학습과 추론</h3><p>ACT / Diffusion / SmolVLA 정책을 학습시키고 실제 로봇에 배포합니다.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch13.html" data-slug="ch13"><div class="lc-no">13</div><div class="lc-main"><div class="lc-title">정책 모델 학습</div><div class="lc-sum">ACT·Diffusion Policy·SmolVLA·π0의 차이와 lerobot-train 하이퍼파라미터 운용법.</div><div class="lc-meta"><span class="lc-min">45분</span><span class="tag">ACT</span><span class="tag">학습</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch14.html" data-slug="ch14"><div class="lc-no">14</div><div class="lc-main"><div class="lc-title">모델 추론과 평가</div><div class="lc-sum">lerobot-rollout 전략별 사용법, 성공률 측정, 실패 분석과 데이터 보강 루프.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">추론</span><span class="tag">평가</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section><section class="part"><header class="part-head"><div class="part-no">PART 5</div><div><h3>ROS 2 연동과 시뮬레이션</h3><p>URDF부터 ros2_control, MoveIt 2, Gazebo까지 산업 표준 스택으로 확장합니다.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch15.html" data-slug="ch15"><div class="lc-no">15</div><div class="lc-main"><div class="lc-title">URDF와 로봇 모델 이해</div><div class="lc-sum">so101_new_calib.urdf를 한 줄씩 해부하고, 조인트 한계표와 좌표 변환 체인을 직접 계산합니다.</div><div class="lc-meta"><span class="lc-min">35분</span><span class="tag">URDF</span><span class="tag">TF</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch16.html" data-slug="ch16"><div class="lc-no">16</div><div class="lc-main"><div class="lc-title">ROS 2 워크스페이스 구성과 RViz2</div><div class="lc-sum">so_arm101_description 패키지를 만들고 robot_state_publisher·RViz2로 모델을 띄웁니다.</div><div class="lc-meta"><span class="lc-min">35분</span><span class="tag">ROS 2</span><span class="tag">RViz2</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch17.html" data-slug="ch17"><div class="lc-no">17</div><div class="lc-main"><div class="lc-title">ros2_control과 실기 하드웨어 인터페이스</div><div class="lc-sum">Feetech 버스를 ros2_control SystemInterface로 감싸 실제 팔을 ROS 2에서 제어합니다.</div><div class="lc-meta"><span class="lc-min">45분</span><span class="tag">ros2_control</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch18.html" data-slug="ch18"><div class="lc-no">18</div><div class="lc-main"><div class="lc-title">MoveIt 2 모션 플래닝</div><div class="lc-sum">Setup Assistant로 SRDF를 만들고 OMPL 플래닝, 충돌 회피, Pick&amp;Place를 구현합니다.</div><div class="lc-meta"><span class="lc-min">45분</span><span class="tag">MoveIt 2</span><span class="tag">OMPL</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch19.html" data-slug="ch19"><div class="lc-no">19</div><div class="lc-main"><div class="lc-title">Gazebo 시뮬레이션과 시각화 툴</div><div class="lc-sum">Gazebo Harmonic에서 물리 시뮬레이션을 돌리고 RViz2·Foxglove·PlotJuggler로 관찰합니다.</div><div class="lc-meta"><span class="lc-min">40분</span><span class="tag">Gazebo</span><span class="tag">Foxglove</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch20.html" data-slug="ch20"><div class="lc-no">20</div><div class="lc-main"><div class="lc-title">LeRobot ↔ ROS 2 브릿지</div><div class="lc-sum">학습한 정책을 ROS 2 노드로 감싸 joint_states/JointTrajectory 파이프라인에 연결합니다.</div><div class="lc-meta"><span class="lc-min">35분</span><span class="tag">브릿지</span><span class="tag">통합</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section><section class="part"><header class="part-head"><div class="part-no">PART 6</div><div><h3>확장과 마무리</h3><p>듀얼 암·모바일 플랫폼 확장, 문제 해결, 종합 프로젝트.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch21.html" data-slug="ch21"><div class="lc-no">21</div><div class="lc-main"><div class="lc-title">확장 — 듀얼 암, 모바일, 손</div><div class="lc-sum">듀얼 팔로워 구성, LeKiwi·XLeRobot 모바일 플랫폼, AmazingHand, 7축 변형까지.</div><div class="lc-meta"><span class="lc-min">30분</span><span class="tag">확장</span></div></div><div class="lc-check" aria-hidden="true"></div></a><a class="lesson-card" href="lessons/ch22.html" data-slug="ch22"><div class="lc-no">22</div><div class="lc-main"><div class="lc-title">트러블슈팅과 종합 프로젝트</div><div class="lc-sum">현장에서 자주 만나는 30가지 문제의 원인과 해법, 그리고 최종 픽앤플레이스 프로젝트.</div><div class="lc-meta"><span class="lc-min">45분</span><span class="tag">FAQ</span><span class="tag">프로젝트</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section><section class="part"><header class="part-head"><div class="part-no">PART 7</div><div><h3>부록</h3><p>다른 공개 강좌와 응용 프로젝트, 중국어 원문 용어 대조표.</p></div></header><div class="part-list"><a class="lesson-card" href="lessons/ch23.html" data-slug="ch23"><div class="lc-no">23</div><div class="lc-main"><div class="lc-title">더 배우기 — 강좌·프로젝트·용어</div><div class="lc-sum">HF·NVIDIA 공식 강좌, Seeed 벤더 위키, 한국어 자료, 응용 프로젝트, 중↔한 용어 대조표.</div><div class="lc-meta"><span class="lc-min">25분</span><span class="tag">참고자료</span><span class="tag">용어</span></div></div><div class="lc-check" aria-hidden="true"></div></a></div></section>
+</section>
+
+<footer class="site-foot">
+  <p>본 강좌는 钜犀科技(Juxi Tech) Feishu 위키의 <b>SO-ARM101机械臂教程</b> 목차를 기반으로 한국어로 재구성하고,
+  Hugging Face LeRobot 공식 문서 &middot; TheRobotStudio/SO-ARM100 저장소 &middot; ROS 2 생태계 자료를 추가해 작성했습니다.</p>
+  <p class="foot-links">
+    <a href="https://github.com/TheRobotStudio/SO-ARM100" target="_blank" rel="noopener">SO-ARM100/101 하드웨어</a>
+    <a href="https://huggingface.co/docs/lerobot" target="_blank" rel="noopener">LeRobot 공식 문서</a>
+    <a href="https://github.com/LightwheelAI/leisaac" target="_blank" rel="noopener">LeIsaac</a>
+    <a href="https://juxitech.feishu.cn/wiki/NOWXw9NOJiDTs2kRr7RcdIrKnvg" target="_blank" rel="noopener">원문 위키(중국어)</a>
+  </p>
+</footer>
+
+</main>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/so101-kinematics.js"></script>
+<script src="assets/js/robot-canvas.js"></script>
+<script src="assets/js/hero.js"></script>
+</body>
+</html>

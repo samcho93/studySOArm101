@@ -1,0 +1,49 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="서보 중위 캘리브레이션과 LeRobot 캘리브레이션의 차이">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    캘리브레이션은 두 번입니다 — 성격이 다릅니다</text>
+
+  <!-- 1단계 -->
+  <rect class="box" x="16" y="48" width="278" height="180" rx="9"/>
+  <text class="tag mono" x="32" y="70" font-size="10.5">조립 전 · 5장</text>
+  <text class="lbl" x="32" y="90" font-size="12.5">① 서보 중위 캘리브레이션</text>
+
+  <!-- 눈금 그림 -->
+  <path stroke="var(--border)" stroke-width="1.6" d="M40 132 H270"/>
+  <path stroke="var(--accent)" stroke-width="2.4" d="M155 124 V140"/>
+  <text class="hi mono" x="155" y="158" text-anchor="middle" font-size="11">2048</text>
+  <text class="sub mono" x="40" y="152" font-size="10">0</text>
+  <text class="sub mono" x="270" y="152" text-anchor="end" font-size="10">4095</text>
+  <text class="sub" x="155" y="118" text-anchor="middle" font-size="10.5">현재 자세를 중립으로 기록</text>
+
+  <g class="sub">
+    <text x="32" y="182">대상 — 서보 내부 EEPROM</text>
+    <text x="32" y="199">도구 — FD 툴 · 웹 도구 · Juxi 툴</text>
+    <text x="32" y="216">서보 하나씩 연결한 상태에서만 가능</text>
+  </g>
+
+  <!-- 2단계 -->
+  <rect class="box-hi" x="306" y="48" width="278" height="180" rx="9"/>
+  <text class="tag mono" x="322" y="70" font-size="10.5">조립 후 · 8장</text>
+  <text class="hi" x="322" y="90" font-size="12.5">② LeRobot 캘리브레이션</text>
+
+  <path stroke="var(--border)" stroke-width="1.6" d="M330 132 H560"/>
+  <rect fill="var(--accent)" opacity="0.25" x="390" y="124" width="118" height="16" rx="3"/>
+  <path stroke="var(--accent)" stroke-width="2.4" d="M390 120 V144 M508 120 V144"/>
+  <text class="hi mono" x="390" y="158" text-anchor="middle" font-size="10.5">range_min</text>
+  <text class="hi mono" x="508" y="158" text-anchor="middle" font-size="10.5">range_max</text>
+  <text class="sub" x="449" y="118" text-anchor="middle" font-size="10.5">실제로 움직인 범위를 측정</text>
+
+  <g class="sub">
+    <text x="322" y="182">대상 — <tspan class="mono">~/.cache/…/calibration/*.json</tspan></text>
+    <text x="322" y="199">도구 — <tspan class="mono">lerobot-calibrate</tspan></text>
+    <text x="322" y="216">관절을 끝에서 끝까지 움직여야 합니다</text>
+  </g>
+
+  <!-- 결과 -->
+  <rect class="box" x="16" y="244" width="568" height="46" rx="8"/>
+  <text class="lbl" x="32" y="266" font-size="12">둘 다 맞아야 하는 이유</text>
+  <text class="sub" x="32" y="282" font-size="11">
+    ①이 없으면 가동범위가 한쪽으로 치우치고, ②가 없으면 리더와 팔로워의 숫자가 어긋납니다.
+    ②는 <tspan class="hi">남의 로봇에서 학습한 정책이 내 로봇에서 도는 이유</tspan>이기도 합니다.</text>
+</svg>

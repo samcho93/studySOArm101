@@ -1,0 +1,67 @@
+<svg viewBox="0 0 600 316" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="리더 암과 팔로워 암의 역할 비교">
+  <defs>
+    <marker id="lf-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- 리더 -->
+  <rect class="box" x="12" y="40" width="250" height="236" rx="9"/>
+  <text class="lbl" x="28" y="66" font-size="13" font-weight="700">리더 암 (Leader / 主动臂)</text>
+  <text class="sub" x="28" y="83">사람이 손으로 잡고 움직입니다</text>
+
+  <!-- 리더 스케치 -->
+  <g stroke="var(--text-dim)" stroke-width="9" stroke-linecap="round" fill="none" opacity="0.5">
+    <path d="M62 250 V214"/>
+    <path d="M62 214 L112 176"/>
+    <path d="M112 176 L162 196"/>
+  </g>
+  <rect class="box" x="44" y="250" width="36" height="14" rx="3"/>
+  <path stroke="var(--text-dim)" stroke-width="4" fill="none" d="M162 196 l16 8 M170 200 l-4 12"/>
+  <text class="tag" x="186" y="200" font-size="10.5">손잡이·트리거</text>
+
+  <g class="sub">
+    <text x="28" y="112">전원 <tspan class="lbl">5V 6A</tspan>  ·  검정 팔</text>
+    <text x="28" y="130">서보 감속비 <tspan class="lbl">1:191 / 1:345 / 1:147</tspan></text>
+    <text x="28" y="148">손으로 <tspan class="hi">가볍게</tspan> 움직여야 하므로</text>
+    <text x="28" y="164">관절마다 필요한 만큼만 감속</text>
+    <text class="tag mono" x="28" y="186">so101_leader  (teleoperator)</text>
+  </g>
+
+  <!-- 팔로워 -->
+  <rect class="box-hi" x="338" y="40" width="250" height="236" rx="9"/>
+  <text class="hi" x="354" y="66" font-size="13" font-weight="700">팔로워 암 (Follower / 从动臂)</text>
+  <text class="sub" x="354" y="83">실제로 물건을 집습니다</text>
+
+  <g stroke="var(--accent)" stroke-width="11" stroke-linecap="round" fill="none" opacity="0.55">
+    <path d="M388 250 V214"/>
+    <path d="M388 214 L438 176"/>
+    <path d="M438 176 L488 196"/>
+  </g>
+  <rect class="box" x="370" y="250" width="36" height="14" rx="3"/>
+  <path stroke="var(--accent)" stroke-width="4" fill="none" d="M488 196 l18 -6 M488 196 l18 10"/>
+  <text class="tag" x="512" y="200" font-size="10.5">그리퍼</text>
+
+  <g class="sub">
+    <text x="354" y="112">전원 <tspan class="wr">12V 5A</tspan>  ·  흰색 팔</text>
+    <text x="354" y="130">서보 감속비 <tspan class="lbl">6개 모두 1:345</tspan></text>
+    <text x="354" y="148">자기 무게와 부하를 버텨야 하므로</text>
+    <text x="354" y="164">전 관절 고토크</text>
+    <text class="tag mono" x="354" y="186">so101_follower  (robot)</text>
+  </g>
+
+  <!-- 관계 -->
+  <path class="ln-hi" stroke-width="2" d="M268 158 H332" marker-end="url(#lf-a)"
+        color="var(--accent)"/>
+  <text class="hi" x="300" y="146" text-anchor="middle" font-size="11.5">관절 각도</text>
+  <text class="sub" x="300" y="176" text-anchor="middle" font-size="10.5">30~60 Hz</text>
+
+  <text class="dg" x="300" y="22" text-anchor="middle" font-size="12" font-weight="700">
+    어댑터를 바꿔 끼우면 서보가 탑니다</text>
+
+  <text class="sub" x="300" y="302" text-anchor="middle">
+    리더에서 읽은 각도가 데이터셋의 <tspan class="mono">action</tspan>,
+    팔로워가 읽은 각도가 <tspan class="mono">observation.state</tspan> 가 됩니다</text>
+</svg>

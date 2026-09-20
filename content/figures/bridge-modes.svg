@@ -1,0 +1,75 @@
+<svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="LeRobot과 ROS 2를 잇는 세 가지 방식">
+  <defs>
+    <marker id="bm-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    둘을 잇는 세 가지 방식</text>
+  <text class="dg" x="16" y="42" font-size="11.5">
+    시리얼 포트는 하나입니다 — LeRobot 과 ROS 2 하드웨어가 동시에 열 수 없습니다</text>
+
+  <!-- 방식 1 -->
+  <rect class="box-hi" x="16" y="58" width="568" height="78" rx="8"/>
+  <text class="hi" x="32" y="78" font-size="12.5">방식 1 — 정책을 ROS 2 노드로 감싸기 (권장)</text>
+  <g>
+    <rect class="box" x="32"  y="88" width="104" height="34" rx="5"/>
+    <rect class="box" x="168" y="88" width="120" height="34" rx="5"/>
+    <rect class="box" x="320" y="88" width="120" height="34" rx="5"/>
+    <rect class="box" x="472" y="88" width="96" height="34" rx="5"/>
+  </g>
+  <g text-anchor="middle" class="sub" font-size="10.5">
+    <text x="84"  y="109">카메라 · /joint_states</text>
+    <text x="228" y="109" class="lbl">LeRobot 정책</text>
+    <text x="380" y="109" class="mono">JointTrajectory</text>
+    <text x="520" y="109" class="lbl">ros2_control</text>
+  </g>
+  <g class="ln-hi" stroke-width="1.8" color="var(--accent)">
+    <path d="M136 105 H162" marker-end="url(#bm-a)"/>
+    <path d="M288 105 H314" marker-end="url(#bm-a)"/>
+    <path d="M440 105 H466" marker-end="url(#bm-a)"/>
+  </g>
+
+  <!-- 방식 2 -->
+  <rect class="box" x="16" y="148" width="568" height="78" rx="8"/>
+  <text class="lbl" x="32" y="168" font-size="12.5">방식 2 — LeRobot 이 주도, ROS 2 는 관측만</text>
+  <g>
+    <rect class="box" x="32"  y="178" width="140" height="34" rx="5"/>
+    <rect class="box" x="216" y="178" width="120" height="34" rx="5"/>
+    <rect class="box" x="380" y="178" width="188" height="34" rx="5"/>
+  </g>
+  <g text-anchor="middle" class="sub" font-size="10.5">
+    <text x="102" y="199" class="lbl">LeRobot (시리얼 직접)</text>
+    <text x="276" y="199">서보</text>
+    <text x="474" y="199" class="mono">/joint_states → RViz · rosbag</text>
+  </g>
+  <g class="ln" stroke="var(--border)" stroke-width="1.8">
+    <path d="M172 195 H210" marker-end="url(#bm-a)" color="var(--border)"/>
+    <path d="M336 195 H374" marker-end="url(#bm-a)" color="var(--border)"/>
+  </g>
+  <text class="sub" x="32" y="222" font-size="10.5">MoveIt 충돌 회피를 쓸 수 없습니다</text>
+
+  <!-- 방식 3 -->
+  <rect class="box" x="16" y="238" width="568" height="86" rx="8"/>
+  <text class="lbl" x="32" y="258" font-size="12.5">방식 3 — 작업 단계별로 제어권을 넘기기</text>
+  <g>
+    <rect class="box" x="32"  y="268" width="150" height="38" rx="5"/>
+    <rect class="box-hi" x="214" y="268" width="150" height="38" rx="5"/>
+    <rect class="box" x="396" y="268" width="172" height="38" rx="5"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="lbl" x="107" y="286" font-size="11.5">접근</text>
+    <text class="sub" x="107" y="300" font-size="10">MoveIt — 충돌 회피</text>
+    <text class="hi"  x="289" y="286" font-size="11.5">파지</text>
+    <text class="sub" x="289" y="300" font-size="10">LeRobot 정책 — 정밀</text>
+    <text class="lbl" x="482" y="286" font-size="11.5">운반 · 배치</text>
+    <text class="sub" x="482" y="300" font-size="10">MoveIt — 직선 경로</text>
+  </g>
+  <g class="ln" stroke="var(--border)" stroke-width="1.8">
+    <path d="M182 287 H208" marker-end="url(#bm-a)" color="var(--border)"/>
+    <path d="M364 287 H390" marker-end="url(#bm-a)" color="var(--border)"/>
+  </g>
+</svg>

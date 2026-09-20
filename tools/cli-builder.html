@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeRobot 명령어 생성기 · SO-ARM101</title>
+<meta name="description" content="내 포트·ID·카메라 설정을 넣으면 SO-ARM101용 lerobot 명령을 완성해 주는 도구.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#9881;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/sim.css">
+</head>
+<body class="tool-page">
+
+<header class="sim-top">
+  <a class="sim-back" href="../index.html">&larr; 강좌</a>
+  <div class="sim-title">
+    <strong>LeRobot 명령어 생성기</strong>
+    <span>SO-ARM101 전용</span>
+  </div>
+  <div class="sim-top-actions">
+    <a class="sim-back" href="../sim/index.html">3D 시뮬레이터</a>
+  </div>
+</header>
+
+<div class="tool-wrap">
+  <h1>내 환경에 맞는 명령 만들기</h1>
+  <p class="lede">
+    포트와 ID를 한 번만 입력하면 조립 이후 전 과정의 <code>lerobot-*</code> 명령이
+    자동으로 완성됩니다. 입력값은 이 브라우저에만 저장되며 어디로도 전송되지 않습니다.
+  </p>
+
+  <div class="tool-grid">
+
+    <!-- ─────────────── 입력 폼 ─────────────── -->
+    <form class="tool-form" id="cfgForm" autocomplete="off">
+
+      <fieldset>
+        <legend>플랫폼</legend>
+        <label>운영체제
+          <select id="os">
+            <option value="linux">Linux (Ubuntu)</option>
+            <option value="mac">macOS</option>
+            <option value="win">Windows</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>포트와 ID</legend>
+        <label>팔로워 포트
+          <input type="text" id="fPort" value="/dev/ttyACM0"></label>
+        <label>팔로워 id
+          <input type="text" id="fId" value="my_awesome_follower_arm"></label>
+        <label>리더 포트
+          <input type="text" id="lPort" value="/dev/ttyACM1"></label>
+        <label>리더 id
+          <input type="text" id="lId" value="my_awesome_leader_arm"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>카메라</legend>
+        <label class="inline">
+          <input type="checkbox" id="camWristOn" checked> 손목 카메라 사용</label>
+        <div class="row2">
+          <label>이름<input type="text" id="camWristName" value="wrist"></label>
+          <label>인덱스<input type="text" id="camWristIdx" value="0"></label>
+        </div>
+        <label class="inline">
+          <input type="checkbox" id="camTopOn" checked> 전역 카메라 사용</label>
+        <div class="row2">
+          <label>이름<input type="text" id="camTopName" value="top"></label>
+          <label>인덱스<input type="text" id="camTopIdx" value="2"></label>
+        </div>
+        <div class="row2">
+          <label>너비<input type="number" id="camW" value="640"></label>
+          <label>높이<input type="number" id="camH" value="480"></label>
+        </div>
+        <label>FPS<input type="number" id="camFps" value="30"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>데이터셋</legend>
+        <label>repo_id
+          <input type="text" id="repoId" value="myname/so101_pick_cube"></label>
+        <label class="inline">
+          <input type="checkbox" id="localOnly" checked> 로컬에만 저장 (Hub 업로드 안 함)</label>
+        <label>로컬 경로
+          <input type="text" id="dsRoot" value="./datasets/so101_pick_cube"></label>
+        <label>작업 설명
+          <input type="text" id="task" value="Pick the black cube and place it in the bin"></label>
+        <div class="row2">
+          <label>에피소드<input type="number" id="numEp" value="50"></label>
+          <label>FPS<input type="number" id="dsFps" value="30"></label>
+        </div>
+        <div class="row2">
+          <label>에피소드 길이(s)<input type="number" id="epTime" value="20"></label>
+          <label>리셋 시간(s)<input type="number" id="resetTime" value="8"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>학습</legend>
+        <label>정책
+          <select id="policy">
+            <option value="act">ACT (권장)</option>
+            <option value="diffusion">Diffusion Policy</option>
+            <option value="smolvla">SmolVLA</option>
+            <option value="pi0">Pi0</option>
+          </select>
+        </label>
+        <label>디바이스
+          <select id="device">
+            <option value="cuda">cuda (NVIDIA)</option>
+            <option value="mps">mps (Apple Silicon)</option>
+            <option value="cpu">cpu</option>
+          </select>
+        </label>
+        <div class="row2">
+          <label>학습 스텝<input type="number" id="steps" value="60000"></label>
+          <label>출력 폴더<input type="text" id="outDir" value="outputs/train/act_so101"></label>
+        </div>
+        <label class="inline">
+          <input type="checkbox" id="wandb"> Weights &amp; Biases 로깅</label>
+      </fieldset>
+
+      <div class="panel-actions">
+        <button class="s-btn" id="btnReset" type="button">기본값으로</button>
+      </div>
+    </form>
+
+    <!-- ─────────────── 결과 ─────────────── -->
+    <div id="output"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'so-arm101.cli.v1';
+  var form = document.getElementById('cfgForm');
+  var out = document.getElementById('output');
+
+  var FIELDS = ['os', 'fPort', 'fId', 'lPort', 'lId',
+    'camWristOn', 'camWristName', 'camWristIdx',
+    'camTopOn', 'camTopName', 'camTopIdx', 'camW', 'camH', 'camFps',
+    'repoId', 'localOnly', 'dsRoot', 'task', 'numEp', 'dsFps', 'epTime', 'resetTime',
+    'policy', 'device', 'steps', 'outDir', 'wandb'];
+
+  var DEFAULTS = {};
+  FIELDS.forEach(function (id) {
+    var node = document.getElementById(id);
+    DEFAULTS[id] = node.type === 'checkbox' ? node.checked : node.value;
+  });
+
+  function read() {
+    var cfg = {};
+    FIELDS.forEach(function (id) {
+      var node = document.getElementById(id);
+      cfg[id] = node.type === 'checkbox' ? node.checked : node.value.trim();
+    });
+    return cfg;
+  }
+
+  function write(cfg) {
+    FIELDS.forEach(function (id) {
+      if (!(id in cfg)) return;
+      var node = document.getElementById(id);
+      if (node.type === 'checkbox') node.checked = !!cfg[id];
+      else node.value = cfg[id];
+    });
+  }
+
+  function save(cfg) {
+    try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) { /* noop */ }
+  }
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || 'null'); }
+    catch (e) { return null; }
+  }
+
+  // ------------------------------------------------------------ 명령 생성
+  function camerasArg(cfg) {
+    var parts = [];
+    if (cfg.camWristOn) {
+      parts.push(cfg.camWristName + ': {type: opencv, index_or_path: ' + cfg.camWristIdx +
+        ', width: ' + cfg.camW + ', height: ' + cfg.camH + ', fps: ' + cfg.camFps + '}');
+    }
+    if (cfg.camTopOn) {
+      parts.push(cfg.camTopName + ': {type: opencv, index_or_path: ' + cfg.camTopIdx +
+        ', width: ' + cfg.camW + ', height: ' + cfg.camH + ', fps: ' + cfg.camFps + '}');
+    }
+    if (!parts.length) return null;
+    return '  --robot.cameras="{ ' + parts.join(', ') + ' }"';
+  }
+
+  function join(lines) {
+    return lines.filter(Boolean).join(' \\\n');
+  }
+
+  function build(cfg) {
+    var cams = camerasArg(cfg);
+    var ds = [];
+    ds.push('  --dataset.repo_id=' + (cfg.localOnly ? cfg.repoId : '${HF_USER}/' + cfg.repoId.split('/').pop()));
+    if (cfg.localOnly) {
+      ds.push('  --dataset.root=' + cfg.dsRoot);
+      ds.push('  --dataset.push_to_hub=false');
+      ds.push('  --dataset.no_stamp=true');
+    }
+
+    var sections = [];
+
+    sections.push({
+      step: '1',
+      title: '시리얼 포트 찾기',
+      desc: '리더와 팔로워 각각에 대해 한 번씩, 총 두 번 실행합니다. 안내가 나오면 해당 팔의 USB를 뽑으세요.',
+      lang: 'bash',
+      code: 'lerobot-find-port'
+    });
+
+    if (cfg.os === 'linux') {
+      sections.push({
+        step: '1b',
+        title: '포트 권한 (Linux)',
+        desc: '영구 설정은 dialout 그룹 가입입니다. 로그아웃 후 다시 로그인해야 적용됩니다.',
+        lang: 'bash',
+        code: 'sudo usermod -a -G dialout $USER\n\n# 또는 임시로\nsudo chmod 666 ' + cfg.fPort + ' ' + cfg.lPort
+      });
+    } else if (cfg.os === 'mac') {
+      sections.push({
+        step: '1b',
+        title: '포트 권한 (macOS)',
+        desc: '시리얼 장치에 읽기/쓰기 권한을 부여합니다.',
+        lang: 'bash',
+        code: 'chmod 666 /dev/tty.*'
+      });
+    }
+
+    sections.push({
+      step: '2',
+      title: '서보 ID와 보레이트 설정',
+      desc: '조립 전에 서보를 하나씩 연결한 상태로 실행합니다. ID는 6(gripper)부터 1(shoulder_pan)까지 역순으로 설정됩니다.',
+      lang: 'bash',
+      code: join([
+        'lerobot-setup-motors',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort
+      ]) + '\n\n' + join([
+        'lerobot-setup-motors',
+        '  --teleop.type=so101_leader',
+        '  --teleop.port=' + cfg.lPort
+      ])
+    });
+
+    sections.push({
+      step: '3',
+      title: '캘리브레이션',
+      desc: '중간 자세로 맞춘 뒤 Enter, 이어서 각 관절을 끝에서 끝까지 움직입니다. 여기서 정한 id를 이후 모든 명령에서 그대로 씁니다.',
+      lang: 'bash',
+      code: join([
+        'lerobot-calibrate',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId
+      ]) + '\n\n' + join([
+        'lerobot-calibrate',
+        '  --teleop.type=so101_leader',
+        '  --teleop.port=' + cfg.lPort,
+        '  --teleop.id=' + cfg.lId
+      ])
+    });
+
+    sections.push({
+      step: '4',
+      title: '텔레오퍼레이션 (카메라 없이)',
+      desc: '리더를 움직이면 팔로워가 따라옵니다. 처음에는 아주 천천히 움직이세요.',
+      lang: 'bash',
+      code: join([
+        'lerobot-teleoperate',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId,
+        '  --teleop.type=so101_leader',
+        '  --teleop.port=' + cfg.lPort,
+        '  --teleop.id=' + cfg.lId
+      ])
+    });
+
+    sections.push({
+      step: '5',
+      title: '카메라 확인 & 카메라 연동 텔레오퍼레이션',
+      desc: '카메라 인덱스를 먼저 확인한 뒤, rerun 시각화와 함께 실행합니다.',
+      lang: 'bash',
+      code: 'lerobot-find-cameras opencv\n\n' + join([
+        'lerobot-teleoperate',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId,
+        cams,
+        '  --teleop.type=so101_leader',
+        '  --teleop.port=' + cfg.lPort,
+        '  --teleop.id=' + cfg.lId,
+        '  --display_data=true'
+      ])
+    });
+
+    sections.push({
+      step: '6',
+      title: '데이터셋 녹화',
+      desc: '→ / n 키로 다음 에피소드, ← / r 키로 재녹화, ESC / q 키로 종료입니다.',
+      lang: 'bash',
+      code: (cfg.localOnly ? '' :
+        'hf auth login --token ${HUGGINGFACE_TOKEN} --add-to-git-credential\n' +
+        'HF_USER=$(NO_COLOR=1 hf auth whoami | awk -F\': *\' \'NR==1 {print $2}\')\n\n') +
+        join([
+          'lerobot-record',
+          '  --robot.type=so101_follower',
+          '  --robot.port=' + cfg.fPort,
+          '  --robot.id=' + cfg.fId,
+          cams,
+          '  --teleop.type=so101_leader',
+          '  --teleop.port=' + cfg.lPort,
+          '  --teleop.id=' + cfg.lId,
+          '  --display_data=true'
+        ].concat(ds).concat([
+          '  --dataset.single_task="' + cfg.task + '"',
+          '  --dataset.num_episodes=' + cfg.numEp,
+          '  --dataset.fps=' + cfg.dsFps,
+          '  --dataset.episode_time_s=' + cfg.epTime,
+          '  --dataset.reset_time_s=' + cfg.resetTime
+        ]))
+    });
+
+    sections.push({
+      step: '6b',
+      title: '이어 녹화 (resume)',
+      desc: 'num_episodes 는 "추가로 녹화할 개수"입니다. 총 목표치가 아닙니다.',
+      lang: 'bash',
+      code: join([
+        'lerobot-record',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId,
+        cams,
+        '  --teleop.type=so101_leader',
+        '  --teleop.port=' + cfg.lPort,
+        '  --teleop.id=' + cfg.lId
+      ].concat(ds).concat([
+        '  --dataset.single_task="' + cfg.task + '"',
+        '  --resume=true',
+        '  --dataset.num_episodes=10'
+      ]))
+    });
+
+    sections.push({
+      step: '7',
+      title: '에피소드 재생',
+      desc: '로봇의 반복 정밀도를 확인합니다. 인덱스는 0부터 시작합니다.',
+      lang: 'bash',
+      code: join([
+        'lerobot-replay',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId,
+        '  --dataset.repo_id=' + cfg.repoId,
+        cfg.localOnly ? '  --dataset.root=' + cfg.dsRoot : null,
+        '  --dataset.episode=0'
+      ])
+    });
+
+    sections.push({
+      step: '8',
+      title: '정책 학습',
+      desc: '출력 폴더가 이미 있으면 오류가 납니다. 새 폴더를 쓰거나 --resume=true 를 추가하세요.',
+      lang: 'bash',
+      code: join([
+        'lerobot-train',
+        '  --dataset.repo_id=' + cfg.repoId,
+        cfg.localOnly ? '  --dataset.root=' + cfg.dsRoot : null,
+        '  --policy.type=' + cfg.policy,
+        '  --policy.device=' + cfg.device,
+        '  --steps=' + cfg.steps,
+        '  --output_dir=' + cfg.outDir,
+        '  --wandb.enable=' + (cfg.wandb ? 'true' : 'false'),
+        '  --policy.push_to_hub=false'
+      ])
+    });
+
+    sections.push({
+      step: '9',
+      title: '추론 — 빠른 동작 확인',
+      desc: '데이터를 기록하지 않고 정책만 실행합니다. 첫 실행은 duration 을 짧게 하세요.',
+      lang: 'bash',
+      code: join([
+        'lerobot-rollout',
+        '  --strategy.type=base',
+        '  --policy.path=' + cfg.outDir + '/checkpoints/last/pretrained_model',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId,
+        cams,
+        '  --task="' + cfg.task + '"',
+        '  --duration=30'
+      ])
+    });
+
+    var rolloutRepo = cfg.repoId.indexOf('/') >= 0
+      ? cfg.repoId.split('/')[0] + '/rollout_' + cfg.repoId.split('/').slice(1).join('_')
+      : 'rollout_' + cfg.repoId;
+
+    sections.push({
+      step: '10',
+      title: '추론 — 성공률 측정',
+      desc: '데이터셋 이름은 반드시 rollout_ 으로 시작해야 합니다.',
+      lang: 'bash',
+      code: join([
+        'lerobot-rollout',
+        '  --strategy.type=episodic',
+        '  --policy.path=' + cfg.outDir + '/checkpoints/last/pretrained_model',
+        '  --robot.type=so101_follower',
+        '  --robot.port=' + cfg.fPort,
+        '  --robot.id=' + cfg.fId,
+        cams,
+        '  --dataset.repo_id=' + rolloutRepo,
+        '  --dataset.root=./datasets/' + rolloutRepo.split('/').pop(),
+        '  --dataset.no_stamp=true',
+        '  --dataset.push_to_hub=false',
+        '  --dataset.single_task="' + cfg.task + '"',
+        '  --dataset.num_episodes=20'
+      ])
+    });
+
+    return sections;
+  }
+
+  // ------------------------------------------------------------- 렌더링
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function render() {
+    var cfg = read();
+    save(cfg);
+    out.innerHTML = build(cfg).map(function (s) {
+      return '<section class="cmd-section">' +
+        '<h2><span class="cmd-step">STEP ' + s.step + '</span>' + s.title + '</h2>' +
+        '<p>' + s.desc + '</p>' +
+        '<div class="code-block"><div class="code-head">' +
+        '<span class="code-lang">' + s.lang + '</span>' +
+        '<button class="copy-btn" type="button">복사</button></div>' +
+        '<pre><code>' + esc(s.code) + '</code></pre></div>' +
+        '</section>';
+    }).join('');
+    bindCopy();
+  }
+
+  function bindCopy() {
+    out.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.closest('.code-block').querySelector('code').textContent;
+        var done = function () {
+          btn.textContent = '복사됨';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.textContent = '복사';
+            btn.classList.remove('copied');
+          }, 1400);
+        };
+        if (navigator.clipboard) navigator.clipboard.writeText(code).then(done, fallback);
+        else fallback();
+
+        function fallback() {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) { /* noop */ }
+          document.body.removeChild(ta);
+        }
+      });
+    });
+  }
+
+  // OS를 바꾸면 포트 기본값을 맞춰 준다
+  document.getElementById('os').addEventListener('change', function () {
+    var os = this.value;
+    var f = document.getElementById('fPort');
+    var l = document.getElementById('lPort');
+    if (os === 'linux') { f.value = '/dev/ttyACM0'; l.value = '/dev/ttyACM1'; }
+    else if (os === 'mac') {
+      f.value = '/dev/tty.usbmodem5AAF2193061';
+      l.value = '/dev/tty.usbmodem5AAF2194741';
+    } else { f.value = 'COM3'; l.value = 'COM4'; }
+    render();
+  });
+
+  document.getElementById('btnReset').addEventListener('click', function () {
+    write(DEFAULTS);
+    render();
+  });
+
+  form.addEventListener('input', render);
+  form.addEventListener('change', render);
+
+  var saved = load();
+  if (saved) write(saved);
+  render();
+})();
+</script>
+</body>
+</html>

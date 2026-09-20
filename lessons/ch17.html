@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>17. ros2_control과 실기 하드웨어 인터페이스 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="Feetech 버스를 ros2_control SystemInterface로 감싸 실제 팔을 ROS 2에서 제어합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" class="active" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch17">
+  <div class="lesson-head">
+    <div class="crumbs">PART 5 ROS 2 연동과 시뮬레이션 &middot; 약 45분</div>
+    <h1><span class="lesson-no">17</span>ros2_control과 실기 하드웨어 인터페이스</h1>
+    <p class="lede">Feetech 버스를 ros2_control SystemInterface로 감싸 실제 팔을 ROS 2에서 제어합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="ros2control의-구조">ros2_control의 구조<a class="anchor" href="#ros2control의-구조">#</a></h2>
+<p>ROS 2에서 실제 하드웨어를 제어하는 표준 프레임워크입니다. 세 층으로 나뉩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">┌─────────────────────────────────────────┐
+│  컨트롤러 (Controller)                   │  joint_trajectory_controller
+│  &quot;이 궤적대로 움직여라&quot;                    │  joint_state_broadcaster
+├─────────────────────────────────────────┤
+│  컨트롤러 매니저 (Controller Manager)      │  제어 주기마다 read() → update() → write()
+├─────────────────────────────────────────┤
+│  하드웨어 인터페이스 (SystemInterface)      │  so_arm_hardware
+│  &quot;시리얼로 서보에 명령을 쓰고 상태를 읽는다&quot;  │
+└─────────────────────────────────────────┘
+                    ↓ USB 시리얼 (SCS 프로토콜)
+              STS3215 × 6</code></pre></div>
+<p>핵심은 <strong>컨트롤러가 하드웨어를 모른다</strong>는 점입니다. 같은 <code>joint_trajectory_controller</code>가 Mock에서도, Gazebo에서도, 실물에서도 동일하게 동작합니다. 바뀌는 것은 맨 아래 하드웨어 인터페이스뿐입니다.</p>
+<hr>
+<figure class="fig" id="fig-ros2-control-stack"><svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="ros2_control 3층 구조와 하드웨어 전환">
+  <defs>
+    <marker id="rc-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    컨트롤러는 하드웨어를 모릅니다</text>
+  <text class="sub" x="16" y="42">
+    맨 아래 한 줄만 바꾸면 같은 코드가 가상·시뮬레이션·실물에서 그대로 돕니다</text>
+
+  <!-- MoveIt -->
+  <rect class="box" x="140" y="60" width="320" height="34" rx="6"/>
+  <text class="lbl" x="300" y="82" text-anchor="middle" font-size="12.5">MoveIt 2 — 경로 계획</text>
+
+  <path class="ln" stroke="var(--border)" stroke-width="1.8" d="M300 94 V110"
+        marker-end="url(#rc-a)" color="var(--border)"/>
+  <text class="tag mono" x="310" y="107" font-size="10">FollowJointTrajectory</text>
+
+  <!-- 컨트롤러 -->
+  <rect class="box-hi" x="60" y="114" width="480" height="52" rx="7"/>
+  <text class="hi" x="76" y="136" font-size="12.5">컨트롤러</text>
+  <text class="sub mono" x="76" y="154" font-size="10.5">joint_trajectory_controller · joint_state_broadcaster</text>
+  <text class="sub" x="524" y="145" text-anchor="end" font-size="10.5">6개 관절 전체를 하나가 제어</text>
+
+  <!-- 매니저 -->
+  <rect class="box" x="60" y="176" width="480" height="44" rx="7"/>
+  <text class="lbl" x="76" y="196" font-size="12.5">컨트롤러 매니저</text>
+  <text class="sub mono" x="76" y="212" font-size="10.5">100 Hz · read() → update() → write()</text>
+
+  <!-- 하드웨어 인터페이스 -->
+  <text class="sub" x="300" y="240" text-anchor="middle" font-size="11">
+    ↓ 하드웨어 인터페이스 — xacro 인자 하나로 갈아끼웁니다</text>
+
+  <g>
+    <rect class="box" x="24"  y="250" width="176" height="60" rx="7"/>
+    <rect class="box" x="212" y="250" width="176" height="60" rx="7"/>
+    <rect class="box-hi" x="400" y="250" width="176" height="60" rx="7"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="lbl mono" x="112" y="270" font-size="11.5">hardware_type:=mock</text>
+    <text class="sub" x="112" y="287" font-size="10.5">GenericSystem</text>
+    <text class="sub" x="112" y="301" font-size="10.5">하드웨어 없이 메모리에서</text>
+
+    <text class="lbl mono" x="300" y="270" font-size="11.5">:=gazebo</text>
+    <text class="sub" x="300" y="287" font-size="10.5">GazeboSimSystem</text>
+    <text class="sub" x="300" y="301" font-size="10.5">중력·마찰·관성 포함</text>
+
+    <text class="hi mono" x="488" y="270" font-size="11.5">:=real</text>
+    <text class="sub" x="488" y="287" font-size="10.5">so_arm_hardware</text>
+    <text class="sub" x="488" y="301" font-size="10.5">SCS 시리얼 → STS3215</text>
+  </g>
+
+  <g class="ln" stroke="var(--border)" stroke-width="1.4">
+    <path d="M112 220 V250"/><path d="M300 220 V250"/>
+    <path d="M488 220 V250"/>
+  </g>
+</svg><figcaption>같은 컨트롤러가 mock·gazebo·real 에서 그대로 돕니다. 바뀌는 것은 맨 아래 한 층뿐입니다.</figcaption></figure>
+<h2 id="하드웨어-타입-전환">하드웨어 타입 전환<a class="anchor" href="#하드웨어-타입-전환">#</a></h2>
+<p>xacro 인자 하나로 세 가지 모드를 전환합니다.</p>
+<div class="table-wrap"><table><thead><tr><th><code>hardware_type</code></th><th>플러그인</th><th>용도</th></tr></thead><tbody><tr><td><code>mock</code></td><td><code>mock_components/GenericSystem</code></td><td>하드웨어 없이 테스트</td></tr><tr><td><code>gazebo</code></td><td><code>gz_ros2_control/GazeboSimSystem</code></td><td>물리 시뮬레이션 (<a href="../lessons/ch19.html">19장</a>)</td></tr><tr><td><code>real</code></td><td><code>so_arm_hardware/SOArmHardware</code></td><td><strong>실물 SO-ARM101</strong></td></tr></tbody></table></div>
+<h3 id="ros2control-xacro">ros2_control xacro<a class="anchor" href="#ros2control-xacro">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;robot xmlns:xacro=&quot;http://www.ros.org/wiki/xacro&quot;&gt;
+
+  &lt;xacro:macro name=&quot;so101_ros2_control&quot;
+               params=&quot;name hardware_type usb_port baud_rate:=1000000&quot;&gt;
+    &lt;ros2_control name=&quot;${name}&quot; type=&quot;system&quot;&gt;
+
+      &lt;!-- ── 하드웨어 플러그인 선택 ───────────────────────── --&gt;
+      &lt;xacro:if value=&quot;${hardware_type == &#x27;mock&#x27;}&quot;&gt;
+        &lt;hardware&gt;
+          &lt;plugin&gt;mock_components/GenericSystem&lt;/plugin&gt;
+          &lt;param name=&quot;calculate_dynamics&quot;&gt;true&lt;/param&gt;
+        &lt;/hardware&gt;
+      &lt;/xacro:if&gt;
+
+      &lt;xacro:if value=&quot;${hardware_type == &#x27;gazebo&#x27;}&quot;&gt;
+        &lt;hardware&gt;
+          &lt;plugin&gt;gz_ros2_control/GazeboSimSystem&lt;/plugin&gt;
+        &lt;/hardware&gt;
+      &lt;/xacro:if&gt;
+
+      &lt;xacro:if value=&quot;${hardware_type == &#x27;real&#x27;}&quot;&gt;
+        &lt;hardware&gt;
+          &lt;plugin&gt;so_arm_hardware/SOArmHardware&lt;/plugin&gt;
+          &lt;param name=&quot;usb_port&quot;&gt;${usb_port}&lt;/param&gt;
+          &lt;param name=&quot;baud_rate&quot;&gt;${baud_rate}&lt;/param&gt;
+          &lt;param name=&quot;torque_enable&quot;&gt;true&lt;/param&gt;
+        &lt;/hardware&gt;
+      &lt;/xacro:if&gt;
+
+      &lt;!-- ── 조인트 정의 ────────────────────────────────── --&gt;
+      &lt;xacro:so101_joint name=&quot;shoulder_pan&quot;  id=&quot;1&quot; min=&quot;-1.91986&quot;  max=&quot;1.91986&quot;  offset=&quot;0&quot;/&gt;
+      &lt;xacro:so101_joint name=&quot;shoulder_lift&quot; id=&quot;2&quot; min=&quot;-1.74533&quot;  max=&quot;1.74533&quot;  offset=&quot;0&quot;/&gt;
+      &lt;xacro:so101_joint name=&quot;elbow_flex&quot;    id=&quot;3&quot; min=&quot;-1.69&quot;     max=&quot;1.69&quot;     offset=&quot;0&quot;/&gt;
+      &lt;xacro:so101_joint name=&quot;wrist_flex&quot;    id=&quot;4&quot; min=&quot;-1.65806&quot;  max=&quot;1.65806&quot;  offset=&quot;0&quot;/&gt;
+      &lt;xacro:so101_joint name=&quot;wrist_roll&quot;    id=&quot;5&quot; min=&quot;-2.74385&quot;  max=&quot;2.84121&quot;  offset=&quot;0&quot;/&gt;
+      &lt;xacro:so101_joint name=&quot;gripper&quot;       id=&quot;6&quot; min=&quot;-0.174533&quot; max=&quot;1.74533&quot;  offset=&quot;0&quot;/&gt;
+
+    &lt;/ros2_control&gt;
+  &lt;/xacro:macro&gt;
+
+  &lt;xacro:macro name=&quot;so101_joint&quot; params=&quot;name id min max offset&quot;&gt;
+    &lt;joint name=&quot;${name}&quot;&gt;
+      &lt;command_interface name=&quot;position&quot;&gt;
+        &lt;param name=&quot;min&quot;&gt;${min}&lt;/param&gt;
+        &lt;param name=&quot;max&quot;&gt;${max}&lt;/param&gt;
+      &lt;/command_interface&gt;
+      &lt;state_interface name=&quot;position&quot;/&gt;
+      &lt;state_interface name=&quot;velocity&quot;/&gt;
+      &lt;state_interface name=&quot;effort&quot;/&gt;
+      &lt;param name=&quot;servo_id&quot;&gt;${id}&lt;/param&gt;
+      &lt;param name=&quot;position_offset&quot;&gt;${offset}&lt;/param&gt;
+    &lt;/joint&gt;
+  &lt;/xacro:macro&gt;
+
+&lt;/robot&gt;</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">`position_offset` 이 핵심입니다</div><div class="callout-body"><p>서보의 중위(2048)와 URDF의 0 rad가 정확히 일치하지 않으면 RViz 자세와 실제 자세가 어긋납니다. 이 오프셋 값(서보 틱 단위)으로 보정합니다. 아래 &quot;자세 불일치 보정&quot;에서 다룹니다.</p></div></div>
+<hr>
+<h2 id="컨트롤러-설정">컨트롤러 설정<a class="anchor" href="#컨트롤러-설정">#</a></h2>
+<p><code>config/controllers.yaml</code>:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">yaml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-yaml">controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - shoulder_pan
+      - shoulder_lift
+      - elbow_flex
+      - wrist_flex
+      - wrist_roll
+      - gripper
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    constraints:
+      stopped_velocity_tolerance: 0.05
+      goal_time: 0.5</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">그리퍼를 별도 컨트롤러로 두지 않습니다</div><div class="callout-body"><p>원문 위키 구성에서도 <code>gripper_controller</code>는 제거되었고, **<code>joint_trajectory_controller</code>가 6개 관절 전체를 제어**합니다. MoveIt 설정도 여기에 맞춰야 합니다.</p></div></div>
+<h3 id="jointlimits-yaml">joint_limits.yaml<a class="anchor" href="#jointlimits-yaml">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">yaml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-yaml">joint_limits:
+  shoulder_pan:
+    has_position_limits: true
+    min_position: -1.91986
+    max_position: 1.91986
+    has_velocity_limits: true
+    max_velocity: 1.5
+    has_acceleration_limits: true
+    max_acceleration: 3.0
+  shoulder_lift:
+    has_position_limits: true
+    min_position: -1.74533
+    max_position: 1.74533
+    has_velocity_limits: true
+    max_velocity: 1.5
+    has_acceleration_limits: true
+    max_acceleration: 3.0
+  # ... 나머지 조인트 동일 패턴</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">처음에는 속도를 낮추세요</div><div class="callout-body"><p><code>max_velocity</code>를 <strong>0.5 rad/s</strong> 정도로 낮춰 두고 시작하세요. 동작을 확인한 뒤 점진적으로 올리면 사고를 크게 줄일 수 있습니다.</p></div></div>
+<hr>
+<h2 id="실기-구동">실기 구동<a class="anchor" href="#실기-구동">#</a></h2>
+<h3 id="1-컨트롤러-단독-실행">1) 컨트롤러 단독 실행<a class="anchor" href="#1-컨트롤러-단독-실행">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 launch so_arm101_description controllers_bringup.launch.py \
+  hardware_type:=real \
+  usb_port:=/dev/ttyACM0</code></pre></div>
+<p><code>so_arm_hardware</code> 플러그인이 자동으로 다음을 수행합니다.</p>
+<ol><li>시리얼 포트를 엽니다.</li><li><strong>서보 ID 1~6을 스캔</strong>합니다.</li><li>각 서보가 응답하는지 검증합니다.</li><li><strong>토크를 활성화</strong>하고 현재 위치를 읽습니다.</li></ol>
+<div class="callout callout-danger"><div class="callout-title">토크가 켜지는 순간</div><div class="callout-body"><p>토크가 활성화되면 팔이 <strong>현재 위치를 유지하려고 힘을 줍니다.</strong> 팔이 중력으로 처져 있었다면 그 자세를 그대로 유지합니다. 실행 전에 팔을 안정적인 자세(예: rest)로 두세요.</p></div></div>
+<h3 id="2-moveit까지-한-번에">2) MoveIt까지 한 번에<a class="anchor" href="#2-moveit까지-한-번에">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 launch so_arm101_moveit_config demo.launch.py \
+  hardware_type:=real \
+  usb_port:=/dev/ttyACM0</code></pre></div>
+<p><code>demo.launch.py</code>는 <strong>컨트롤러 스택을 내부에 포함</strong>하고 있습니다.</p>
+<div class="callout callout-warn"><div class="callout-title">두 방식을 동시에 실행하지 마세요</div><div class="callout-body"><p>1)번을 이미 실행 중이라면 반드시 종료한 뒤 2)번을 실행하세요. 컨트롤러 매니저가 두 개 뜨면 충돌합니다.</p></div></div>
+<h3 id="1번을-쓴-경우-moveit-추가-실행">1)번을 쓴 경우 MoveIt 추가 실행<a class="anchor" href="#1번을-쓴-경우-moveit-추가-실행">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 터미널 2 — move_group
+ros2 launch so_arm101_moveit_config move_group.launch.py
+
+# 터미널 3 — RViz
+ros2 launch so_arm101_moveit_config moveit_rviz.launch.py</code></pre></div>
+<hr>
+<h2 id="자세-불일치-보정">자세 불일치 보정<a class="anchor" href="#자세-불일치-보정">#</a></h2>
+<p>RViz에 표시되는 자세가 실제 팔과 다를 때 (관절 오프셋, 잘못된 충돌 경고 등) 다음 순서로 잡습니다.</p>
+<h3 id="1-서보-중위-캘리브레이션-확인">1) 서보 중위 캘리브레이션 확인<a class="anchor" href="#1-서보-중위-캘리브레이션-확인">#</a></h3>
+<p>먼저 <a href="../lessons/ch05.html">5장</a>의 서보 중위 캘리브레이션이 제대로 되었는지 확인합니다. 이것이 안 되어 있으면 오프셋으로 아무리 보정해도 가동범위가 비대칭으로 남습니다.</p>
+<h3 id="2-positionoffset-조정">2) position_offset 조정<a class="anchor" href="#2-positionoffset-조정">#</a></h3>
+<p><code>so101.ros2_control.xacro</code>에서 해당 조인트의 <code>position_offset</code>을 수정합니다.</p>
+<div class="callout callout-info"><div class="callout-title">환산 공식</div><div class="callout-body"><div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">새 offset = 현재 offset + (RViz에 표시된 오차 rad ÷ 0.00153398)</code></pre></div>
+<p><code>0.00153398 rad</code>는 STS3215의 <strong>1틱</strong>입니다. (2π ÷ 4096)</p></div></div>
+<p><strong>예시</strong>: <code>elbow_flex</code>가 실제로는 0°인데 RViz에서 <code>0.12 rad</code>로 표시된다면,</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">0.12 ÷ 0.00153398 ≈ 78.2 → 78틱
+새 offset = 0 + 78 = 78</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;xacro:so101_joint name=&quot;elbow_flex&quot; id=&quot;3&quot; min=&quot;-1.69&quot; max=&quot;1.69&quot; offset=&quot;78&quot;/&gt;</code></pre></div>
+<h3 id="3-재빌드">3) 재빌드<a class="anchor" href="#3-재빌드">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">colcon build --packages-select so_arm101_description --symlink-install
+source install/setup.bash</code></pre></div>
+<p><code>--symlink-install</code>을 썼다면 xacro 수정은 재빌드 없이 반영될 수 있지만, 확실하게 하려면 재빌드하세요.</p>
+<div class="callout callout-task"><div class="callout-title">실습 — 오프셋 잡기</div><div class="callout-body"><ol><li>팔을 손으로 잡아 각 관절이 <strong>0°(중립)</strong> 이 되도록 맞춥니다.</li><li><code>ros2 topic echo /joint_states --once</code> 로 현재 값을 읽습니다.</li><li>0에서 벗어난 값을 위 공식에 넣어 오프셋을 계산합니다.</li><li>xacro 수정 → 재빌드 → 재실행 → 다시 확인.</li><li>모든 관절이 0에 가까워질 때까지 반복합니다.</li></ol></div></div>
+<hr>
+<h2 id="시리얼-문제-해결">시리얼 문제 해결<a class="anchor" href="#시리얼-문제-해결">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 포트 존재 확인
+ls -l /dev/ttyACM*
+
+# 권한 확인
+groups   # dialout 이 있어야 함
+
+# 임시 권한
+sudo chmod 666 /dev/ttyACM0
+
+# 포트를 점유한 프로세스 찾기
+sudo lsof /dev/ttyACM0</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">LeRobot과 동시에 실행할 수 없습니다</div><div class="callout-body"><p><code>lerobot-teleoperate</code>가 돌고 있으면 그 프로세스가 시리얼 포트를 점유합니다. ROS 2 하드웨어 인터페이스가 같은 포트를 열 수 없습니다. <strong>한 번에 하나만</strong> 실행하세요.</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td><code>Permission denied</code></td><td>dialout 그룹 미가입</td><td><code>sudo usermod -a -G dialout $USER</code> 후 재로그인</td></tr><tr><td><code>Device or resource busy</code></td><td>다른 프로세스가 점유</td><td><code>sudo lsof /dev/ttyACM0</code> 로 확인 후 종료</td></tr><tr><td>서보 스캔 실패</td><td>ID 미설정 또는 보레이트 불일치</td><td><a href="../lessons/ch05.html">5장</a> 재확인</td></tr><tr><td>일부 서보만 인식</td><td>3핀 케이블 접촉 불량</td><td>배선 점검</td></tr><tr><td>토크 활성화 실패</td><td>전원 미연결</td><td>12V 어댑터 확인</td></tr><tr><td>포트 번호가 매번 바뀜</td><td>udev 규칙 없음</td><td><a href="../lessons/ch07.html">7장</a> udev 설정</td></tr></tbody></table></div>
+<hr>
+<h2 id="컨트롤러-운용-명령-모음">컨트롤러 운용 명령 모음<a class="anchor" href="#컨트롤러-운용-명령-모음">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 컨트롤러 목록과 상태
+ros2 control list_controllers
+
+# 하드웨어 인터페이스 목록
+ros2 control list_hardware_interfaces
+
+# 컨트롤러 비활성화
+ros2 control set_controller_state joint_trajectory_controller inactive
+
+# 컨트롤러 로드 + 활성화 (spawner 사용 권장)
+ros2 run controller_manager spawner joint_trajectory_controller
+
+# 컨트롤러 언로드
+ros2 control unload_controller joint_trajectory_controller</code></pre></div>
+<div class="callout callout-danger"><div class="callout-title">`load_controller` 를 먼저 쓰지 마세요</div><div class="callout-body"><p><code>ros2 control load_controller</code>를 먼저 실행하면 컨트롤러가 **<code>unconfigured</code> 상태**가 되어, 이후 <code>spawner</code>가 활성화하지 못합니다. 이미 그렇게 했다면 <code>unload_controller</code>로 내린 뒤 <code>spawner</code>로 다시 시작하세요.</p></div></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch18.html">18장 MoveIt 2 모션 플래닝</a> — 목표 자세만 주면 충돌 없는 경로를 자동으로 만들어 줍니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch16.html"><span>이전</span>ROS 2 워크스페이스 구성과 RViz2</a><a class="pager-next" href="ch18.html"><span>다음</span>MoveIt 2 모션 플래닝</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#ros2control의-구조">ros2_control의 구조</a><a class="toc-l2" href="#하드웨어-타입-전환">하드웨어 타입 전환</a><a class="toc-l3" href="#ros2control-xacro">ros2_control xacro</a><a class="toc-l2" href="#컨트롤러-설정">컨트롤러 설정</a><a class="toc-l3" href="#jointlimits-yaml">joint_limits.yaml</a><a class="toc-l2" href="#실기-구동">실기 구동</a><a class="toc-l3" href="#1-컨트롤러-단독-실행">1) 컨트롤러 단독 실행</a><a class="toc-l3" href="#2-moveit까지-한-번에">2) MoveIt까지 한 번에</a><a class="toc-l3" href="#1번을-쓴-경우-moveit-추가-실행">1)번을 쓴 경우 MoveIt 추가 실행</a><a class="toc-l2" href="#자세-불일치-보정">자세 불일치 보정</a><a class="toc-l3" href="#1-서보-중위-캘리브레이션-확인">1) 서보 중위 캘리브레이션 확인</a><a class="toc-l3" href="#2-positionoffset-조정">2) position_offset 조정</a><a class="toc-l3" href="#3-재빌드">3) 재빌드</a><a class="toc-l2" href="#시리얼-문제-해결">시리얼 문제 해결</a><a class="toc-l2" href="#컨트롤러-운용-명령-모음">컨트롤러 운용 명령 모음</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

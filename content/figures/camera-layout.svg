@@ -1,0 +1,54 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="손목 카메라와 전역 카메라의 배치와 시야">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">두 대가 서로 다른 것을 봅니다</text>
+
+  <!-- 바닥 -->
+  <path stroke="var(--border)" stroke-width="1.6" d="M30 246 H570"/>
+  <text class="sub" x="566" y="264" text-anchor="end">작업대</text>
+
+  <!-- 팔 -->
+  <rect class="box" x="66" y="222" width="52" height="24" rx="4"/>
+  <g stroke="var(--accent)" stroke-width="11" stroke-linecap="round" fill="none" opacity="0.5">
+    <path d="M92 222 V184"/>
+    <path d="M92 184 L166 140"/>
+    <path d="M166 140 L246 176"/>
+  </g>
+  <circle class="box-hi" cx="92" cy="184" r="6"/>
+  <circle class="box-hi" cx="166" cy="140" r="6"/>
+  <circle class="box-hi" cx="246" cy="176" r="6"/>
+
+  <!-- 큐브 -->
+  <rect class="box" x="286" y="228" width="20" height="18" rx="2"/>
+  <text class="sub" x="296" y="264" text-anchor="middle" font-size="10.5">대상물</text>
+
+  <!-- 손목 카메라 -->
+  <rect class="box-hi" x="228" y="150" width="30" height="18" rx="3"/>
+  <text class="hi mono" x="243" y="143" text-anchor="middle" font-size="10">wrist</text>
+  <path fill="var(--accent)" opacity="0.14" d="M252 168 L330 214 L268 246 Z"/>
+  <path stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" fill="none"
+        d="M252 168 L330 214 M252 168 L268 246"/>
+
+  <!-- 전역 카메라 -->
+  <rect class="box" x="470" y="70" width="40" height="24" rx="4"/>
+  <text class="lbl mono" x="490" y="62" text-anchor="middle" font-size="10.5">top</text>
+  <path fill="var(--info)" opacity="0.10" d="M478 94 L200 246 L470 246 Z"/>
+  <path stroke="var(--info)" stroke-width="1" stroke-dasharray="3 3" fill="none"
+        d="M478 94 L200 246 M478 94 L470 246"/>
+  <rect class="box" x="484" y="94" width="12" height="152" rx="2"/>
+  <text class="sub" x="516" y="176" font-size="10.5">삼각대에</text>
+  <text class="sub" x="516" y="189" font-size="10.5">고정</text>
+
+  <!-- 설명 -->
+  <g>
+    <rect class="box-hi" x="16" y="44" width="264" height="44" rx="6"/>
+    <text class="hi" x="30" y="64" font-size="12">손목 카메라 — 파지 직전 정밀 정렬</text>
+    <text class="sub" x="30" y="80" font-size="10.5">그리퍼 조가 화면 아래에 살짝 보이게 각도를 잡으세요</text>
+
+    <rect class="box" x="296" y="44" width="288" height="44" rx="6"/>
+    <text class="lbl" x="310" y="64" font-size="12">전역 카메라 — 물체 탐색과 전체 맥락</text>
+    <text class="sub" x="310" y="80" font-size="10.5">로봇 베이스가 아니라 별도 스탠드에 — 진동이 전달됩니다</text>
+  </g>
+
+  <text class="dg" x="16" y="286" font-size="11.5">
+    판별 기준 — 이 두 화면만 보고 사람이 작업을 할 수 있는가? 못 하면 정책도 못 합니다.</text>
+</svg>

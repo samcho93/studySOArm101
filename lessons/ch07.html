@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07. 시리얼 포트 확인과 권한 설정 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="lerobot-find-port로 리더/팔로워 포트를 구분하고, udev 규칙으로 포트를 고정합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" class="active" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch07">
+  <div class="lesson-head">
+    <div class="crumbs">PART 2 서보 설정과 환경 구축 &middot; 약 20분</div>
+    <h1><span class="lesson-no">07</span>시리얼 포트 확인과 권한 설정</h1>
+    <p class="lede">lerobot-find-port로 리더/팔로워 포트를 구분하고, udev 규칙으로 포트를 고정합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="왜-헷갈리는가">왜 헷갈리는가<a class="anchor" href="#왜-헷갈리는가">#</a></h2>
+<p>리더와 팔로워를 모두 꽂으면 PC에는 <strong>똑같이 생긴 시리얼 포트 두 개</strong>가 생깁니다. 어느 쪽이 리더이고 어느 쪽이 팔로워인지 알아야 모든 명령이 제대로 동작합니다.</p>
+<p>게다가 이 포트 번호는 <strong>꽂는 순서에 따라 바뀔 수 있습니다.</strong> 재부팅하거나 USB를 다시 꽂으면 리더와 팔로워가 뒤바뀔 수 있다는 뜻입니다.</p>
+<hr>
+<h2 id="방법-1-os-명령으로-직접-보기">방법 1 — OS 명령으로 직접 보기<a class="anchor" href="#방법-1-os-명령으로-직접-보기">#</a></h2>
+<h3 id="linux-ubuntu">Linux (Ubuntu)<a class="anchor" href="#linux-ubuntu">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ls /dev/ttyACM*</code></pre></div>
+<p>USB를 꽂기 <strong>전후로 두 번</strong> 실행해 새로 생긴 장치를 확인하는 것이 가장 확실합니다.</p>
+<div class="callout callout-tip"><div class="callout-title">꽂는 순서를 정해 두세요</div><div class="callout-body"><p>원문 튜토리얼의 권장 순서는 <strong>팔로워(Follower)를 먼저 꽂고, 그다음 리더(Leader)를 꽂는</strong> 것입니다. 이러면 일반적으로 이렇게 잡힙니다.</p>
+<ul><li><code>/dev/ttyACM0</code> → <strong>팔로워(종동팔)</strong></li><li><code>/dev/ttyACM1</code> → <strong>리더(주동팔)</strong></li></ul></div></div>
+<h3 id="macos">macOS<a class="anchor" href="#macos">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ls /dev/tty.*
+ls /dev/cu.*</code></pre></div>
+<p>macOS에서는 같은 장치가 두 이름으로 보입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">팔로워:
+  /dev/tty.usbmodem5AAF2193061
+  /dev/tty.wchusbserial5AAF2193061
+리더:
+  /dev/tty.usbmodem5AAF2194741
+  /dev/tty.wchusbserial5AAF2194741</code></pre></div>
+<p><strong>둘 중 어느 쪽을 써도 동작합니다.</strong> 끝의 시리얼 번호가 같으면 같은 장치입니다.</p>
+<div class="callout callout-info"><div class="callout-title">tty vs cu</div><div class="callout-body"><p><code>/dev/tty.*</code>는 블로킹(캐리어 신호를 기다림), <code>/dev/cu.*</code>는 논블로킹입니다. 일부 도구에서는 <code>cu</code> 쪽이 더 안정적입니다.</p></div></div>
+<h3 id="windows">Windows<a class="anchor" href="#windows">#</a></h3>
+<p><strong>장치 관리자 → 포트(COM &amp; LPT)</strong> 에서 <code>COM3</code>, <code>COM4</code> 같은 번호를 확인합니다. USB를 뺐다 꽂으며 어느 번호가 사라졌다 나타나는지 보면 구분됩니다.</p>
+<hr>
+<h2 id="방법-2-lerobot-공식-도구-권장">방법 2 — LeRobot 공식 도구 (권장)<a class="anchor" href="#방법-2-lerobot-공식-도구-권장">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-find-port</code></pre></div>
+<p>실행하면 현재 포트 목록을 보여주고, <strong>USB 케이블을 뽑으라고 안내</strong>합니다. 뽑고 Enter를 누르면 사라진 포트를 찾아 알려줍니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">Finding all available ports for the MotorBus.
+[&#x27;/dev/ttyACM0&#x27;, &#x27;/dev/ttyACM1&#x27;]
+Remove the usb cable from your MotorsBus and press Enter when done.
+
+[...해당하는 리더 또는 팔로워 팔의 USB를 뽑고 Enter...]
+
+The port of this MotorsBus is /dev/ttyACM1
+Reconnect the USB cable.</code></pre></div>
+<p>macOS 예시 출력:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">Finding all available ports for the MotorBus.
+[&#x27;/dev/tty.usbmodem575E0032081&#x27;, &#x27;/dev/tty.usbmodem575E0031751&#x27;]
+Remove the USB cable from your MotorsBus and press Enter when done.
+The port of this MotorsBus is /dev/tty.usbmodem575E0032081</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">반드시 USB를 실제로 뽑아야 합니다</div><div class="callout-body"><p>케이블을 뽑지 않으면 포트가 감지되지 않습니다. 전원 어댑터가 아니라 <strong>USB 커넥터</strong>를 뽑아야 합니다.</p></div></div>
+<p><strong>리더와 팔로워 각각 한 번씩, 총 두 번</strong> 실행하세요.</p>
+<hr>
+<h2 id="내-포트-기록해-두기">내 포트 기록해 두기<a class="anchor" href="#내-포트-기록해-두기">#</a></h2>
+<p>앞으로 모든 명령에 이 값을 넣게 됩니다. 메모해 두세요.</p>
+<div class="table-wrap"><table><thead><tr><th>역할</th><th>내 포트</th><th>LeRobot 타입</th><th>id 이름(예시)</th></tr></thead><tbody><tr><td>팔로워 (종동팔)</td><td><code>/dev/ttyACM0</code></td><td><code>so101_follower</code></td><td><code>my_awesome_follower_arm</code></td></tr><tr><td>리더 (주동팔)</td><td><code>/dev/ttyACM1</code></td><td><code>so101_leader</code></td><td><code>my_awesome_leader_arm</code></td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">명령어 생성기를 쓰세요</div><div class="callout-body"><p><a href="../tools/cli-builder.html">명령어 생성기</a>에 포트와 id를 한 번 입력해 두면, 이후 모든 장의 명령이 <strong>내 환경에 맞게 자동 완성</strong>됩니다. 브라우저에 저장되므로 다시 입력할 필요가 없습니다.</p></div></div>
+<hr>
+<h2 id="포트-권한-설정">포트 권한 설정<a class="anchor" href="#포트-권한-설정">#</a></h2>
+<h3 id="임시-재부팅하면-초기화됨">임시 — 재부팅하면 초기화됨<a class="anchor" href="#임시-재부팅하면-초기화됨">#</a></h3>
+<p>Linux:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo chmod 666 /dev/ttyACM0
+sudo chmod 666 /dev/ttyACM1</code></pre></div>
+<p>한 번에:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo chmod 666 /dev/ttyACM*</code></pre></div>
+<p>macOS:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">chmod 666 /dev/tty.*</code></pre></div>
+<h3 id="영구-dialout-그룹-권장">영구 — dialout 그룹 (권장)<a class="anchor" href="#영구-dialout-그룹-권장">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo usermod -a -G dialout $USER</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">로그아웃 후 다시 로그인해야 적용됩니다</div><div class="callout-body"><p>그룹 변경은 새 로그인 세션부터 반영됩니다. <code>groups</code> 명령으로 <code>dialout</code>이 보이면 성공입니다.</p></div></div>
+<h3 id="권한-오류-증상">권한 오류 증상<a class="anchor" href="#권한-오류-증상">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">serial.serialutil.SerialException: [Errno 13] could not open port /dev/ttyACM0:
+[Errno 13] Permission denied: &#x27;/dev/ttyACM0&#x27;</code></pre></div>
+<p>이 오류가 뜨면 위 권한 설정을 하지 않은 것입니다.</p>
+<hr>
+<h2 id="udev-규칙으로-포트-고정-강력-추천">udev 규칙으로 포트 고정 (강력 추천)<a class="anchor" href="#udev-규칙으로-포트-고정-강력-추천">#</a></h2>
+<p>포트 번호가 매번 바뀌는 문제를 근본적으로 해결하는 방법입니다. <strong>USB 장치의 시리얼 번호에 고정된 이름을 붙입니다.</strong></p>
+<h3 id="1-장치-정보-확인">1. 장치 정보 확인<a class="anchor" href="#1-장치-정보-확인">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">udevadm info -a -n /dev/ttyACM0 | grep -E &#x27;ATTRS\{(idVendor|idProduct|serial)\}&#x27; | head -3</code></pre></div>
+<p>출력 예:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">ATTRS{idVendor}==&quot;1a86&quot;
+ATTRS{idProduct}==&quot;55d3&quot;
+ATTRS{serial}==&quot;5AAF2193061&quot;</code></pre></div>
+<h3 id="2-규칙-파일-작성">2. 규칙 파일 작성<a class="anchor" href="#2-규칙-파일-작성">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo nano /etc/udev/rules.d/99-so-arm101.rules</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text"># SO-ARM101 팔로워(종동팔)
+SUBSYSTEM==&quot;tty&quot;, ATTRS{idVendor}==&quot;1a86&quot;, ATTRS{serial}==&quot;5AAF2193061&quot;, SYMLINK+=&quot;so101_follower&quot;, MODE=&quot;0666&quot;
+
+# SO-ARM101 리더(주동팔)
+SUBSYSTEM==&quot;tty&quot;, ATTRS{idVendor}==&quot;1a86&quot;, ATTRS{serial}==&quot;5AAF2194741&quot;, SYMLINK+=&quot;so101_leader&quot;, MODE=&quot;0666&quot;</code></pre></div>
+<h3 id="3-적용">3. 적용<a class="anchor" href="#3-적용">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo udevadm control --reload-rules
+sudo udevadm trigger</code></pre></div>
+<p>USB를 다시 꽂으면 이제 다음 이름으로 항상 접근할 수 있습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ls -l /dev/so101_*</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">/dev/so101_follower -&gt; ttyACM0
+/dev/so101_leader   -&gt; ttyACM1</code></pre></div>
+<p>이제 명령에서 이렇게 쓰면 됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">--robot.port=/dev/so101_follower
+--teleop.port=/dev/so101_leader</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">듀얼 암이라면 필수입니다</div><div class="callout-body"><p><a href="../lessons/ch21.html">21장</a>의 듀얼 팔로워 구성에서는 포트가 4개가 되어 뒤섞이기 매우 쉽습니다. udev 규칙을 미리 만들어 두면 &quot;왼팔과 오른팔이 뒤바뀌는&quot; 사고를 막을 수 있습니다.</p></div></div>
+<hr>
+<h2 id="연결-검증">연결 검증<a class="anchor" href="#연결-검증">#</a></h2>
+<p>포트가 제대로 잡혔는지 확인하는 가장 빠른 방법은 서보 스캔입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/scan_servos.py --port /dev/ttyACM0</code></pre></div>
+<p>정상이라면 ID 1~6이 모두 응답합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">포트 /dev/ttyACM0 (1000000 bps) 스캔 중...
+  ID 1  shoulder_pan    위치 2041  (-0.6°)   전압 11.9V  온도 31°C
+  ID 2  shoulder_lift   위치 2050  ( 0.2°)   전압 11.9V  온도 30°C
+  ID 3  elbow_flex      위치 2047  (-0.1°)   전압 11.9V  온도 32°C
+  ID 4  wrist_flex      위치 2048  ( 0.0°)   전압 11.9V  온도 29°C
+  ID 5  wrist_roll      위치 2045  (-0.3°)   전압 11.9V  온도 30°C
+  ID 6  gripper         위치 2100  ( 4.6°)   전압 11.9V  온도 28°C
+6개 서보 발견.</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th>스캔 결과</th><th>의미</th></tr></thead><tbody><tr><td>6개 모두 발견</td><td>정상</td></tr><tr><td>0개 발견</td><td>포트가 틀렸거나, 전원 미연결, 또는 Waveshare 점퍼가 A 채널</td></tr><tr><td>일부만 발견</td><td>해당 서보의 3핀 케이블 접촉 불량 또는 ID 미설정</td></tr><tr><td>ID 1이 여러 개</td><td>ID 설정이 안 된 서보가 섞임 → <a href="../lessons/ch05.html">5장</a> 재수행</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch08.html">8장 로봇 캘리브레이션</a> — 리더와 팔로워가 같은 물리 자세에서 같은 숫자를 내도록 맞춥니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch06.html"><span>이전</span>LeRobot 개발 환경 설치</a><a class="pager-next" href="ch08.html"><span>다음</span>로봇 캘리브레이션</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#왜-헷갈리는가">왜 헷갈리는가</a><a class="toc-l2" href="#방법-1-os-명령으로-직접-보기">방법 1 — OS 명령으로 직접 보기</a><a class="toc-l3" href="#linux-ubuntu">Linux (Ubuntu)</a><a class="toc-l3" href="#macos">macOS</a><a class="toc-l3" href="#windows">Windows</a><a class="toc-l2" href="#방법-2-lerobot-공식-도구-권장">방법 2 — LeRobot 공식 도구 (권장)</a><a class="toc-l2" href="#내-포트-기록해-두기">내 포트 기록해 두기</a><a class="toc-l2" href="#포트-권한-설정">포트 권한 설정</a><a class="toc-l3" href="#임시-재부팅하면-초기화됨">임시 — 재부팅하면 초기화됨</a><a class="toc-l3" href="#영구-dialout-그룹-권장">영구 — dialout 그룹 (권장)</a><a class="toc-l3" href="#권한-오류-증상">권한 오류 증상</a><a class="toc-l2" href="#udev-규칙으로-포트-고정-강력-추천">udev 규칙으로 포트 고정 (강력 추천)</a><a class="toc-l3" href="#1-장치-정보-확인">1. 장치 정보 확인</a><a class="toc-l3" href="#2-규칙-파일-작성">2. 규칙 파일 작성</a><a class="toc-l3" href="#3-적용">3. 적용</a><a class="toc-l2" href="#연결-검증">연결 검증</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

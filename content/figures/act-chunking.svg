@@ -1,0 +1,48 @@
+<svg viewBox="0 0 600 270" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="ACT의 action chunking과 temporal ensembling">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    ACT 는 다음 한 스텝이 아니라 다음 100스텝을 한꺼번에 예측합니다</text>
+
+  <!-- 시간축 -->
+  <path stroke="var(--border)" stroke-width="1.4" d="M60 214 H578"/>
+  <text class="sub" x="578" y="232" text-anchor="end" font-size="10.5">시간 →</text>
+
+  <!-- 일반 정책 -->
+  <text class="sub" x="16" y="62" font-size="11">한 스텝씩</text>
+  <g fill="var(--text-faint)" opacity="0.55">
+    <rect x="60"  y="52" width="16" height="14" rx="2"/>
+    <rect x="86"  y="52" width="16" height="14" rx="2"/>
+    <rect x="112" y="52" width="16" height="14" rx="2"/>
+    <rect x="138" y="52" width="16" height="14" rx="2"/>
+    <rect x="164" y="52" width="16" height="14" rx="2"/>
+    <rect x="190" y="52" width="16" height="14" rx="2"/>
+  </g>
+  <text class="sub" x="216" y="63" font-size="10.5">매 스텝 추론 → 느린 모델은 따라가지 못함</text>
+
+  <!-- 청크 -->
+  <text class="sub" x="16" y="104" font-size="11">청크 1</text>
+  <rect fill="var(--accent)" opacity="0.32" x="60" y="92" width="280" height="16" rx="3"/>
+  <text class="hi" x="200" y="105" text-anchor="middle" font-size="10.5">t 시점에 예측한 100스텝</text>
+
+  <text class="sub" x="16" y="134" font-size="11">청크 2</text>
+  <rect fill="var(--accent)" opacity="0.32" x="150" y="122" width="280" height="16" rx="3"/>
+  <text class="hi" x="290" y="135" text-anchor="middle" font-size="10.5">t+k 에 예측한 100스텝</text>
+
+  <text class="sub" x="16" y="164" font-size="11">청크 3</text>
+  <rect fill="var(--accent)" opacity="0.32" x="240" y="152" width="280" height="16" rx="3"/>
+  <text class="hi" x="380" y="165" text-anchor="middle" font-size="10.5">t+2k 에 예측한 100스텝</text>
+
+  <!-- 겹침 -->
+  <rect fill="var(--warn)" opacity="0.18" x="240" y="86" width="100" height="88" rx="3"/>
+  <text class="wr" x="290" y="192" text-anchor="middle" font-size="10.5">겹치는 구간은 평균</text>
+
+  <!-- 실행 -->
+  <path stroke="var(--accent)" stroke-width="2.6" fill="none"
+        d="M60 214 C 140 206, 200 220, 260 210 S 380 202, 460 212 S 540 208, 578 214"/>
+  <text class="hi" x="76" y="204" font-size="10.5">실제 실행 궤적 — 매끄럽게 이어집니다</text>
+
+  <text class="sub" x="16" y="258">
+    <tspan class="lbl">장점</tspan> 추론이 느려도 동작이 끊기지 않습니다  ·
+    <tspan class="lbl">단점</tspan> 청크 도중 상황이 바뀌면 대응이 늦습니다  ·
+    이 겹쳐 평균내기가 <tspan class="hi">temporal ensembling</tspan> 입니다</text>
+</svg>

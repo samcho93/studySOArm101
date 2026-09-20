@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+  SO-ARM101 SRDF — URDF 가 담지 못하는 "의미론적" 정보.
+
+  주의: 이 파일은 손으로 작성한 출발점입니다. 충돌 검사 행렬(disable_collisions)은
+  MoveIt Setup Assistant 로 생성하면 더 정확합니다.
+
+      ros2 launch moveit_setup_assistant setup_assistant.launch.py
+-->
+<robot name="so_arm101">
+
+  <!-- ── 플래닝 그룹 ────────────────────────────────────────── -->
+  <group name="manipulator">
+    <chain base_link="base_link" tip_link="gripper_frame_link"/>
+  </group>
+
+  <group name="gripper">
+    <joint name="gripper"/>
+  </group>
+
+  <!-- ── 미리 정의된 자세 ──────────────────────────────────── -->
+  <group_state name="rest" group="manipulator">
+    <joint name="shoulder_pan"  value="0"/>
+    <joint name="shoulder_lift" value="-1.68"/>
+    <joint name="elbow_flex"    value="1.60"/>
+    <joint name="wrist_flex"    value="0.75"/>
+    <joint name="wrist_roll"    value="0"/>
+  </group_state>
+
+  <group_state name="zero" group="manipulator">
+    <joint name="shoulder_pan"  value="0"/>
+    <joint name="shoulder_lift" value="0"/>
+    <joint name="elbow_flex"    value="0"/>
+    <joint name="wrist_flex"    value="0"/>
+    <joint name="wrist_roll"    value="0"/>
+  </group_state>
+
+  <group_state name="home" group="manipulator">
+    <joint name="shoulder_pan"  value="0"/>
+    <joint name="shoulder_lift" value="-0.60"/>
+    <joint name="elbow_flex"    value="0.90"/>
+    <joint name="wrist_flex"    value="0.60"/>
+    <joint name="wrist_roll"    value="0"/>
+  </group_state>
+
+  <group_state name="extended" group="manipulator">
+    <joint name="shoulder_pan"  value="0"/>
+    <joint name="shoulder_lift" value="0.35"/>
+    <joint name="elbow_flex"    value="-0.45"/>
+    <joint name="wrist_flex"    value="0.15"/>
+    <joint name="wrist_roll"    value="0"/>
+  </group_state>
+
+  <group_state name="open" group="gripper">
+    <joint name="gripper" value="1.60"/>
+  </group_state>
+
+  <group_state name="close" group="gripper">
+    <joint name="gripper" value="-0.10"/>
+  </group_state>
+
+  <!-- ── 엔드 이펙터 ───────────────────────────────────────── -->
+  <end_effector name="eef" parent_link="gripper_frame_link"
+                group="gripper" parent_group="manipulator"/>
+
+  <!-- ── 가상 조인트 (월드에 고정) ─────────────────────────── -->
+  <virtual_joint name="fixed_base" type="fixed" parent_frame="world" child_link="base_link"/>
+
+  <!-- ── 충돌 검사 제외 ───────────────────────────────────── -->
+  <disable_collisions link1="base_link"      link2="shoulder_link"  reason="Adjacent"/>
+  <disable_collisions link1="shoulder_link"  link2="upper_arm_link" reason="Adjacent"/>
+  <disable_collisions link1="upper_arm_link" link2="lower_arm_link" reason="Adjacent"/>
+  <disable_collisions link1="lower_arm_link" link2="wrist_link"     reason="Adjacent"/>
+  <disable_collisions link1="wrist_link"     link2="gripper_link"   reason="Adjacent"/>
+  <disable_collisions link1="gripper_link"   link2="moving_jaw_so101_v1_link" reason="Adjacent"/>
+
+  <!-- 접힌 자세에서 물리적으로 닿지 않지만 박스 근사 때문에 겹치는 쌍 -->
+  <disable_collisions link1="base_link"      link2="upper_arm_link" reason="Never"/>
+  <disable_collisions link1="shoulder_link"  link2="lower_arm_link" reason="Never"/>
+  <disable_collisions link1="wrist_link"     link2="moving_jaw_so101_v1_link" reason="Never"/>
+
+</robot>

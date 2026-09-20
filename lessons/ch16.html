@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16. ROS 2 워크스페이스 구성과 RViz2 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="so_arm101_description 패키지를 만들고 robot_state_publisher·RViz2로 모델을 띄웁니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" class="active" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch16">
+  <div class="lesson-head">
+    <div class="crumbs">PART 5 ROS 2 연동과 시뮬레이션 &middot; 약 35분</div>
+    <h1><span class="lesson-no">16</span>ROS 2 워크스페이스 구성과 RViz2</h1>
+    <p class="lede">so_arm101_description 패키지를 만들고 robot_state_publisher·RViz2로 모델을 띄웁니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="환경-준비">환경 준비<a class="anchor" href="#환경-준비">#</a></h2>
+<div class="callout callout-info"><div class="callout-title">어떤 배포판을 쓸까</div><div class="callout-body"><ul><li><strong>Ubuntu 22.04 + ROS 2 Humble</strong> — 원문 위키의 SO-ARM101 ROS 2 패키지가 기준으로 삼는 조합. 자료가 가장 많습니다.</li><li><strong>Ubuntu 24.04 + ROS 2 Jazzy</strong> — 최신. Gazebo Harmonic과의 궁합이 좋습니다.</li></ul>
+<p>이 강좌의 명령은 <strong>Humble 기준</strong>으로 적고, Jazzy에서 다른 부분은 따로 표시합니다.</p></div></div>
+<h3 id="시스템-요구사항">시스템 요구사항<a class="anchor" href="#시스템-요구사항">#</a></h3>
+<ul><li>Ubuntu 22.04 (권장) 또는 24.04</li><li>메모리 최소 4GB</li><li>실기 모드는 USB 시리얼 포트 필요</li></ul>
+<h3 id="ros-2-humble-설치">ROS 2 Humble 설치<a class="anchor" href="#ros-2-humble-설치">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># locale 설정
+sudo apt update &amp;&amp; sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# ROS 2 저장소 추가
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+sudo apt update &amp;&amp; sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+  -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
+http://packages.ros.org/ros2/ubuntu $(. /etc/os-release &amp;&amp; echo $UBUNTU_CODENAME) main&quot; \
+  | sudo tee /etc/apt/sources.list.d/ros2.list &gt; /dev/null
+
+# ROS 2 Humble Desktop 설치
+sudo apt update
+sudo apt install ros-humble-desktop</code></pre></div>
+<h3 id="빌드-도구와-의존-패키지">빌드 도구와 의존 패키지<a class="anchor" href="#빌드-도구와-의존-패키지">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># colcon 빌드 도구
+sudo apt install python3-colcon-common-extensions
+
+# MoveIt 2
+sudo apt install ros-humble-moveit
+
+# ros2_control
+sudo apt install ros-humble-ros2-control \
+                 ros-humble-ros2-controllers \
+                 ros-humble-controller-manager \
+                 ros-humble-joint-state-publisher-gui</code></pre></div>
+<p>Jazzy를 쓴다면 <code>humble</code>을 <code>jazzy</code>로 바꾸면 됩니다.</p>
+<h3 id="환경-변수">환경 변수<a class="anchor" href="#환경-변수">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">echo &quot;source /opt/ros/humble/setup.bash&quot; &gt;&gt; ~/.bashrc
+source ~/.bashrc</code></pre></div>
+<h3 id="시리얼-포트-권한-실기-필수">시리얼 포트 권한 (실기 필수)<a class="anchor" href="#시리얼-포트-권한-실기-필수">#</a></h3>
+<p>영구 설정 (권장):</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo usermod -a -G dialout $USER
+# 로그아웃 후 다시 로그인해야 적용됩니다</code></pre></div>
+<p>임시 설정:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo chmod 666 /dev/ttyACM0</code></pre></div>
+<hr>
+<h2 id="워크스페이스-만들기">워크스페이스 만들기<a class="anchor" href="#워크스페이스-만들기">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 1단계 — 워크스페이스 생성
+mkdir -p ~/so101_ws/src
+cd ~/so101_ws/src
+
+# 2단계 — 소스 배치
+cp -r /path/to/studySO-ARM101/ros2_ws/src/* ./
+
+# 3단계 — 시스템 의존성 설치
+cd ~/so101_ws
+rosdep install --from-paths src --ignore-src -r -y
+
+# 4단계 — 전체 빌드
+colcon build --symlink-install
+
+# 5단계 — 환경 로드 (새 터미널마다 필요!)
+source install/setup.bash</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">새 터미널마다 source</div><div class="callout-body"><p><code>source ~/so101_ws/install/setup.bash</code>를 잊으면 <code>Package &#x27;so_arm101_description&#x27; not found</code> 오류가 납니다. <code>~/.bashrc</code>에 추가해 두면 편합니다.</p></div></div>
+<div class="callout callout-info"><div class="callout-title">별도 드라이버 설치가 필요 없습니다</div><div class="callout-body"><p><code>so_arm_hardware</code> 패키지가 내장되어 있어, <strong>시리얼로 SCS 프로토콜을 써서 STS3215 서보와 직접 통신</strong>합니다. 추가 드라이버를 설치할 필요가 없습니다.</p></div></div>
+<hr>
+<h2 id="패키지-구조">패키지 구조<a class="anchor" href="#패키지-구조">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">so101_ws/src/
+├── so_arm_utils/                # Python 유틸리티 라이브러리
+├── so_arm101_description/       # URDF · 컨트롤러 · 메시 · RViz · MuJoCo
+│   ├── urdf/
+│   │   ├── so101_new_calib.urdf        # 원본 CAD URDF
+│   │   ├── so_arm101.urdf.xacro        # xacro 진입점
+│   │   └── so101.ros2_control.xacro    # 하드웨어 인터페이스
+│   ├── config/
+│   │   ├── controllers.yaml
+│   │   └── joint_limits.yaml
+│   ├── launch/
+│   │   ├── view_description.launch.py
+│   │   └── controllers_bringup.launch.py
+│   ├── meshes/
+│   └── rviz/
+├── so_arm101_moveit_config/     # MoveIt 2 SRDF · 플래너 · 런치
+├── so_arm_gz/                   # Gazebo 시뮬레이션 런치
+├── so_arm_hardware/             # 내장 SCS 시리얼 드라이버 (C++)
+└── Simulation/                  # 원본 CAD URDF (참고 보관)</code></pre></div>
+<hr>
+<h2 id="1단계-시각화-검증-가장-쉬움">1단계 — 시각화 검증 (가장 쉬움)<a class="anchor" href="#1단계-시각화-검증-가장-쉬움">#</a></h2>
+<p>컨트롤러도, 하드웨어도 필요 없습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">source ~/so101_ws/install/setup.bash
+ros2 launch so_arm101_description view_description.launch.py rviz:=true</code></pre></div>
+<p>RViz2가 열리며 로봇 모델 전체가 표시됩니다. <code>joint_state_publisher_gui</code>의 슬라이더를 움직여 각 관절이 <strong>올바른 축으로, 올바른 방향으로</strong> 도는지 확인하세요.</p>
+<div class="callout callout-check"><div class="callout-title">여기서 확인할 것</div><div class="callout-body"><ul><li>[ ] 6개 관절이 모두 슬라이더에 나타나는가</li><li>[ ] 각 관절이 예상한 축으로 회전하는가</li><li>[ ] 메시가 제대로 로드되는가 (흰 상자만 보이면 메시 경로 문제)</li><li>[ ] TF 트리가 <code>base_link → ... → gripper_frame_link</code> 로 이어지는가</li></ul></div></div>
+<h3 id="이-런치가-실행하는-노드">이 런치가 실행하는 노드<a class="anchor" href="#이-런치가-실행하는-노드">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>노드</th><th>역할</th></tr></thead><tbody><tr><td><code>robot_state_publisher</code></td><td>URDF + <code>/joint_states</code> → <strong>TF 변환</strong> 발행</td></tr><tr><td><code>joint_state_publisher_gui</code></td><td>슬라이더로 <code>/joint_states</code> 발행</td></tr><tr><td><code>rviz2</code></td><td>시각화</td></tr></tbody></table></div>
+<h3 id="유용한-확인-명령">유용한 확인 명령<a class="anchor" href="#유용한-확인-명령">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 토픽 목록
+ros2 topic list
+
+# 현재 관절 상태
+ros2 topic echo /joint_states --once
+
+# TF 트리를 PDF로 저장
+ros2 run tf2_tools view_frames
+
+# 특정 변환 조회 (베이스 → TCP)
+ros2 run tf2_ros tf2_echo base_link gripper_frame_link</code></pre></div>
+<p><code>tf2_echo</code> 출력이 <a href="../lessons/ch15.html">15장</a>에서 계산한 FK 결과와 일치하는지 비교해 보세요.</p>
+<hr>
+<h2 id="2단계-컨트롤러-테스트-mock-하드웨어">2단계 — 컨트롤러 테스트 (Mock 하드웨어)<a class="anchor" href="#2단계-컨트롤러-테스트-mock-하드웨어">#</a></h2>
+<p>여전히 실물 로봇이 필요 없습니다. 모든 것이 메모리에서 돕니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 launch so_arm101_description controllers_bringup.launch.py</code></pre></div>
+<p>로그에 다음이 나오면 준비 완료입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">joint_state_broadcaster      → active
+joint_trajectory_controller  → active</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">Mock 모드의 컨트롤러 구성</div><div class="callout-body"><p>시뮬레이션 모드는 <strong>두 개의 컨트롤러만</strong> 띄웁니다.</p>
+<ul><li><code>joint_state_broadcaster</code> — 하드웨어 상태를 <code>/joint_states</code>로 발행</li><li><code>joint_trajectory_controller</code> — <strong>6개 관절 전체</strong>(그리퍼 포함)의 궤적 실행</li></ul>
+<p>별도의 <code>gripper_controller</code>는 제거되었고, 그리퍼도 <code>joint_trajectory_controller</code>가 함께 제어합니다.</p></div></div>
+<h3 id="컨트롤러-상태-확인">컨트롤러 상태 확인<a class="anchor" href="#컨트롤러-상태-확인">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 control list_controllers
+ros2 control list_hardware_interfaces</code></pre></div>
+<h3 id="직접-궤적-명령-보내기">직접 궤적 명령 보내기<a class="anchor" href="#직접-궤적-명령-보내기">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 topic pub --once /joint_trajectory_controller/joint_trajectory \
+  trajectory_msgs/msg/JointTrajectory \
+  &quot;{
+    joint_names: [shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll, gripper],
+    points: [{
+      positions: [0.0, -0.6, 0.9, 0.6, 0.0, 0.6],
+      time_from_start: {sec: 3}
+    }]
+  }&quot;</code></pre></div>
+<p>RViz2에서 팔이 3초에 걸쳐 그 자세로 이동합니다.</p>
+<div class="callout callout-tip"><div class="callout-title">이 명령이 중요한 이유</div><div class="callout-body"><p><a href="../lessons/ch20.html">20장</a>에서 LeRobot 정책의 출력을 ROS 2로 보낼 때 정확히 이 메시지 형식을 씁니다. 지금 손에 익혀 두세요.</p></div></div>
+<hr>
+<h2 id="rviz2-활용">RViz2 활용<a class="anchor" href="#rviz2-활용">#</a></h2>
+<h3 id="필수-디스플레이">필수 디스플레이<a class="anchor" href="#필수-디스플레이">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>디스플레이</th><th>용도</th></tr></thead><tbody><tr><td><strong>RobotModel</strong></td><td>URDF 렌더링. Description Topic을 <code>/robot_description</code>으로</td></tr><tr><td><strong>TF</strong></td><td>좌표계 표시. 링크가 많으면 필요한 프레임만 켜기</td></tr><tr><td><strong>MotionPlanning</strong></td><td>MoveIt 2 패널 (<a href="../lessons/ch18.html">18장</a>)</td></tr><tr><td><strong>Grid</strong></td><td>바닥 격자</td></tr></tbody></table></div>
+<h3 id="설정-저장">설정 저장<a class="anchor" href="#설정-저장">#</a></h3>
+<p>RViz2 설정을 <code>so_arm101_description/rviz/view.rviz</code>로 저장해 두면 런치 파일에서 자동으로 불러옵니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">Node(
+    package=&quot;rviz2&quot;, executable=&quot;rviz2&quot;,
+    arguments=[&quot;-d&quot;, PathJoinSubstitution([
+        FindPackageShare(&quot;so_arm101_description&quot;), &quot;rviz&quot;, &quot;view.rviz&quot;
+    ])],
+)</code></pre></div>
+<hr>
+<h2 id="빌드-문제-해결">빌드 문제 해결<a class="anchor" href="#빌드-문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td><code>package not found</code></td><td>시스템 의존성 미설치 또는 source 누락</td><td><code>rosdep install ...</code> 후 <code>source /opt/ros/humble/setup.bash</code></td></tr><tr><td>메시가 안 보임</td><td><code>package://</code> 경로 오류</td><td><code>meshes/</code> 디렉터리 위치와 <code>CMakeLists.txt</code> install 규칙 확인</td></tr><tr><td><code>colcon build</code> 실패</td><td>컴파일러 또는 의존성</td><td>로그의 첫 에러부터 해결. <code>--packages-select</code>로 하나씩 빌드</td></tr><tr><td>RViz2가 매우 느림</td><td>충돌 메시가 너무 복잡</td><td>프리미티브 충돌 형상 사용</td></tr><tr><td><code>/joint_states</code> 가 비어 있음</td><td>publisher 노드 미실행</td><td><code>joint_state_publisher_gui</code> 실행 확인</td></tr><tr><td>xacro 파싱 오류</td><td>인자 누락</td><td><code>ros2 run xacro xacro &lt;파일&gt;</code> 로 단독 실행해 에러 확인</td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">패키지 하나만 다시 빌드</div><div class="callout-body"><div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">colcon build --packages-select so_arm101_description --symlink-install</code></pre></div>
+<p><code>--symlink-install</code>을 쓰면 URDF·런치·설정 파일 수정 시 재빌드 없이 반영됩니다.</p></div></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch17.html">17장 ros2_control과 실기 하드웨어 인터페이스</a> — Mock을 실물로 바꿉니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch15.html"><span>이전</span>URDF와 로봇 모델 이해</a><a class="pager-next" href="ch17.html"><span>다음</span>ros2_control과 실기 하드웨어 인터페이스</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#환경-준비">환경 준비</a><a class="toc-l3" href="#시스템-요구사항">시스템 요구사항</a><a class="toc-l3" href="#ros-2-humble-설치">ROS 2 Humble 설치</a><a class="toc-l3" href="#빌드-도구와-의존-패키지">빌드 도구와 의존 패키지</a><a class="toc-l3" href="#환경-변수">환경 변수</a><a class="toc-l3" href="#시리얼-포트-권한-실기-필수">시리얼 포트 권한 (실기 필수)</a><a class="toc-l2" href="#워크스페이스-만들기">워크스페이스 만들기</a><a class="toc-l2" href="#패키지-구조">패키지 구조</a><a class="toc-l2" href="#1단계-시각화-검증-가장-쉬움">1단계 — 시각화 검증 (가장 쉬움)</a><a class="toc-l3" href="#이-런치가-실행하는-노드">이 런치가 실행하는 노드</a><a class="toc-l3" href="#유용한-확인-명령">유용한 확인 명령</a><a class="toc-l2" href="#2단계-컨트롤러-테스트-mock-하드웨어">2단계 — 컨트롤러 테스트 (Mock 하드웨어)</a><a class="toc-l3" href="#컨트롤러-상태-확인">컨트롤러 상태 확인</a><a class="toc-l3" href="#직접-궤적-명령-보내기">직접 궤적 명령 보내기</a><a class="toc-l2" href="#rviz2-활용">RViz2 활용</a><a class="toc-l3" href="#필수-디스플레이">필수 디스플레이</a><a class="toc-l3" href="#설정-저장">설정 저장</a><a class="toc-l2" href="#빌드-문제-해결">빌드 문제 해결</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>09. 텔레오퍼레이션 기초 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="리더 암으로 팔로워를 조종합니다. 시뮬레이터의 리더/팔로워 모드로 감을 먼저 잡습니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" class="active" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch09">
+  <div class="lesson-head">
+    <div class="crumbs">PART 3 텔레오퍼레이션과 데이터 수집 &middot; 약 25분</div>
+    <h1><span class="lesson-no">09</span>텔레오퍼레이션 기초</h1>
+    <p class="lede">리더 암으로 팔로워를 조종합니다. 시뮬레이터의 리더/팔로워 모드로 감을 먼저 잡습니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="텔레오퍼레이션이란">텔레오퍼레이션이란<a class="anchor" href="#텔레오퍼레이션이란">#</a></h2>
+<p>사람이 <strong>리더 암</strong>을 손으로 움직이면, 그 관절 각도를 읽어 <strong>팔로워 암</strong>에 그대로 명령으로 보내는 것입니다. 구조는 놀랍도록 단순합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">while True:
+    action = teleop_device.get_action()   # 리더의 현재 관절 각도를 읽는다
+    robot.send_action(action)             # 팔로워에게 그 각도로 가라고 명령한다</code></pre></div>
+<p>이게 전부입니다. 초당 30~60회 반복하면 팔로워가 리더를 실시간으로 따라옵니다.</p>
+<div class="callout callout-info"><div class="callout-title">왜 이 단순한 구조가 중요한가</div><div class="callout-body"><p>모방학습 데이터셋의 <code>action</code>은 바로 이 리더의 관절 각도입니다. 즉 <strong>텔레오퍼레이션을 하는 것 자체가 데이터 수집</strong>입니다. (<a href="../lessons/ch11.html">11장</a>)</p></div></div>
+<hr>
+<figure class="fig" id="fig-teleop-loop"><svg viewBox="0 0 600 262" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="텔레오퍼레이션 제어 루프와 데이터 기록">
+  <defs>
+    <marker id="tl-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    텔레오퍼레이션 루프 — 초당 30~60회</text>
+
+  <!-- 사람 -->
+  <circle class="box" cx="52" cy="104" r="14"/>
+  <path class="ln" stroke="var(--border)" stroke-width="2" d="M52 118 V146 M38 130 H66 M42 168 L52 146 L62 168"/>
+  <text class="sub" x="52" y="190" text-anchor="middle">사람</text>
+
+  <!-- 리더 -->
+  <rect class="box" x="104" y="76" width="118" height="56" rx="7"/>
+  <text class="lbl" x="163" y="100" text-anchor="middle" font-size="12.5">리더 암</text>
+  <text class="sub mono" x="163" y="118" text-anchor="middle" font-size="10.5">get_action()</text>
+
+  <!-- 팔로워 -->
+  <rect class="box-hi" x="286" y="76" width="118" height="56" rx="7"/>
+  <text class="hi" x="345" y="100" text-anchor="middle" font-size="12.5">팔로워 암</text>
+  <text class="sub mono" x="345" y="118" text-anchor="middle" font-size="10.5">send_action()</text>
+
+  <!-- 카메라 -->
+  <rect class="box" x="286" y="164" width="118" height="46" rx="7"/>
+  <text class="lbl" x="345" y="183" text-anchor="middle" font-size="12">카메라</text>
+  <text class="sub" x="345" y="199" text-anchor="middle" font-size="10.5">손목 · 전역</text>
+
+  <!-- 데이터셋 -->
+  <rect class="box" x="462" y="76" width="122" height="134" rx="7"/>
+  <text class="lbl" x="523" y="100" text-anchor="middle" font-size="12.5">데이터셋</text>
+  <text class="sub mono" x="523" y="122" text-anchor="middle" font-size="10">action</text>
+  <text class="sub mono" x="523" y="140" text-anchor="middle" font-size="10">observation.state</text>
+  <text class="sub mono" x="523" y="158" text-anchor="middle" font-size="10">observation.images</text>
+  <text class="sub" x="523" y="184" text-anchor="middle" font-size="10.5">lerobot-record</text>
+
+  <!-- 화살표 -->
+  <path class="ln" stroke="var(--border)" stroke-width="2" d="M76 104 H98" marker-end="url(#tl-a)" color="var(--border)"/>
+  <path class="ln-hi" stroke-width="2.2" d="M222 104 H280" marker-end="url(#tl-a)" color="var(--accent)"/>
+  <text class="hi" x="251" y="94" text-anchor="middle" font-size="11">각도 6개</text>
+
+  <path class="ln" stroke="var(--text-faint)" stroke-width="1.6" stroke-dasharray="4 3"
+        d="M222 116 H280" />
+  <text class="sub" x="251" y="132" text-anchor="middle" font-size="10">지연 수십 ms</text>
+
+  <path class="ln" stroke="var(--border)" stroke-width="1.6" d="M404 104 H456" marker-end="url(#tl-a)" color="var(--border)"/>
+  <path class="ln" stroke="var(--border)" stroke-width="1.6" d="M404 187 H432 V150 H456" marker-end="url(#tl-a)" color="var(--border)"/>
+  <path class="ln" stroke="var(--border)" stroke-width="1.6" d="M163 132 V222 H432 V212" marker-end="url(#tl-a)" color="var(--border)"/>
+  <text class="sub" x="290" y="238" text-anchor="middle" font-size="10.5">
+    리더의 각도는 명령이면서 동시에 정답 레이블입니다</text>
+
+  <text class="sub" x="16" y="44">
+    <tspan class="hi">텔레오퍼레이션을 하는 것 자체가 데이터 수집</tspan>입니다 —
+    같은 루프에 기록만 얹으면 됩니다.</text>
+</svg><figcaption>리더에서 읽은 각도가 팔로워 명령이면서 동시에 데이터셋의 정답이 됩니다.</figcaption></figure>
+<h2 id="먼저-시뮬레이터에서-체험하기">먼저 시뮬레이터에서 체험하기<a class="anchor" href="#먼저-시뮬레이터에서-체험하기">#</a></h2>
+<p>실물을 켜기 전에 감을 잡아 두면 사고를 줄일 수 있습니다.</p>
+<div class="callout callout-task"><div class="callout-title">실습 — 시뮬레이터 텔레오퍼레이션</div><div class="callout-body"><p><a href="../sim/index.html">3D 시뮬레이터</a>를 열고 <strong>&quot;텔레오퍼레이션&quot; 탭</strong>을 선택하세요.</p>
+<ol><li>화면에 <strong>반투명한 리더 암</strong>과 <strong>불투명한 팔로워 암</strong>이 함께 나타납니다.</li><li>슬라이더나 IK 타깃으로 <strong>리더</strong>를 움직이면 팔로워가 약간의 지연을 두고 따라옵니다.</li><li><strong>&quot;추종 지연(lag)&quot; 슬라이더</strong>를 올려 보세요. 실제 시리얼 통신 지연과 서보 응답 지연을 모사한 것입니다. 지연이 크면 빠른 동작에서 팔로워가 뒤처지는 것을 볼 수 있습니다.</li><li><strong>&quot;조인트 한계 초과 경고&quot;</strong> 를 켜 두면, 리더가 팔로워의 물리적 한계를 넘는 자세를 만들 때 해당 관절이 빨갛게 표시됩니다. 실물에서 이 상황이 바로 서보 과부하입니다.</li></ol></div></div>
+<hr>
+<h2 id="실물-텔레오퍼레이션-실행">실물 텔레오퍼레이션 실행<a class="anchor" href="#실물-텔레오퍼레이션-실행">#</a></h2>
+<h3 id="기본-명령">기본 명령<a class="anchor" href="#기본-명령">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0 \
+    --robot.id=my_awesome_follower_arm \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM1 \
+    --teleop.id=my_awesome_leader_arm</code></pre></div>
+<p>macOS 예시 (<code>/dev/tty.usbmodem*</code> 또는 <code>/dev/tty.wchusbserial*</code> 둘 다 동작):</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/tty.usbmodem5AAF2193061 \
+    --robot.id=my_follower_arm \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/tty.usbmodem5AAF2194741 \
+    --teleop.id=my_leader_arm</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">포트 이름은 명령어 생성기로</div><div class="callout-body"><p><a href="../tools/cli-builder.html">명령어 생성기</a>에 포트와 id를 입력해 두면 위 명령이 자동 완성됩니다.</p></div></div>
+<h3 id="이-명령이-하는-일">이 명령이 하는 일<a class="anchor" href="#이-명령이-하는-일">#</a></h3>
+<ol><li>캘리브레이션 파일이 있는지 확인하고, 없으면 <strong>캘리브레이션 절차를 먼저 시작</strong>합니다.</li><li>리더와 팔로워를 연결합니다.</li><li>텔레오퍼레이션 루프를 시작합니다.</li></ol>
+<h3 id="파이썬-api-버전">파이썬 API 버전<a class="anchor" href="#파이썬-api-버전">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">from lerobot.teleoperators.so_leader import SO101Leader, SO101LeaderConfig
+from lerobot.robots.so_follower import SO101Follower, SO101FollowerConfig
+
+robot_config = SO101FollowerConfig(
+    port=&quot;/dev/ttyACM0&quot;,
+    id=&quot;my_follower_arm&quot;,
+)
+
+teleop_config = SO101LeaderConfig(
+    port=&quot;/dev/ttyACM1&quot;,
+    id=&quot;my_leader_arm&quot;,
+)
+
+robot = SO101Follower(robot_config)
+teleop_device = SO101Leader(teleop_config)
+robot.connect()
+teleop_device.connect()
+
+while True:
+    action = teleop_device.get_action()
+    robot.send_action(action)</code></pre></div>
+<hr>
+<h2 id="첫-실행-안전-수칙">첫 실행 안전 수칙<a class="anchor" href="#첫-실행-안전-수칙">#</a></h2>
+<div class="callout callout-danger"><div class="callout-title">처음 켤 때 반드시</div><div class="callout-body"><ol><li><strong>팔로워 주변을 비우세요.</strong> 반경 60cm 안에 물건·사람·케이블이 없어야 합니다. (최대 도달 반경이 약 48cm입니다)</li><li><strong>전원 플러그를 손이 닿는 곳에</strong> 두세요. 이상이 생기면 즉시 뽑을 수 있어야 합니다.</li><li><strong>리더를 아주 천천히</strong> 움직이세요. 팔로워가 어떻게 반응하는지 먼저 관찰합니다.</li><li>베이스가 <strong>클램프로 고정</strong>되어 있는지 확인하세요.</li><li>터미널에서 <strong>Ctrl+C</strong> 로 언제든 멈출 수 있습니다.</li></ol></div></div>
+<h3 id="정상-동작-판정">정상 동작 판정<a class="anchor" href="#정상-동작-판정">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>관찰</th><th>판정</th></tr></thead><tbody><tr><td>리더를 움직이면 팔로워가 <strong>같은 방향</strong>으로 따라옴</td><td>정상</td></tr><tr><td>팔로워가 <strong>반대 방향</strong>으로 움직임</td><td>서보 ID 배치 오류 또는 drive_mode 문제</td></tr><tr><td>팔로워가 <strong>덜덜 떨림</strong></td><td>전원 용량 부족 또는 통신 지연</td></tr><tr><td>팔로워가 <strong>한 관절만 안 움직임</strong></td><td>그 관절 캘리브레이션 범위 0</td></tr><tr><td>팔로워가 <strong>급격히 튐</strong></td><td>캘리브레이션 불일치 — 즉시 정지</td></tr><tr><td>리더가 <strong>손으로 안 움직임</strong></td><td>리더 토크가 켜져 있음</td></tr></tbody></table></div>
+<hr>
+<h2 id="그리퍼-동작">그리퍼 동작<a class="anchor" href="#그리퍼-동작">#</a></h2>
+<p>리더의 <strong>트리거</strong>를 당기면 팔로워의 <strong>그리퍼가 닫힙니다.</strong> 트리거도 하나의 서보(ID 6)이므로, 다른 관절과 똑같이 각도가 전달됩니다.</p>
+<div class="callout callout-warn"><div class="callout-title">그리퍼는 힘 제한이 없습니다</div><div class="callout-body"><p>STS3215는 위치 제어이므로, 물체를 잡은 상태에서 트리거를 더 당기면 <strong>서보가 계속 힘을 줍니다.</strong> 과도하게 당기면 그리퍼 부품이 깨지거나 서보가 과열됩니다. 물체를 잡는 순간 트리거를 멈추는 감각을 익히세요.</p></div></div>
+<hr>
+<h2 id="시각화와-함께-보기-rerun">시각화와 함께 보기 (<code>rerun</code>)<a class="anchor" href="#시각화와-함께-보기-rerun">#</a></h2>
+<p>관절 값과 카메라 영상을 실시간 그래프로 보려면 <code>--display_data=true</code>를 추가합니다. (카메라 설정은 <a href="../lessons/ch10.html">10장</a>)</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0 \
+    --robot.id=my_follower_arm \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM1 \
+    --teleop.id=my_leader_arm \
+    --display_data=true</code></pre></div>
+<p><code>rerun</code> 뷰어가 열리고 각 관절의 목표값(action)과 실제값(observation)이 그래프로 그려집니다.</p>
+<div class="callout callout-tip"><div class="callout-title">추종 오차 읽기</div><div class="callout-body"><p>action과 observation 곡선 사이의 간격이 <strong>추종 오차</strong>입니다. 빠르게 움직일수록 벌어지는데, 이 간격이 크면 데이터셋 품질이 떨어집니다. 데이터 수집 시 <strong>동작 속도를 일정하게, 너무 빠르지 않게</strong> 유지해야 하는 이유입니다.</p></div></div>
+<hr>
+<h2 id="대안-리더-암-없이-조종하기">대안 — 리더 암 없이 조종하기<a class="anchor" href="#대안-리더-암-없이-조종하기">#</a></h2>
+<p>리더 암이 아직 없거나 고장 났다면 다른 입력 장치를 쓸 수 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>방식</th><th>설명</th></tr></thead><tbody><tr><td><strong>키보드</strong></td><td><code>--teleop.type=keyboard</code>. 관절을 키로 증감. 정밀하지 않지만 테스트에 유용</td></tr><tr><td><strong>게임패드</strong></td><td><code>--teleop.type=gamepad</code>. 아날로그 스틱으로 관절 제어</td></tr><tr><td><strong>휴대폰</strong></td><td>LeRobot의 <a href="https://huggingface.co/docs/lerobot/main/en/phone_teleop" target="_blank" rel="noopener">phone_teleop</a> — 폰 자세로 팔로워를 제어</td></tr><tr><td><strong>LeLab 웹 UI</strong></td><td><a href="https://github.com/huggingface/leLab" target="_blank" rel="noopener">github.com/huggingface/leLab</a> — 캘리브레이션·텔레오퍼레이션·녹화·학습·재생을 브라우저 하나로</td></tr><tr><td><strong>ESP32-S3 무선</strong></td><td>원문 위키의 무선 텔레오퍼레이션 프로젝트</td></tr></tbody></table></div>
+<div class="callout callout-info"><div class="callout-title">키보드 텔레오퍼레이션 제약</div><div class="callout-body"><p>키보드 텔레오퍼레이션은 <strong>전역 키 입력 백엔드</strong>가 필요합니다. X11 세션, Windows 데스크톱, 또는 손쉬운 사용 권한이 부여된 macOS에서만 동작하며 <strong>Wayland나 헤드리스 환경에서는 불가</strong>합니다.</p>
+<p>(녹화 중 에피소드 제어 키 <code>n</code>/<code>r</code>/<code>q</code>는 별개로, 터미널에서 직접 읽기 때문에 Wayland·헤드리스·SSH에서도 동작합니다.)</p></div></div>
+<p>저장소에 포함된 간단한 키보드 텔레오퍼레이션 예제도 참고하세요.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/so101_keyboard_teleop.py --port /dev/ttyACM0 --id my_follower_arm</code></pre></div>
+<hr>
+<h2 id="문제-해결">문제 해결<a class="anchor" href="#문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td><code>Permission denied</code></td><td>시리얼 권한</td><td><a href="../lessons/ch07.html">7장</a> 권한 설정</td></tr><tr><td><code>Could not find port</code></td><td>포트 이름 오타 / USB 미연결</td><td><code>lerobot-find-port</code> 재실행</td></tr><tr><td>팔로워 무반응</td><td>외부 전원 미연결</td><td>12V 어댑터 확인</td></tr><tr><td>팔로워가 축 처짐</td><td>토크 미활성 또는 전원 부족</td><td>전원 용량(5A) 확인</td></tr><tr><td>좌우가 반대</td><td>리더/팔로워 포트 바뀜</td><td><code>--robot.port</code>와 <code>--teleop.port</code> 교체</td></tr><tr><td>움직임이 끊김</td><td>USB 허브 대역폭</td><td>허브 대신 PC 직결</td></tr><tr><td>서보 과열 경고</td><td>장시간 무거운 자세 유지</td><td>휴식 자세로 두고 냉각</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch10.html">10장 카메라 연동과 시각화</a> — 모방학습에서 가장 중요한 입력인 카메라를 붙입니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch08.html"><span>이전</span>로봇 캘리브레이션</a><a class="pager-next" href="ch10.html"><span>다음</span>카메라 연동과 시각화</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#텔레오퍼레이션이란">텔레오퍼레이션이란</a><a class="toc-l2" href="#먼저-시뮬레이터에서-체험하기">먼저 시뮬레이터에서 체험하기</a><a class="toc-l2" href="#실물-텔레오퍼레이션-실행">실물 텔레오퍼레이션 실행</a><a class="toc-l3" href="#기본-명령">기본 명령</a><a class="toc-l3" href="#이-명령이-하는-일">이 명령이 하는 일</a><a class="toc-l3" href="#파이썬-api-버전">파이썬 API 버전</a><a class="toc-l2" href="#첫-실행-안전-수칙">첫 실행 안전 수칙</a><a class="toc-l3" href="#정상-동작-판정">정상 동작 판정</a><a class="toc-l2" href="#그리퍼-동작">그리퍼 동작</a><a class="toc-l2" href="#시각화와-함께-보기-rerun">시각화와 함께 보기 (`rerun`)</a><a class="toc-l2" href="#대안-리더-암-없이-조종하기">대안 — 리더 암 없이 조종하기</a><a class="toc-l2" href="#문제-해결">문제 해결</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

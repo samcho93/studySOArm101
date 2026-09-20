@@ -1,0 +1,63 @@
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="MoveIt 2가 목표 자세를 실행 궤적으로 바꾸는 과정">
+  <defs>
+    <marker id="mf-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    MoveIt 2 가 Plan 버튼 뒤에서 하는 일</text>
+
+  <g>
+    <rect class="box-hi" x="16"  y="52" width="108" height="56" rx="7"/>
+    <rect class="box" x="140" y="52" width="108" height="56" rx="7"/>
+    <rect class="box" x="264" y="52" width="108" height="56" rx="7"/>
+    <rect class="box" x="388" y="52" width="108" height="56" rx="7"/>
+    <rect class="box-hi" x="500" y="52" width="84" height="56" rx="7"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="hi"  x="70"  y="76" font-size="12.5">목표 자세</text>
+    <text class="sub" x="70"  y="94" font-size="10.5">마커 드래그 · 프리셋</text>
+
+    <text class="lbl" x="194" y="76" font-size="12.5">IK 솔버</text>
+    <text class="sub mono" x="194" y="94" font-size="10">KDL / TRAC-IK</text>
+
+    <text class="lbl" x="318" y="76" font-size="12.5">경로 계획</text>
+    <text class="sub mono" x="318" y="94" font-size="10">OMPL · RRTConnect</text>
+
+    <text class="lbl" x="442" y="76" font-size="12.5">시간 최적화</text>
+    <text class="sub" x="442" y="94" font-size="10.5">속도·가속도 한계</text>
+
+    <text class="hi"  x="542" y="76" font-size="12.5">실행</text>
+    <text class="sub" x="542" y="94" font-size="10.5">컨트롤러</text>
+  </g>
+
+  <g class="ln-hi" stroke-width="2" color="var(--accent)">
+    <path d="M124 80 H134" marker-end="url(#mf-a)"/>
+    <path d="M248 80 H258" marker-end="url(#mf-a)"/>
+    <path d="M372 80 H382" marker-end="url(#mf-a)"/>
+    <path d="M496 80 H494" marker-end="url(#mf-a)"/>
+  </g>
+
+  <!-- 각 단계가 실패하는 지점 -->
+  <g>
+    <rect class="box" x="16" y="134" width="568" height="106" rx="8"/>
+    <text class="wr" x="32" y="156" font-size="12" font-weight="700">여기서 막히면 원인이 다릅니다</text>
+
+    <text class="lbl mono" x="32" y="180" font-size="11">IK 실패</text>
+    <text class="sub" x="120" y="180" font-size="11">목표가 작업영역 밖 — Random Valid 로 도달 범위를 먼저 확인</text>
+
+    <text class="lbl mono" x="32" y="202" font-size="11">start tree 실패</text>
+    <text class="sub" x="120" y="202" font-size="11">시작 자세가 관절 한계 초과(0.3 rad 허용) 또는 자기 충돌 — 17장 오프셋 점검</text>
+
+    <text class="lbl mono" x="32" y="224" font-size="11">Execute 무반응</text>
+    <text class="sub" x="120" y="224" font-size="11">컨트롤러 이름 불일치 또는 비활성 — <tspan class="mono">ros2 control list_controllers</tspan></text>
+  </g>
+
+  <text class="sub" x="16" y="44">
+    SO-ARM101은 5자유도라 위치+방향을 동시에 못 맞춥니다 →
+    <tspan class="mono hi">position_only_ik: true</tspan> 로 성공률이 크게 오릅니다</text>
+</svg>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>22. 트러블슈팅과 종합 프로젝트 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="현장에서 자주 만나는 30가지 문제의 원인과 해법, 그리고 최종 픽앤플레이스 프로젝트.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" class="active" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch22">
+  <div class="lesson-head">
+    <div class="crumbs">PART 6 확장과 마무리 &middot; 약 45분</div>
+    <h1><span class="lesson-no">22</span>트러블슈팅과 종합 프로젝트</h1>
+    <p class="lede">현장에서 자주 만나는 30가지 문제의 원인과 해법, 그리고 최종 픽앤플레이스 프로젝트.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="통합-문제-해결-색인">통합 문제 해결 색인<a class="anchor" href="#통합-문제-해결-색인">#</a></h2>
+<p>증상으로 찾아가는 표입니다. 상세 설명은 해당 장을 참고하세요.</p>
+<h3 id="하드웨어-조립">하드웨어 / 조립<a class="anchor" href="#하드웨어-조립">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th><th>장</th></tr></thead><tbody><tr><td>나사가 안 들어감</td><td>서포트 잔여물</td><td>드릴비트로 구멍 정리</td><td><a href="../lessons/ch04.html">4</a></td></tr><tr><td>관절이 뻑뻑함</td><td>나사 과조임, 혼 정렬 불량</td><td>나사 1/4바퀴 풀기</td><td><a href="../lessons/ch04.html">4</a></td></tr><tr><td>팔이 처짐</td><td>팔로워에 저감속 서보 사용</td><td>서보 모델 라벨 확인</td><td><a href="../lessons/ch03.html">3</a></td></tr><tr><td>베이스가 넘어감</td><td>클램프 미고정</td><td>테이블 클램프 2개 체결</td><td><a href="../lessons/ch04.html">4</a></td></tr><tr><td>서보가 탐</td><td>7.4V 서보에 12V 인가</td><td><strong>어댑터 확인</strong> (검정 5V / 흰색 12V)</td><td><a href="../lessons/ch03.html">3</a></td></tr></tbody></table></div>
+<h3 id="서보-통신">서보 / 통신<a class="anchor" href="#서보-통신">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th><th>장</th></tr></thead><tbody><tr><td>서보 0개 검출</td><td>전원 미연결 / 잘못된 포트</td><td>전원·포트 확인</td><td><a href="../lessons/ch07.html">7</a></td></tr><tr><td>서보 0개 검출 (Waveshare)</td><td>점퍼가 A 채널</td><td><strong>점퍼를 B 채널(USB)로</strong></td><td><a href="../lessons/ch03.html">3</a></td></tr><tr><td>일부만 검출</td><td>3핀 케이블 접촉 불량</td><td>배선 재점검</td><td><a href="../lessons/ch07.html">7</a></td></tr><tr><td>ID 1이 여러 개</td><td>ID 미설정 서보 혼재</td><td>ID 재설정</td><td><a href="../lessons/ch05.html">5</a></td></tr><tr><td>포트 점유 오류</td><td>다른 프로그램이 사용 중</td><td><code>sudo lsof /dev/ttyACM0</code></td><td><a href="../lessons/ch17.html">17</a></td></tr><tr><td><code>Permission denied</code></td><td>dialout 그룹 미가입</td><td><code>sudo usermod -a -G dialout $USER</code></td><td><a href="../lessons/ch07.html">7</a></td></tr><tr><td>포트 번호가 매번 바뀜</td><td>udev 규칙 없음</td><td>udev 규칙 작성</td><td><a href="../lessons/ch07.html">7</a></td></tr></tbody></table></div>
+<h3 id="lerobot">LeRobot<a class="anchor" href="#lerobot">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th><th>장</th></tr></thead><tbody><tr><td><code>command not found</code></td><td>가상환경 미활성화</td><td><code>conda activate lerobot</code></td><td><a href="../lessons/ch06.html">6</a></td></tr><tr><td><code>ModuleNotFoundError: scservo_sdk</code></td><td>feetech extra 미설치</td><td><code>pip install -e &quot;.[feetech]&quot;</code></td><td><a href="../lessons/ch06.html">6</a></td></tr><tr><td>torchcodec 오류</td><td>ffmpeg 버전 불일치</td><td><code>conda install ffmpeg=7.1.1 -c conda-forge</code></td><td><a href="../lessons/ch06.html">6</a></td></tr><tr><td>재캘리브레이션 요구</td><td>id 불일치</td><td>동일한 <code>--robot.id</code> 사용</td><td><a href="../lessons/ch08.html">8</a></td></tr><tr><td>특정 관절 안 움직임</td><td>캘리브레이션 범위 0</td><td>전 범위로 재캘리브레이션</td><td><a href="../lessons/ch08.html">8</a></td></tr><tr><td>팔로워가 급격히 튐</td><td>캘리브레이션 불일치</td><td>즉시 정지 후 재캘리브레이션</td><td><a href="../lessons/ch08.html">8</a></td></tr><tr><td><code>FileExistsError</code></td><td>같은 이름 데이터셋</td><td><code>--resume=true</code> 또는 삭제</td><td><a href="../lessons/ch11.html">11</a></td></tr><tr><td>resume 시 root 요구</td><td>root 미지정</td><td><code>--dataset.root=</code> 추가</td><td><a href="../lessons/ch11.html">11</a></td></tr><tr><td>데이터셋명에 타임스탬프</td><td><code>no_stamp</code> 미설정</td><td><code>--dataset.no_stamp=true</code></td><td><a href="../lessons/ch11.html">11</a></td></tr><tr><td><code>--dataset.vcodec</code> 없음</td><td>구버전 파라미터</td><td><code>--dataset.rgb_encoder.vcodec=h264</code></td><td><a href="../lessons/ch21.html">21</a></td></tr><tr><td>배포 시 <code>--policy.path</code> 오류</td><td><code>lerobot-record</code>로 배포 시도</td><td><code>lerobot-rollout</code> 사용</td><td><a href="../lessons/ch14.html">14</a></td></tr><tr><td><code>eval_</code> 접두사 거부</td><td>현재 버전 규약</td><td><code>rollout_</code> 로 시작</td><td><a href="../lessons/ch14.html">14</a></td></tr><tr><td>카메라 검출 안 됨</td><td>video 그룹 권한</td><td><code>sudo usermod -a -G video $USER</code></td><td><a href="../lessons/ch10.html">10</a></td></tr><tr><td>프레임 드롭</td><td>USB 대역폭</td><td>포트 분산, 해상도 축소</td><td><a href="../lessons/ch10.html">10</a></td></tr></tbody></table></div>
+<h3 id="ros-2">ROS 2<a class="anchor" href="#ros-2">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th><th>장</th></tr></thead><tbody><tr><td><code>package not found</code></td><td>의존성 미설치 / source 누락</td><td><code>rosdep install</code> + <code>source setup.bash</code></td><td><a href="../lessons/ch16.html">16</a></td></tr><tr><td>메시가 안 보임</td><td><code>package://</code> 경로 오류</td><td>install 규칙 확인</td><td><a href="../lessons/ch16.html">16</a></td></tr><tr><td>플래닝 시작 실패 (bounds)</td><td>관절 한계 초과</td><td><code>position_offset</code> 조정</td><td><a href="../lessons/ch17.html">17</a></td></tr><tr><td>플래닝 시작 실패 (collision)</td><td>시작 자세 자기 충돌</td><td>팔을 펴고 재시도</td><td><a href="../lessons/ch18.html">18</a></td></tr><tr><td>Execute 해도 안 움직임</td><td>컨트롤러 비활성</td><td><code>ros2 control list_controllers</code></td><td><a href="../lessons/ch18.html">18</a></td></tr><tr><td>spawner 활성화 실패</td><td><code>load_controller</code> 먼저 실행함</td><td><code>unload_controller</code> 후 재시도</td><td><a href="../lessons/ch19.html">19</a></td></tr><tr><td>RViz 자세 ≠ 실제 자세</td><td>오프셋 미보정</td><td>오프셋 환산 공식 적용</td><td><a href="../lessons/ch17.html">17</a></td></tr><tr><td>Gazebo에서 그리퍼 무동작</td><td><code>gz_ros2_control</code> PID 하드코딩</td><td>알려진 제약. Mock/실기는 정상</td><td><a href="../lessons/ch19.html">19</a></td></tr><tr><td>RViz 시작이 느림</td><td>MoveIt 초기 로딩</td><td>정상. 약 10초 대기</td><td><a href="../lessons/ch18.html">18</a></td></tr><tr><td>경로가 떨림</td><td>플래너 특성</td><td>RRTConnect, Planning Time 10초</td><td><a href="../lessons/ch18.html">18</a></td></tr></tbody></table></div>
+<hr>
+<h2 id="진단-순서-막혔을-때">진단 순서 (막혔을 때)<a class="anchor" href="#진단-순서-막혔을-때">#</a></h2>
+<div class="callout callout-tip"><div class="callout-title">아래에서 위로 올라가며 확인하세요</div><div class="callout-body"><ol><li><strong>전원</strong> — 어댑터가 꽂혀 있고 전압이 맞는가?</li><li><strong>케이블</strong> — USB, 3핀 케이블이 모두 확실히 꽂혀 있는가?</li><li><strong>포트</strong> — <code>ls /dev/ttyACM*</code> 로 장치가 보이는가?</li><li><strong>권한</strong> — <code>groups</code> 에 <code>dialout</code>이 있는가?</li><li><strong>서보</strong> — <code>scan_servos.py</code>로 6개가 다 응답하는가?</li><li><strong>캘리브레이션</strong> — JSON 파일이 존재하고 범위가 정상인가?</li><li><strong>소프트웨어</strong> — 가상환경이 활성화되어 있는가?</li></ol>
+<p>대부분의 문제는 1~4단계에서 해결됩니다.</p></div></div>
+<hr>
+<h2 id="종합-프로젝트-큐브-픽앤플레이스">종합 프로젝트 — 큐브 픽앤플레이스<a class="anchor" href="#종합-프로젝트-큐브-픽앤플레이스">#</a></h2>
+<p>지금까지 배운 것을 전부 쓰는 최종 프로젝트입니다.</p>
+<h3 id="목표">목표<a class="anchor" href="#목표">#</a></h3>
+<blockquote><p>테이블 위 임의의 위치에 놓인 4cm 검은 큐브를 집어, 지정된 상자에 넣는다. 성공률 <strong>70% 이상</strong>을 달성한다.</p></blockquote>
+<h3 id="준비물">준비물<a class="anchor" href="#준비물">#</a></h3>
+<ul><li>SO-ARM101 리더 + 팔로워 1세트</li><li>USB 웹캠 2대 (손목 + 전역)</li><li>4cm 큐브, 상자</li><li>테이블 클램프</li></ul>
+<hr>
+<h3 id="단계-1-환경-구성-30분">단계 1 — 환경 구성 (30분)<a class="anchor" href="#단계-1-환경-구성-30분">#</a></h3>
+<div class="callout callout-task"><div class="callout-title">체크리스트</div><div class="callout-body"><ul><li>[ ] 팔로워를 테이블에 클램프로 고정</li><li>[ ] 전역 카메라를 삼각대에 고정, 작업 공간 전체가 보이게 조정</li><li>[ ] 손목 카메라 장착, 그리퍼 조가 프레임 하단에 살짝 보이게</li><li>[ ] 큐브 배치 위치 5곳(A~E)을 테이프로 표시</li><li>[ ] 조명 고정 (창가 피하기)</li><li>[ ] <code>lerobot-find-port</code>로 포트 확인, udev 규칙 작성</li><li>[ ] <code>lerobot-find-cameras opencv</code>로 카메라 인덱스 확인</li></ul></div></div>
+<h3 id="단계-2-캘리브레이션과-텔레오퍼레이션-검증-20분">단계 2 — 캘리브레이션과 텔레오퍼레이션 검증 (20분)<a class="anchor" href="#단계-2-캘리브레이션과-텔레오퍼레이션-검증-20분">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-calibrate --robot.type=so101_follower \
+  --robot.port=/dev/so101_follower --robot.id=proj_follower
+
+lerobot-calibrate --teleop.type=so101_leader \
+  --teleop.port=/dev/so101_leader --teleop.id=proj_leader
+
+lerobot-teleoperate \
+  --robot.type=so101_follower --robot.port=/dev/so101_follower --robot.id=proj_follower \
+  --robot.cameras=&#x27;{wrist: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30},
+                    top:   {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 30}}&#x27; \
+  --teleop.type=so101_leader --teleop.port=/dev/so101_leader --teleop.id=proj_leader \
+  --display_data=true</code></pre></div>
+<div class="callout callout-check"><div class="callout-title">검증 포인트</div><div class="callout-body"><ul><li>리더를 움직이면 팔로워가 같은 방향으로 따라오는가?</li><li>rerun 화면에서 두 카메라 영상이 모두 나오는가?</li><li><strong>카메라 영상만 보고 큐브를 집을 수 있는가?</strong> ← 가장 중요</li></ul></div></div>
+<h3 id="단계-3-데이터셋-수집-60-90분">단계 3 — 데이터셋 수집 (60~90분)<a class="anchor" href="#단계-3-데이터셋-수집-60-90분">#</a></h3>
+<p>위치당 10 에피소드씩, 총 50개를 목표로 합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-record \
+  --robot.type=so101_follower --robot.port=/dev/so101_follower --robot.id=proj_follower \
+  --robot.cameras=&#x27;{wrist: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30},
+                    top:   {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 30}}&#x27; \
+  --teleop.type=so101_leader --teleop.port=/dev/so101_leader --teleop.id=proj_leader \
+  --dataset.repo_id=myname/so101_cube_pick \
+  --dataset.root=./datasets/so101_cube_pick \
+  --dataset.push_to_hub=false \
+  --dataset.no_stamp=true \
+  --dataset.single_task=&quot;Pick the black cube and place it in the bin&quot; \
+  --dataset.num_episodes=50 \
+  --dataset.fps=30 \
+  --dataset.episode_time_s=20 \
+  --dataset.reset_time_s=8 \
+  --display_data=true</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">수집 요령</div><div class="callout-body"><ul><li>큐브를 A→B→C→D→E 순환하며 배치합니다.</li><li><strong>매번 같은 방식으로</strong> 잡으세요 (같은 접근 방향, 같은 높이).</li><li>실패한 에피소드는 **즉시 <code>r</code> 키**로 다시 녹화합니다.</li><li>30분마다 쉬세요. 사람이 지치면 시연 품질이 떨어지고, 그게 그대로 데이터에 남습니다.</li></ul></div></div>
+<h3 id="단계-4-학습-2-8시간">단계 4 — 학습 (2~8시간)<a class="anchor" href="#단계-4-학습-2-8시간">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+  --dataset.repo_id=myname/so101_cube_pick \
+  --dataset.root=./datasets/so101_cube_pick \
+  --policy.type=act \
+  --policy.device=cuda \
+  --steps=60000 \
+  --output_dir=outputs/train/act_cube_pick \
+  --wandb.enable=true \
+  --policy.push_to_hub=false</code></pre></div>
+<p>GPU가 없다면 <a href="../lessons/ch13.html">13장</a>의 Colab 또는 HF Jobs 경로를 쓰세요.</p>
+<h3 id="단계-5-평가-30분">단계 5 — 평가 (30분)<a class="anchor" href="#단계-5-평가-30분">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-rollout \
+  --strategy.type=episodic \
+  --policy.path=outputs/train/act_cube_pick/checkpoints/last/pretrained_model \
+  --robot.type=so101_follower --robot.port=/dev/so101_follower --robot.id=proj_follower \
+  --robot.cameras=&#x27;{wrist: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30},
+                    top:   {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 30}}&#x27; \
+  --dataset.repo_id=myname/rollout_cube_pick \
+  --dataset.root=./datasets/rollout_cube_pick \
+  --dataset.no_stamp=true \
+  --dataset.push_to_hub=false \
+  --dataset.single_task=&quot;Pick the black cube and place it in the bin&quot; \
+  --dataset.num_episodes=20</code></pre></div>
+<p>결과를 기록합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>위치</th><th>시도</th><th>성공</th><th>실패 양상</th></tr></thead><tbody><tr><td>A</td><td>4</td><td></td><td></td></tr><tr><td>B</td><td>4</td><td></td><td></td></tr><tr><td>C</td><td>4</td><td></td><td></td></tr><tr><td>D</td><td>4</td><td></td><td></td></tr><tr><td>E</td><td>4</td><td></td><td></td></tr><tr><td><strong>합계</strong></td><td><strong>20</strong></td><td></td><td><strong>성공률 __%</strong></td></tr></tbody></table></div>
+<h3 id="단계-6-개선-루프">단계 6 — 개선 루프<a class="anchor" href="#단계-6-개선-루프">#</a></h3>
+<p>성공률이 70% 미만이라면 <a href="../lessons/ch14.html">14장</a>의 실패 분석표를 참고해 가장 많이 실패한 패턴부터 데이터를 보강합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-record \
+  ... \
+  --dataset.root=./datasets/so101_cube_pick \
+  --dataset.repo_id=myname/so101_cube_pick \
+  --resume=true \
+  --dataset.num_episodes=15</code></pre></div>
+<p>재학습 후 다시 평가합니다. 보통 <strong>2~3회 루프</strong>면 70%를 넘깁니다.</p>
+<hr>
+<h2 id="심화-과제">심화 과제<a class="anchor" href="#심화-과제">#</a></h2>
+<p>기본 프로젝트를 끝냈다면 다음을 시도해 보세요.</p>
+<div class="table-wrap"><table><thead><tr><th>과제</th><th>난이도</th><th>배우는 것</th></tr></thead><tbody><tr><td>여러 색 큐브 중 특정 색만 집기</td><td>★★</td><td>시각적 구분, SmolVLA의 언어 조건부</td></tr><tr><td>큐브 2개를 쌓기</td><td>★★★</td><td>순차 작업, 정밀 배치</td></tr><tr><td>컵에 물체 넣기</td><td>★★★</td><td>좁은 목표, 정밀 삽입</td></tr><tr><td>MoveIt으로 접근 + 정책으로 파지</td><td>★★★★</td><td>하이브리드 제어 (<a href="../lessons/ch20.html">20장</a>)</td></tr><tr><td>장애물 사이로 경로 계획</td><td>★★★</td><td>MoveIt Scene Objects (<a href="../lessons/ch18.html">18장</a>)</td></tr><tr><td>Gazebo에서 먼저 검증 후 실기</td><td>★★★</td><td>Sim2Real 파이프라인 (<a href="../lessons/ch19.html">19장</a>)</td></tr><tr><td>듀얼 암으로 물건 건네주기</td><td>★★★★★</td><td>양손 협조 (<a href="../lessons/ch21.html">21장</a>)</td></tr></tbody></table></div>
+<hr>
+<h2 id="강좌를-마치며">강좌를 마치며<a class="anchor" href="#강좌를-마치며">#</a></h2>
+<div class="callout callout-check"><div class="callout-title">이제 할 수 있는 것</div><div class="callout-body"><ul><li>[ ] SO-ARM101을 부품부터 조립하고 서보를 설정한다</li><li>[ ] 정기구학·역기구학을 이해하고 계산한다</li><li>[ ] LeRobot 환경을 구축하고 캘리브레이션한다</li><li>[ ] 텔레오퍼레이션으로 데이터셋을 수집한다</li><li>[ ] ACT 정책을 학습시켜 실기에 배포한다</li><li>[ ] 실패를 분석하고 데이터를 보강해 성능을 올린다</li><li>[ ] URDF를 읽고 ROS 2 패키지를 구성한다</li><li>[ ] ros2_control로 실기를 ROS 2에 연결한다</li><li>[ ] MoveIt 2로 충돌 없는 경로를 계획한다</li><li>[ ] Gazebo에서 물리 시뮬레이션을 검증한다</li><li>[ ] LeRobot 정책과 ROS 2를 잇는 브릿지를 만든다</li></ul></div></div>
+<h3 id="계속-배우려면">계속 배우려면<a class="anchor" href="#계속-배우려면">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>주제</th><th>다음 단계</th></tr></thead><tbody><tr><td>정책 알고리즘</td><td>Diffusion Policy, π0, VLA 논문 읽기</td></tr><tr><td>강화학습</td><td>LeRobot의 HIL-SERL, 실기 RL</td></tr><tr><td>시뮬레이션</td><td>Isaac Lab 본격 사용, 도메인 랜덤화</td></tr><tr><td>ROS 2 심화</td><td>Nav2(모바일), behavior tree, 다중 로봇</td></tr><tr><td>하드웨어</td><td>자체 그리퍼 설계, 촉각 센서(AnySkin)</td></tr><tr><td>커뮤니티</td><td><a href="https://discord.com/invite/s3KuuzsPFb" target="_blank" rel="noopener">LeRobot Discord</a></td></tr></tbody></table></div>
+<h3 id="참고-자료">참고 자료<a class="anchor" href="#참고-자료">#</a></h3>
+<ul><li><a href="https://github.com/TheRobotStudio/SO-ARM100" target="_blank" rel="noopener">TheRobotStudio/SO-ARM100</a> — 하드웨어 원본</li><li><a href="https://huggingface.co/docs/lerobot" target="_blank" rel="noopener">Hugging Face LeRobot 문서</a> — 최신 CLI와 API</li><li><a href="https://huggingface.co/datasets?other=LeRobot" target="_blank" rel="noopener">LeRobot 데이터셋 모음</a> — 공개 데이터셋</li><li><a href="https://github.com/LightwheelAI/leisaac" target="_blank" rel="noopener">LeIsaac</a> — Isaac Lab 통합</li><li><a href="https://github.com/huggingface/leLab" target="_blank" rel="noopener">LeLab</a> — 브라우저 UI</li><li><a href="https://juxitech.feishu.cn/wiki/NOWXw9NOJiDTs2kRr7RcdIrKnvg" target="_blank" rel="noopener">원문 위키 (중국어)</a> — 이 강좌의 기반</li><li><a href="https://huggingface.co/learn/robotics-course/en/unit0/1" target="_blank" rel="noopener">Hugging Face Robotics Course</a> — 무료 공식 강좌</li><li><a href="https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/" target="_blank" rel="noopener">NVIDIA Sim-to-Real SO-101</a> — Isaac + GR00T 실전 과정</li><li><a href="https://roboseasy.github.io/docs/physical-ai/lerobot/so-arm/" target="_blank" rel="noopener">RoboSEasy 한국어 문서</a> — 국내 한국어 가이드</li></ul>
+<p>전체 목록은 <a href="../lessons/ch23.html">23장</a>에 정리했습니다.</p>
+<div class="callout callout-tip"><div class="callout-title">마지막 조언</div><div class="callout-body"><p>로봇은 <strong>시뮬레이션에서 완벽해도 실기에서는 다릅니다.</strong> 반대로 실기에서 한 번 성공하면, 그것이 진짜입니다.</p>
+<p>작게 시작하고, 자주 평가하고, 실패에서 배우세요. 그리고 여러분의 데이터셋과 모델을 Hub에 공유해 주세요. 그것이 이 생태계가 자라는 방식입니다.</p></div></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch23.html">23장 더 배우기</a> — Hugging Face·NVIDIA 공식 강좌, 벤더 위키, 한국어 자료, 응용 프로젝트, 그리고 중국어 원문을 직접 읽을 때 쓸 <strong>용어 대조표</strong>를 모았습니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch21.html"><span>이전</span>확장 — 듀얼 암, 모바일, 손</a><a class="pager-next" href="ch23.html"><span>다음</span>더 배우기 — 강좌·프로젝트·용어</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#통합-문제-해결-색인">통합 문제 해결 색인</a><a class="toc-l3" href="#하드웨어-조립">하드웨어 / 조립</a><a class="toc-l3" href="#서보-통신">서보 / 통신</a><a class="toc-l3" href="#lerobot">LeRobot</a><a class="toc-l3" href="#ros-2">ROS 2</a><a class="toc-l2" href="#진단-순서-막혔을-때">진단 순서 (막혔을 때)</a><a class="toc-l2" href="#종합-프로젝트-큐브-픽앤플레이스">종합 프로젝트 — 큐브 픽앤플레이스</a><a class="toc-l3" href="#목표">목표</a><a class="toc-l3" href="#준비물">준비물</a><a class="toc-l3" href="#단계-1-환경-구성-30분">단계 1 — 환경 구성 (30분)</a><a class="toc-l3" href="#단계-2-캘리브레이션과-텔레오퍼레이션-검증-20분">단계 2 — 캘리브레이션과 텔레오퍼레이션 검증 (20분)</a><a class="toc-l3" href="#단계-3-데이터셋-수집-60-90분">단계 3 — 데이터셋 수집 (60~90분)</a><a class="toc-l3" href="#단계-4-학습-2-8시간">단계 4 — 학습 (2~8시간)</a><a class="toc-l3" href="#단계-5-평가-30분">단계 5 — 평가 (30분)</a><a class="toc-l3" href="#단계-6-개선-루프">단계 6 — 개선 루프</a><a class="toc-l2" href="#심화-과제">심화 과제</a><a class="toc-l2" href="#강좌를-마치며">강좌를 마치며</a><a class="toc-l3" href="#계속-배우려면">계속 배우려면</a><a class="toc-l3" href="#참고-자료">참고 자료</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

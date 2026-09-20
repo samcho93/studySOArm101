@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08. 로봇 캘리브레이션 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="왜 캘리브레이션이 정책 전이의 핵심인지 이해하고, 리더·팔로워를 정확히 보정합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" class="active" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch08">
+  <div class="lesson-head">
+    <div class="crumbs">PART 2 서보 설정과 환경 구축 &middot; 약 30분</div>
+    <h1><span class="lesson-no">08</span>로봇 캘리브레이션</h1>
+    <p class="lede">왜 캘리브레이션이 정책 전이의 핵심인지 이해하고, 리더·팔로워를 정확히 보정합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="왜-캘리브레이션이-중요한가">왜 캘리브레이션이 중요한가<a class="anchor" href="#왜-캘리브레이션이-중요한가">#</a></h2>
+<blockquote><p>캘리브레이션 과정은 매우 중요합니다. <strong>한 로봇에서 학습한 신경망이 다른 로봇에서도 동작하게 만드는 것이 바로 캘리브레이션</strong>이기 때문입니다. — LeRobot 공식 문서</p></blockquote>
+<p>생각해 봅시다. 여러분이 만든 팔로워 암과 제가 만든 팔로워 암은 3D 프린팅 오차, 서보 혼을 끼운 각도, 조립 시 조인 위치가 전부 조금씩 다릅니다. 같은 &quot;어깨 30°&quot;라도 실제 물리 자세는 다릅니다.</p>
+<p>캘리브레이션은 <strong>각 관절의 물리적 가동범위를 측정해서, 소프트웨어 숫자와 실제 각도를 일치시키는 작업</strong>입니다. 이것이 맞아야:</p>
+<ol><li><strong>리더를 움직이면 팔로워가 똑같은 자세</strong>가 됩니다. (텔레오퍼레이션)</li><li>다른 사람이 만든 데이터셋으로 학습한 모델이 <strong>내 로봇에서도 동작</strong>합니다. (정책 전이)</li><li>ROS 2 / RViz에 표시되는 모델이 <strong>실제 팔과 같은 자세</strong>로 보입니다.</li></ol>
+<div class="callout callout-danger"><div class="callout-title">캘리브레이션을 건너뛰면</div><div class="callout-body"><p>텔레오퍼레이션 시 팔로워가 <strong>엉뚱한 자세로 급격히 움직여</strong> 부품이 부러지거나 서보가 과부하로 타버릴 수 있습니다. 반드시 먼저 수행하세요.</p></div></div>
+<hr>
+<h2 id="두-단계의-캘리브레이션">두 단계의 캘리브레이션<a class="anchor" href="#두-단계의-캘리브레이션">#</a></h2>
+<p>혼동하기 쉬운데, SO-ARM101에는 <strong>성격이 다른 두 가지 캘리브레이션</strong>이 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>구분</th><th>서보 중위 캘리브레이션</th><th>LeRobot 캘리브레이션</th></tr></thead><tbody><tr><td>대상</td><td>서보 EEPROM</td><td>LeRobot 설정 파일 (JSON)</td></tr><tr><td>시점</td><td><strong>조립 전</strong></td><td><strong>조립 후</strong></td></tr><tr><td>내용</td><td>현재 위치를 2048로 기록</td><td>각 관절의 최소·최대 범위 측정</td></tr><tr><td>도구</td><td>FD 툴 / 웹 도구 / Juxi 툴</td><td><code>lerobot-calibrate</code></td></tr><tr><td>다룬 장</td><td><a href="../lessons/ch05.html">5장</a></td><td><strong>이 장</strong></td></tr></tbody></table></div>
+<figure class="fig" id="fig-calibration-stages"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="서보 중위 캘리브레이션과 LeRobot 캘리브레이션의 차이">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    캘리브레이션은 두 번입니다 — 성격이 다릅니다</text>
+
+  <!-- 1단계 -->
+  <rect class="box" x="16" y="48" width="278" height="180" rx="9"/>
+  <text class="tag mono" x="32" y="70" font-size="10.5">조립 전 · 5장</text>
+  <text class="lbl" x="32" y="90" font-size="12.5">① 서보 중위 캘리브레이션</text>
+
+  <!-- 눈금 그림 -->
+  <path stroke="var(--border)" stroke-width="1.6" d="M40 132 H270"/>
+  <path stroke="var(--accent)" stroke-width="2.4" d="M155 124 V140"/>
+  <text class="hi mono" x="155" y="158" text-anchor="middle" font-size="11">2048</text>
+  <text class="sub mono" x="40" y="152" font-size="10">0</text>
+  <text class="sub mono" x="270" y="152" text-anchor="end" font-size="10">4095</text>
+  <text class="sub" x="155" y="118" text-anchor="middle" font-size="10.5">현재 자세를 중립으로 기록</text>
+
+  <g class="sub">
+    <text x="32" y="182">대상 — 서보 내부 EEPROM</text>
+    <text x="32" y="199">도구 — FD 툴 · 웹 도구 · Juxi 툴</text>
+    <text x="32" y="216">서보 하나씩 연결한 상태에서만 가능</text>
+  </g>
+
+  <!-- 2단계 -->
+  <rect class="box-hi" x="306" y="48" width="278" height="180" rx="9"/>
+  <text class="tag mono" x="322" y="70" font-size="10.5">조립 후 · 8장</text>
+  <text class="hi" x="322" y="90" font-size="12.5">② LeRobot 캘리브레이션</text>
+
+  <path stroke="var(--border)" stroke-width="1.6" d="M330 132 H560"/>
+  <rect fill="var(--accent)" opacity="0.25" x="390" y="124" width="118" height="16" rx="3"/>
+  <path stroke="var(--accent)" stroke-width="2.4" d="M390 120 V144 M508 120 V144"/>
+  <text class="hi mono" x="390" y="158" text-anchor="middle" font-size="10.5">range_min</text>
+  <text class="hi mono" x="508" y="158" text-anchor="middle" font-size="10.5">range_max</text>
+  <text class="sub" x="449" y="118" text-anchor="middle" font-size="10.5">실제로 움직인 범위를 측정</text>
+
+  <g class="sub">
+    <text x="322" y="182">대상 — <tspan class="mono">~/.cache/…/calibration/*.json</tspan></text>
+    <text x="322" y="199">도구 — <tspan class="mono">lerobot-calibrate</tspan></text>
+    <text x="322" y="216">관절을 끝에서 끝까지 움직여야 합니다</text>
+  </g>
+
+  <!-- 결과 -->
+  <rect class="box" x="16" y="244" width="568" height="46" rx="8"/>
+  <text class="lbl" x="32" y="266" font-size="12">둘 다 맞아야 하는 이유</text>
+  <text class="sub" x="32" y="282" font-size="11">
+    ①이 없으면 가동범위가 한쪽으로 치우치고, ②가 없으면 리더와 팔로워의 숫자가 어긋납니다.
+    ②는 <tspan class="hi">남의 로봇에서 학습한 정책이 내 로봇에서 도는 이유</tspan>이기도 합니다.</text>
+</svg><figcaption>이름이 비슷해 헷갈리지만 <strong>대상도 시점도 다릅니다.</strong></figcaption></figure>
+<p>이 장은 두 번째, <strong>LeRobot 캘리브레이션</strong>입니다.</p>
+<hr>
+<h2 id="팔로워-암-캘리브레이션">팔로워 암 캘리브레이션<a class="anchor" href="#팔로워-암-캘리브레이션">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-calibrate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0 \
+    --robot.id=my_awesome_follower_arm</code></pre></div>
+<p>파이썬 API:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">from lerobot.robots.so_follower import SO101FollowerConfig, SO101Follower
+
+config = SO101FollowerConfig(
+    port=&quot;/dev/ttyACM0&quot;,
+    id=&quot;my_awesome_follower_arm&quot;,
+)
+
+follower = SO101Follower(config)
+follower.connect(calibrate=False)
+follower.calibrate()
+follower.disconnect()</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">`--robot.id` 는 나중에 계속 씁니다</div><div class="callout-body"><p>이 id가 캘리브레이션 파일의 이름이 됩니다. <strong>텔레오퍼레이션·녹화·평가에서 같은 id를 써야</strong> 같은 캘리브레이션이 적용됩니다. 팔마다 고유하고 기억하기 쉬운 이름을 정하세요.</p></div></div>
+<hr>
+<h2 id="캘리브레이션-절차">캘리브레이션 절차<a class="anchor" href="#캘리브레이션-절차">#</a></h2>
+<p>화면 안내를 따르면 되지만, 두 단계의 의미를 알고 하면 훨씬 정확해집니다.</p>
+<h3 id="1단계-중간-자세로-이동">1단계 — 중간 자세로 이동<a class="anchor" href="#1단계-중간-자세로-이동">#</a></h3>
+<blockquote><p>먼저 모든 관절이 가동범위의 <strong>한가운데</strong>에 오도록 로봇을 움직이세요.</p></blockquote>
+<p>손으로 팔을 잡고, 각 관절이 대략 &quot;양쪽으로 똑같이 갈 수 있는&quot; 중간 위치에 오도록 배치합니다. 그 상태에서 Enter를 누르면 <strong>영점(zero offset)</strong> 이 기록됩니다.</p>
+<div class="callout callout-tip"><div class="callout-title">중간 자세 잡는 요령</div><div class="callout-body"><ul><li><code>shoulder_pan</code>: 팔이 <strong>정면</strong>을 향하게</li><li><code>shoulder_lift</code>: 상완이 <strong>수직</strong>에 가깝게</li><li><code>elbow_flex</code>: 전완이 상완과 <strong>약 90°</strong></li><li><code>wrist_flex</code>: 손목이 <strong>일직선</strong></li><li><code>wrist_roll</code>: 그리퍼가 <strong>수평</strong></li><li><code>gripper</code>: <strong>반쯤 벌어진</strong> 상태</li></ul></div></div>
+<h3 id="2단계-각-관절을-전-가동범위로-움직이기">2단계 — 각 관절을 전 가동범위로 움직이기<a class="anchor" href="#2단계-각-관절을-전-가동범위로-움직이기">#</a></h3>
+<blockquote><p>Enter를 누른 뒤, <strong>각 관절을 가동범위 끝에서 끝까지</strong> 움직이세요.</p></blockquote>
+<p>한 관절씩 천천히, <strong>끝까지</strong> 돌렸다가 반대쪽 끝까지 돌립니다. LeRobot이 그동안 측정된 최솟값과 최댓값을 기록합니다.</p>
+<div class="callout callout-danger"><div class="callout-title">힘으로 밀어붙이지 마세요</div><div class="callout-body"><p>저항이 느껴지면 그 지점이 물리적 한계입니다. <strong>더 밀면 3D 프린팅 부품이 깨지거나 기어가 마모됩니다.</strong> 부드럽게 멈추는 지점까지만 움직이세요.</p></div></div>
+<div class="callout callout-warn"><div class="callout-title">빠뜨리기 쉬운 것</div><div class="callout-body"><p><strong>모든 6개 관절</strong>(그리퍼 포함)을 움직여야 합니다. 하나라도 빠뜨리면 그 관절의 범위가 0으로 기록되어 나중에 전혀 움직이지 않습니다.</p></div></div>
+<p>완료하면 Enter를 눌러 종료합니다.</p>
+<hr>
+<h2 id="리더-암-캘리브레이션">리더 암 캘리브레이션<a class="anchor" href="#리더-암-캘리브레이션">#</a></h2>
+<p>동일한 과정을 <code>teleop</code> 타입으로 반복합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-calibrate \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM1 \
+    --teleop.id=my_awesome_leader_arm</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">from lerobot.teleoperators.so_leader import SO101LeaderConfig, SO101Leader
+
+config = SO101LeaderConfig(
+    port=&quot;/dev/ttyACM1&quot;,
+    id=&quot;my_awesome_leader_arm&quot;,
+)
+
+leader = SO101Leader(config)
+leader.connect(calibrate=False)
+leader.calibrate()
+leader.disconnect()</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">리더는 훨씬 쉽습니다</div><div class="callout-body"><p>리더 암은 감속비가 낮아 손으로 가볍게 움직입니다. 대신 <strong>자체 무게로 처질 수 있으니</strong> 한 손으로 받치면서 진행하세요.</p></div></div>
+<hr>
+<h2 id="캘리브레이션-파일-위치">캘리브레이션 파일 위치<a class="anchor" href="#캘리브레이션-파일-위치">#</a></h2>
+<p>결과는 사용자 캐시에 JSON으로 저장됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">~/.cache/huggingface/lerobot/calibration/
+├── robots/
+│   └── so_follower/
+│       └── my_awesome_follower_arm.json
+└── teleoperators/
+    └── so_leader/
+        └── my_awesome_leader_arm.json</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">디렉터리 이름이 `so_follower` / `so_leader` 인 이유</div><div class="callout-body"><p>LeRobot 내부에서 <code>so101_follower</code>와 <code>so100_follower</code>가 <strong>같은 구현을 공유</strong>하기 때문에 디렉터리가 통합되어 있습니다. 마찬가지로 <code>so101_leader</code>와 <code>so100_leader</code>도 <code>so_leader</code> 하나를 씁니다.</p>
+<p>또한 <strong>리더는 로봇이 아니라 teleoperator</strong>이므로 <code>robots/</code>가 아니라 <code>teleoperators/</code> 아래에 저장됩니다. 파일을 직접 찾을 때 헷갈리는 지점입니다.</p></div></div>
+<h3 id="파일-내용-예시">파일 내용 예시<a class="anchor" href="#파일-내용-예시">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">json</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-json">{
+  &quot;shoulder_pan&quot;:  { &quot;id&quot;: 1, &quot;drive_mode&quot;: 0, &quot;homing_offset&quot;: -13, &quot;range_min&quot;: 742,  &quot;range_max&quot;: 3339 },
+  &quot;shoulder_lift&quot;: { &quot;id&quot;: 2, &quot;drive_mode&quot;: 0, &quot;homing_offset&quot;: 1024, &quot;range_min&quot;: 810, &quot;range_max&quot;: 3290 },
+  &quot;elbow_flex&quot;:    { &quot;id&quot;: 3, &quot;drive_mode&quot;: 0, &quot;homing_offset&quot;: -1024, &quot;range_min&quot;: 900, &quot;range_max&quot;: 3190 },
+  &quot;wrist_flex&quot;:    { &quot;id&quot;: 4, &quot;drive_mode&quot;: 0, &quot;homing_offset&quot;: 45,   &quot;range_min&quot;: 880,  &quot;range_max&quot;: 3210 },
+  &quot;wrist_roll&quot;:    { &quot;id&quot;: 5, &quot;drive_mode&quot;: 0, &quot;homing_offset&quot;: -8,   &quot;range_min&quot;: 200,  &quot;range_max&quot;: 3900 },
+  &quot;gripper&quot;:       { &quot;id&quot;: 6, &quot;drive_mode&quot;: 0, &quot;homing_offset&quot;: 100,  &quot;range_min&quot;: 2020, &quot;range_max&quot;: 3200 }
+}</code></pre></div>
+<ul><li><code>range_min</code> / <code>range_max</code> — 측정된 서보 틱 범위 (0~4095)</li><li><code>homing_offset</code> — 영점 보정값</li><li>LeRobot은 이 범위를 <strong>-100 ~ +100</strong> (그리퍼는 <strong>0 ~ 100</strong>) 으로 정규화해 사용합니다.</li></ul>
+<div class="callout callout-tip"><div class="callout-title">백업하세요</div><div class="callout-body"><p>이 JSON들을 프로젝트 폴더에 복사해 두면, OS를 재설치하거나 다른 PC에서 작업할 때 캘리브레이션을 다시 하지 않아도 됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">mkdir -p backup/calibration
+cp -r ~/.cache/huggingface/lerobot/calibration/* backup/calibration/</code></pre></div></div></div>
+<hr>
+<h2 id="캘리브레이션-결과-확인">캘리브레이션 결과 확인<a class="anchor" href="#캘리브레이션-결과-확인">#</a></h2>
+<h3 id="방법-1-자동-확인">방법 1 — 자동 확인<a class="anchor" href="#방법-1-자동-확인">#</a></h3>
+<p>다음 장의 텔레오퍼레이션을 실행하면 LeRobot이 자동으로 캘리브레이션 유무를 확인하고, 없으면 캘리브레이션 절차를 시작합니다.</p>
+<h3 id="방법-2-시뮬레이터로-비교">방법 2 — 시뮬레이터로 비교<a class="anchor" href="#방법-2-시뮬레이터로-비교">#</a></h3>
+<p><a href="../sim/index.html">3D 시뮬레이터</a>에서 같은 자세를 만들어 보고 실물과 비교하세요. <strong>&quot;LeRobot 정규화&quot; 단위 모드</strong>로 전환하면 LeRobot이 출력하는 값과 직접 비교할 수 있습니다.</p>
+<h3 id="방법-3-범위-점검">방법 3 — 범위 점검<a class="anchor" href="#방법-3-범위-점검">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/check_calibration.py --id my_awesome_follower_arm --role follower</code></pre></div>
+<p>각 관절의 측정 범위가 상식적인지 검사합니다. 범위가 지나치게 좁으면(예: 500틱 미만) 그 관절을 끝까지 움직이지 않은 것입니다.</p>
+<hr>
+<h2 id="다시-캘리브레이션해야-하는-경우">다시 캘리브레이션해야 하는 경우<a class="anchor" href="#다시-캘리브레이션해야-하는-경우">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>상황</th><th>재캘리브레이션 필요?</th></tr></thead><tbody><tr><td>서보 혼을 다시 끼웠다</td><td><strong>예</strong></td></tr><tr><td>관절을 분해했다 조립했다</td><td><strong>예</strong></td></tr><tr><td>서보를 교체했다</td><td><strong>예</strong> (+ <a href="../lessons/ch05.html">5장</a> ID 설정부터)</td></tr><tr><td>공장 초기화를 했다</td><td><strong>예</strong> (+ 5장부터)</td></tr><tr><td>PC를 바꿨다</td><td>아니오 — JSON 파일만 복사하면 됨</td></tr><tr><td>카메라를 옮겼다</td><td>아니오 (단, 데이터셋 재수집은 필요)</td></tr><tr><td>그냥 껐다 켰다</td><td>아니오</td></tr></tbody></table></div>
+<hr>
+<h2 id="문제-해결">문제 해결<a class="anchor" href="#문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>텔레오퍼레이션 중 &quot;다시 캘리브레이션하라&quot; 안내</td><td>id가 다르거나 파일이 없음</td><td>같은 <code>--robot.id</code> / <code>--teleop.id</code> 사용</td></tr><tr><td>특정 관절만 안 움직임</td><td>그 관절을 전 범위로 움직이지 않음</td><td>재캘리브레이션</td></tr><tr><td>리더와 팔로워 자세가 어긋남</td><td>한쪽만 캘리브레이션함</td><td>양쪽 모두 수행</td></tr><tr><td>리더가 손으로 안 움직임</td><td>토크가 꺼지지 않음</td><td>재캘리브레이션, 또는 서보 상태 점검</td></tr><tr><td>가동범위가 한쪽으로 치우침</td><td>중위 캘리브레이션(5장) 누락</td><td>분해 후 5장 재수행</td></tr><tr><td>캘리브레이션 중 서보 통신 끊김</td><td>3핀 케이블 접촉 불량</td><td>배선 재점검</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch09.html">9장 텔레오퍼레이션 기초</a> — 드디어 리더로 팔로워를 조종합니다. 먼저 시뮬레이터에서 감을 잡고 시작합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch07.html"><span>이전</span>시리얼 포트 확인과 권한 설정</a><a class="pager-next" href="ch09.html"><span>다음</span>텔레오퍼레이션 기초</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#왜-캘리브레이션이-중요한가">왜 캘리브레이션이 중요한가</a><a class="toc-l2" href="#두-단계의-캘리브레이션">두 단계의 캘리브레이션</a><a class="toc-l2" href="#팔로워-암-캘리브레이션">팔로워 암 캘리브레이션</a><a class="toc-l2" href="#캘리브레이션-절차">캘리브레이션 절차</a><a class="toc-l3" href="#1단계-중간-자세로-이동">1단계 — 중간 자세로 이동</a><a class="toc-l3" href="#2단계-각-관절을-전-가동범위로-움직이기">2단계 — 각 관절을 전 가동범위로 움직이기</a><a class="toc-l2" href="#리더-암-캘리브레이션">리더 암 캘리브레이션</a><a class="toc-l2" href="#캘리브레이션-파일-위치">캘리브레이션 파일 위치</a><a class="toc-l3" href="#파일-내용-예시">파일 내용 예시</a><a class="toc-l2" href="#캘리브레이션-결과-확인">캘리브레이션 결과 확인</a><a class="toc-l3" href="#방법-1-자동-확인">방법 1 — 자동 확인</a><a class="toc-l3" href="#방법-2-시뮬레이터로-비교">방법 2 — 시뮬레이터로 비교</a><a class="toc-l3" href="#방법-3-범위-점검">방법 3 — 범위 점검</a><a class="toc-l2" href="#다시-캘리브레이션해야-하는-경우">다시 캘리브레이션해야 하는 경우</a><a class="toc-l2" href="#문제-해결">문제 해결</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

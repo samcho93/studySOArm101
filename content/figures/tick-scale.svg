@@ -1,0 +1,31 @@
+<svg viewBox="0 0 600 264" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="서보 틱, 각도, LeRobot 정규화 값의 대응 관계">
+  <!-- 자동 생성 — content/figures/gen_figures.py -->
+  <text class="lbl" x="70.0" y="34" font-size="12.5" font-weight="700">
+    같은 자세를 부르는 세 가지 숫자</text>
+
+  <path class="ln" stroke="var(--border)" stroke-width="1.6" d="M70.0 78.0 H540.0"/>
+  <text class="tag mono" x="60.0" y="82.0" text-anchor="end">틱</text>
+  <path class="ln" stroke="var(--border)" d="M70.0 78.0 V88.0"/><text class="sub mono" x="70.0" y="70.0" text-anchor="middle">0</text><path class="ln" stroke="var(--border)" d="M187.5 78.0 V88.0"/><text class="sub mono" x="187.5" y="70.0" text-anchor="middle">1024</text><path class="ln" stroke="var(--border)" d="M305.1 78.0 V88.0"/><text class="sub mono" x="305.1" y="70.0" text-anchor="middle">2048</text><path class="ln" stroke="var(--border)" d="M422.6 78.0 V88.0"/><text class="sub mono" x="422.6" y="70.0" text-anchor="middle">3072</text><path class="ln" stroke="var(--border)" d="M540.0 78.0 V88.0"/><text class="sub mono" x="540.0" y="70.0" text-anchor="middle">4095</text><text class="sub mono" x="70.0" y="146.0" text-anchor="middle">−180°</text><text class="sub mono" x="187.5" y="146.0" text-anchor="middle">−90°</text><text class="sub mono" x="305.1" y="146.0" text-anchor="middle">0°</text><text class="sub mono" x="422.6" y="146.0" text-anchor="middle">+90°</text><text class="sub mono" x="540.0" y="146.0" text-anchor="middle">+180°</text>
+
+  <!-- 조인트 가동범위 -->
+  <rect fill="var(--accent)" opacity="0.22" x="174.4" y="98.0"
+        width="261.2" height="26" rx="4"/>
+  <text class="hi" x="305.1" y="116.0" text-anchor="middle"
+        font-size="11.5">shoulder_lift 실제 가동범위 910~3186</text>
+  <text class="tag mono" x="60.0" y="116.0" text-anchor="end">각도</text>
+
+  <!-- LeRobot 정규화 -->
+  <path class="ln" stroke="var(--accent)" stroke-width="1.6"
+        d="M174.4 186.0 H435.7"/>
+  <text class="tag mono" x="60.0" y="190.0" text-anchor="end">LeRobot</text>
+  <text class="hi mono" x="174.4" y="206.0" text-anchor="middle">−100</text>
+  <text class="hi mono" x="305.1" y="206.0" text-anchor="middle">0</text>
+  <text class="hi mono" x="435.7" y="206.0" text-anchor="middle">+100</text>
+
+  <text class="sub" x="70.0" y="230.0">
+    LeRobot 은 캘리브레이션으로 잰 <tspan class="hi">실제 가동범위</tspan>를
+    −100~+100 으로 펴서 씁니다. 그래서 로그의 숫자는 각도가 아닙니다.</text>
+  <text class="sub" x="70.0" y="248.0">
+    1 틱 = 2π ÷ 4096 = 0.00153398 rad = 0.0879°  ·  중립 위치 = 2048</text>
+</svg>

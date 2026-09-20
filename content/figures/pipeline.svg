@@ -1,0 +1,68 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="LeRobot 모방학습 전체 파이프라인">
+  <defs>
+    <marker id="pl-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">모방학습 전체 흐름</text>
+  <text class="sub" x="16" y="42">한 바퀴로 끝나지 않습니다 — 평가 결과가 다시 데이터 수집으로 돌아옵니다</text>
+
+  <!-- 단계 박스 -->
+  <g>
+    <rect class="box" x="16"  y="66" width="104" height="70" rx="8"/>
+    <rect class="box" x="140" y="66" width="104" height="70" rx="8"/>
+    <rect class="box" x="264" y="66" width="104" height="70" rx="8"/>
+    <rect class="box" x="388" y="66" width="104" height="70" rx="8"/>
+    <rect class="box-hi" x="496" y="66" width="88" height="70" rx="8"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="tag mono" x="68"  y="86" font-size="10">STEP 1–8</text>
+    <text class="lbl" x="68"  y="106" font-size="12.5">조립 · 설정</text>
+    <text class="sub" x="68"  y="123" font-size="10.5">ID · 캘리브레이션</text>
+
+    <text class="tag mono" x="192" y="86" font-size="10">STEP 9–10</text>
+    <text class="lbl" x="192" y="106" font-size="12.5">텔레오퍼레이션</text>
+    <text class="sub" x="192" y="123" font-size="10.5">카메라 배치</text>
+
+    <text class="tag mono" x="316" y="86" font-size="10">STEP 11–12</text>
+    <text class="lbl" x="316" y="106" font-size="12.5">데이터 수집</text>
+    <text class="sub" x="316" y="123" font-size="10.5">실기 또는 시뮬</text>
+
+    <text class="tag mono" x="440" y="86" font-size="10">STEP 13</text>
+    <text class="lbl" x="440" y="106" font-size="12.5">정책 학습</text>
+    <text class="sub" x="440" y="123" font-size="10.5">ACT · VLA</text>
+
+    <text class="tag mono" x="540" y="86" font-size="10">STEP 14</text>
+    <text class="hi" x="540" y="106" font-size="12.5">배포 · 평가</text>
+    <text class="sub" x="540" y="123" font-size="10.5">성공률</text>
+  </g>
+
+  <g class="ln-hi" stroke-width="2" color="var(--accent)">
+    <path d="M120 101 H134" marker-end="url(#pl-a)"/>
+    <path d="M244 101 H258" marker-end="url(#pl-a)"/>
+    <path d="M368 101 H382" marker-end="url(#pl-a)"/>
+    <path d="M492 101 H490" marker-end="url(#pl-a)"/>
+  </g>
+
+  <!-- 되먹임 -->
+  <path stroke="var(--warn)" stroke-width="2" fill="none" stroke-dasharray="5 4"
+        d="M540 136 V170 H316 V142" marker-end="url(#pl-a)" color="var(--warn)"/>
+  <text class="wr" x="428" y="186" text-anchor="middle" font-size="11.5">
+    실패 양상을 보고 그 상황 데이터를 보강 — 보통 2~3회 반복</text>
+
+  <!-- 산출물 -->
+  <g>
+    <rect class="box" x="16" y="212" width="568" height="66" rx="8"/>
+    <text class="sub" x="32" y="234" font-size="11">각 단계가 남기는 것</text>
+    <text class="tag mono" x="32"  y="256" font-size="10.5">calibration/*.json</text>
+    <text class="tag mono" x="176" y="256" font-size="10.5">datasets/…/data · videos</text>
+    <text class="tag mono" x="360" y="256" font-size="10.5">checkpoints/…/pretrained_model</text>
+    <text class="tag mono" x="32"  y="272" font-size="10.5">← 개체마다 다름</text>
+    <text class="tag mono" x="176" y="272" font-size="10.5">← Hub 공유 가능</text>
+    <text class="tag mono" x="360" y="272" font-size="10.5">← Hub 공유 가능 · 개체 간 전이</text>
+  </g>
+</svg>

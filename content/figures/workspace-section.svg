@@ -1,0 +1,42 @@
+<svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="SO-ARM101 TCP 도달 영역의 수평거리-높이 단면">
+  <!-- 자동 생성 — content/figures/gen_figures.py -->
+  <rect class="box" x="62" y="26" width="500" height="330" rx="4"/>
+
+  <!-- 도달 가능 영역 (400,000 샘플) -->
+  <g fill="var(--accent)" opacity="0.30">
+    <rect x="62.0" y="82.3" width="346.8" height="4.6"/><rect x="62.0" y="42.1" width="183.3" height="4.6"/><rect x="90.8" y="130.6" width="404.4" height="4.6"/><rect x="62.0" y="191.0" width="462.1" height="4.6"/><rect x="62.0" y="78.3" width="337.1" height="4.6"/><rect x="62.0" y="170.9" width="462.1" height="4.6"/><rect x="62.0" y="178.9" width="462.1" height="4.6"/><rect x="62.0" y="46.1" width="202.5" height="4.6"/><rect x="62.0" y="183.0" width="462.1" height="4.6"/><rect x="81.2" y="323.8" width="298.7" height="4.6"/><rect x="62.0" y="295.6" width="394.8" height="4.6"/><rect x="62.0" y="70.3" width="308.3" height="4.6"/><rect x="62.0" y="110.5" width="404.4" height="4.6"/><rect x="71.6" y="211.1" width="452.5" height="4.6"/><rect x="62.0" y="283.6" width="414.1" height="4.6"/><rect x="62.0" y="255.4" width="442.9" height="4.6"/><rect x="62.0" y="219.2" width="462.1" height="4.6"/><rect x="81.2" y="126.6" width="404.4" height="4.6"/><rect x="62.0" y="66.2" width="298.7" height="4.6"/><rect x="62.0" y="62.2" width="289.1" height="4.6"/><rect x="62.0" y="98.4" width="375.6" height="4.6"/><rect x="90.8" y="142.7" width="29.4" height="4.6"/><rect x="129.3" y="142.7" width="375.6" height="4.6"/><rect x="62.0" y="235.3" width="462.1" height="4.6"/><rect x="62.0" y="174.9" width="462.1" height="4.6"/><rect x="62.0" y="54.2" width="250.6" height="4.6"/><rect x="62.0" y="239.3" width="462.1" height="4.6"/><rect x="62.0" y="94.4" width="375.6" height="4.6"/><rect x="62.0" y="166.9" width="452.5" height="4.6"/><rect x="62.0" y="287.6" width="404.4" height="4.6"/><rect x="100.5" y="134.7" width="394.8" height="4.6"/><rect x="62.0" y="158.8" width="452.5" height="4.6"/><rect x="62.0" y="223.2" width="462.1" height="4.6"/><rect x="71.6" y="203.1" width="452.5" height="4.6"/><rect x="62.0" y="299.7" width="385.2" height="4.6"/><rect x="62.0" y="102.5" width="385.2" height="4.6"/><rect x="62.0" y="114.5" width="404.4" height="4.6"/><rect x="62.0" y="303.7" width="375.6" height="4.6"/><rect x="62.0" y="86.4" width="356.4" height="4.6"/><rect x="62.0" y="275.5" width="423.7" height="4.6"/><rect x="62.0" y="74.3" width="327.5" height="4.6"/><rect x="62.0" y="122.6" width="414.1" height="4.6"/><rect x="62.0" y="315.8" width="346.8" height="4.6"/><rect x="62.0" y="118.6" width="414.1" height="4.6"/><rect x="62.0" y="50.1" width="231.4" height="4.6"/><rect x="71.6" y="199.0" width="452.5" height="4.6"/><rect x="62.0" y="146.7" width="442.9" height="4.6"/><rect x="62.0" y="267.5" width="433.3" height="4.6"/><rect x="62.0" y="227.2" width="462.1" height="4.6"/><rect x="62.0" y="311.7" width="356.4" height="4.6"/><rect x="71.6" y="187.0" width="452.5" height="4.6"/><rect x="62.0" y="90.4" width="366.0" height="4.6"/><rect x="62.0" y="247.3" width="452.5" height="4.6"/><rect x="62.0" y="279.5" width="414.1" height="4.6"/><rect x="62.0" y="150.8" width="442.9" height="4.6"/><rect x="62.0" y="231.2" width="462.1" height="4.6"/><rect x="62.0" y="207.1" width="462.1" height="4.6"/><rect x="62.0" y="251.4" width="452.5" height="4.6"/><rect x="110.1" y="138.7" width="385.2" height="4.6"/><rect x="62.0" y="58.2" width="269.8" height="4.6"/><rect x="62.0" y="243.3" width="452.5" height="4.6"/><rect x="71.6" y="195.0" width="452.5" height="4.6"/><rect x="62.0" y="215.1" width="462.1" height="4.6"/><rect x="62.0" y="106.5" width="394.8" height="4.6"/><rect x="81.2" y="327.8" width="279.4" height="4.6"/><rect x="62.0" y="307.7" width="366.0" height="4.6"/><rect x="62.0" y="271.5" width="423.7" height="4.6"/><rect x="62.0" y="263.4" width="433.3" height="4.6"/><rect x="62.0" y="162.8" width="452.5" height="4.6"/><rect x="62.0" y="259.4" width="442.9" height="4.6"/><rect x="62.0" y="154.8" width="452.5" height="4.6"/><rect x="62.0" y="319.8" width="337.1" height="4.6"/><rect x="100.5" y="331.9" width="241.0" height="4.6"/><rect x="62.0" y="291.6" width="404.4" height="4.6"/><rect x="62.0" y="38.1" width="135.2" height="4.6"/><rect x="119.7" y="335.9" width="192.9" height="4.6"/><rect x="167.8" y="339.9" width="96.8" height="4.6"/>
+  </g>
+
+  <!-- 테이블 면 -->
+  <path stroke="var(--warn)" stroke-width="1.6" stroke-dasharray="5 4"
+        d="M62 251.4 H562"/>
+  <text class="wr" x="558" y="243.4" text-anchor="end"
+        font-size="11.5">테이블 면 z = 0</text>
+
+  <!-- 실용 작업 구간 -->
+  <rect fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="4 3"
+        x="206.2" y="130.6"
+        width="144.2" height="120.7" rx="3"/>
+  <text class="hi" x="278.3" y="122.6" text-anchor="middle"
+        font-size="11.5">실용 작업 구간</text>
+
+  <!-- 베이스 -->
+  <rect class="box" x="59.0" y="227.2" width="14" height="24.1" rx="2"/>
+  <text class="tag" x="78" y="239.3" font-size="11">베이스</text>
+
+  <!-- 최대 도달 -->
+  <path class="ln" stroke="var(--text-faint)" stroke-width="1.2" stroke-dasharray="3 3"
+        d="M523.0 26 V356"/>
+  <text class="lbl" x="515.0" y="44" text-anchor="end"
+        font-size="11.5">최대 48 cm</text>
+
+  <!-- 축 -->
+  <g class="ln" stroke="var(--border)" stroke-width="1"><path d="M62.0 356.0 V361.0"/><text class="sub" x="62.0" y="375.0" text-anchor="middle">0</text><path d="M158.2 356.0 V361.0"/><text class="sub" x="158.2" y="375.0" text-anchor="middle">10</text><path d="M254.3 356.0 V361.0"/><text class="sub" x="254.3" y="375.0" text-anchor="middle">20</text><path d="M350.5 356.0 V361.0"/><text class="sub" x="350.5" y="375.0" text-anchor="middle">30</text><path d="M446.6 356.0 V361.0"/><text class="sub" x="446.6" y="375.0" text-anchor="middle">40</text><path d="M542.8 356.0 V361.0"/><text class="sub" x="542.8" y="375.0" text-anchor="middle">50</text><path d="M57.0 331.9 H62.0"/><text class="sub" x="52.0" y="335.9" text-anchor="end">-20</text><path d="M57.0 251.4 H62.0"/><text class="sub" x="52.0" y="255.4" text-anchor="end">0</text><path d="M57.0 170.9 H62.0"/><text class="sub" x="52.0" y="174.9" text-anchor="end">20</text><path d="M57.0 90.4 H62.0"/><text class="sub" x="52.0" y="94.4" text-anchor="end">40</text></g>
+  <text class="sub" x="312" y="396" text-anchor="middle">
+    베이스 중심에서의 수평 거리 (cm)</text>
+  <text class="sub" x="18" y="191" text-anchor="middle"
+        transform="rotate(-90 18 191)">TCP 높이 z (cm)</text>
+
+  <text class="sub" x="62" y="16">조인트 한계만 고려한 이론 영역 · 자기 충돌과 케이블 간섭은 반영하지 않음</text>
+</svg>

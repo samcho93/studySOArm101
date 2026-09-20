@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>18. MoveIt 2 모션 플래닝 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="Setup Assistant로 SRDF를 만들고 OMPL 플래닝, 충돌 회피, Pick&amp;Place를 구현합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" class="active" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch18">
+  <div class="lesson-head">
+    <div class="crumbs">PART 5 ROS 2 연동과 시뮬레이션 &middot; 약 45분</div>
+    <h1><span class="lesson-no">18</span>MoveIt 2 모션 플래닝</h1>
+    <p class="lede">Setup Assistant로 SRDF를 만들고 OMPL 플래닝, 충돌 회피, Pick&amp;Place를 구현합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="moveit-2가-해주는-일">MoveIt 2가 해주는 일<a class="anchor" href="#moveit-2가-해주는-일">#</a></h2>
+<p><a href="../lessons/ch02.html">2장</a>에서 배운 IK는 &quot;TCP를 여기에 두려면 각도가 얼마인가&quot;만 답합니다. MoveIt 2는 그 위에 다음을 얹습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>기능</th><th>설명</th></tr></thead><tbody><tr><td><strong>IK 솔버</strong></td><td>KDL / TRAC-IK 등으로 목표 자세의 관절 각 계산</td></tr><tr><td><strong>경로 계획</strong></td><td>OMPL(RRTConnect, RRT*, PRM…)로 <strong>충돌 없는 궤적</strong> 탐색</td></tr><tr><td><strong>충돌 검사</strong></td><td>자기 충돌(self-collision) + 환경 장애물</td></tr><tr><td><strong>궤적 시간 최적화</strong></td><td>속도·가속도 한계를 지키는 타이밍 부여</td></tr><tr><td><strong>실행</strong></td><td><code>joint_trajectory_controller</code>로 전송</td></tr></tbody></table></div>
+<hr>
+<figure class="fig" id="fig-moveit-flow"><svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="MoveIt 2가 목표 자세를 실행 궤적으로 바꾸는 과정">
+  <defs>
+    <marker id="mf-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    MoveIt 2 가 Plan 버튼 뒤에서 하는 일</text>
+
+  <g>
+    <rect class="box-hi" x="16"  y="52" width="108" height="56" rx="7"/>
+    <rect class="box" x="140" y="52" width="108" height="56" rx="7"/>
+    <rect class="box" x="264" y="52" width="108" height="56" rx="7"/>
+    <rect class="box" x="388" y="52" width="108" height="56" rx="7"/>
+    <rect class="box-hi" x="500" y="52" width="84" height="56" rx="7"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="hi"  x="70"  y="76" font-size="12.5">목표 자세</text>
+    <text class="sub" x="70"  y="94" font-size="10.5">마커 드래그 · 프리셋</text>
+
+    <text class="lbl" x="194" y="76" font-size="12.5">IK 솔버</text>
+    <text class="sub mono" x="194" y="94" font-size="10">KDL / TRAC-IK</text>
+
+    <text class="lbl" x="318" y="76" font-size="12.5">경로 계획</text>
+    <text class="sub mono" x="318" y="94" font-size="10">OMPL · RRTConnect</text>
+
+    <text class="lbl" x="442" y="76" font-size="12.5">시간 최적화</text>
+    <text class="sub" x="442" y="94" font-size="10.5">속도·가속도 한계</text>
+
+    <text class="hi"  x="542" y="76" font-size="12.5">실행</text>
+    <text class="sub" x="542" y="94" font-size="10.5">컨트롤러</text>
+  </g>
+
+  <g class="ln-hi" stroke-width="2" color="var(--accent)">
+    <path d="M124 80 H134" marker-end="url(#mf-a)"/>
+    <path d="M248 80 H258" marker-end="url(#mf-a)"/>
+    <path d="M372 80 H382" marker-end="url(#mf-a)"/>
+    <path d="M496 80 H494" marker-end="url(#mf-a)"/>
+  </g>
+
+  <!-- 각 단계가 실패하는 지점 -->
+  <g>
+    <rect class="box" x="16" y="134" width="568" height="106" rx="8"/>
+    <text class="wr" x="32" y="156" font-size="12" font-weight="700">여기서 막히면 원인이 다릅니다</text>
+
+    <text class="lbl mono" x="32" y="180" font-size="11">IK 실패</text>
+    <text class="sub" x="120" y="180" font-size="11">목표가 작업영역 밖 — Random Valid 로 도달 범위를 먼저 확인</text>
+
+    <text class="lbl mono" x="32" y="202" font-size="11">start tree 실패</text>
+    <text class="sub" x="120" y="202" font-size="11">시작 자세가 관절 한계 초과(0.3 rad 허용) 또는 자기 충돌 — 17장 오프셋 점검</text>
+
+    <text class="lbl mono" x="32" y="224" font-size="11">Execute 무반응</text>
+    <text class="sub" x="120" y="224" font-size="11">컨트롤러 이름 불일치 또는 비활성 — <tspan class="mono">ros2 control list_controllers</tspan></text>
+  </g>
+
+  <text class="sub" x="16" y="44">
+    SO-ARM101은 5자유도라 위치+방향을 동시에 못 맞춥니다 →
+    <tspan class="mono hi">position_only_ik: true</tspan> 로 성공률이 크게 오릅니다</text>
+</svg><figcaption>Plan 버튼 하나 뒤에서 네 단계가 순서대로 돕니다. 어디서 막혔는지에 따라 원인이 다릅니다.</figcaption></figure>
+<h2 id="데모-실행-mock-하드웨어">데모 실행 (Mock 하드웨어)<a class="anchor" href="#데모-실행-mock-하드웨어">#</a></h2>
+<p>터미널 하나면 됩니다. <code>demo.launch.py</code>가 컨트롤러 스택을 내부에서 자동으로 띄웁니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 launch so_arm101_moveit_config demo.launch.py</code></pre></div>
+<p>RViz 창이 열리면:</p>
+<ol><li><strong>MotionPlanning</strong> 패널에서 **Planning Group → <code>manipulator</code>**</li><li>**Start State → <code>&lt;current&gt;</code><strong>, </strong>Goal State → <code>extended</code>**</li><li><strong>Plan</strong> 클릭 → 주황색 궤적 미리보기</li><li><strong>Execute</strong> 클릭 → 실행</li></ol>
+<p>사용 가능한 프리셋 자세: **<code>open</code>, <code>zero</code>, <code>extended</code>, <code>rest</code>**</p>
+<div class="callout callout-info"><div class="callout-title">RViz 첫 실행이 느린 건 정상입니다</div><div class="callout-body"><p>MoveIt은 시작 시 URDF 모델, 충돌 검사 플러그인, 기구학 솔버를 모두 로드합니다. <strong>첫 실행에 약 10초</strong> 걸립니다.</p></div></div>
+<hr>
+<h2 id="motionplanning-패널-사용법">MotionPlanning 패널 사용법<a class="anchor" href="#motionplanning-패널-사용법">#</a></h2>
+<h3 id="planning-탭">Planning 탭<a class="anchor" href="#planning-탭">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>설명</th></tr></thead><tbody><tr><td><strong>Planning Group</strong></td><td>제어할 관절 그룹. SO-ARM101은 <code>manipulator</code></td></tr><tr><td><strong>Start State</strong></td><td>시작 자세. 보통 <code>&lt;current&gt;</code></td></tr><tr><td><strong>Goal State</strong></td><td>목표 자세. 프리셋 또는 <code>&lt;random valid&gt;</code></td></tr><tr><td><strong>Plan</strong></td><td>경로만 계산 (실행하지 않음)</td></tr><tr><td><strong>Execute</strong></td><td>계산된 경로 실행</td></tr><tr><td><strong>Plan &amp; Execute</strong></td><td>한 번에</td></tr></tbody></table></div>
+<h3 id="플래닝-파라미터">플래닝 파라미터<a class="anchor" href="#플래닝-파라미터">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>파라미터</th><th>의미</th><th>권장값</th></tr></thead><tbody><tr><td><strong>Planning Time</strong></td><td>최대 탐색 시간(초)</td><td>5 → 실패 시 10</td></tr><tr><td><strong>Planning Attempts</strong></td><td>재시도 횟수</td><td>10</td></tr><tr><td><strong>Velocity Scaling</strong></td><td>속도 배율 (0~1)</td><td><strong>첫 테스트 0.3</strong></td></tr><tr><td><strong>Acceleration Scaling</strong></td><td>가속도 배율 (0~1)</td><td><strong>첫 테스트 0.3</strong></td></tr></tbody></table></div>
+<div class="callout callout-warn"><div class="callout-title">첫 테스트는 반드시 0.1~0.3으로</div><div class="callout-body"><p>속도와 가속도를 낮추면 문제가 생겼을 때 대응할 시간이 생깁니다. 실기에서는 특히 중요합니다.</p></div></div>
+<h3 id="scene-objects-탭">Scene Objects 탭<a class="anchor" href="#scene-objects-탭">#</a></h3>
+<ul><li>장애물(Box / Sphere / Cylinder)을 추가해 충돌 검사에 반영</li><li>장면(scene) 가져오기 / 내보내기</li><li>MoveIt이 자동으로 장애물을 피해 경로를 계획합니다</li></ul>
+<h3 id="stored-states-탭">Stored States 탭<a class="anchor" href="#stored-states-탭">#</a></h3>
+<ul><li>자주 쓰는 자세를 저장</li><li>기본 제공: <code>open</code>, <code>zero</code>, <code>extended</code>, <code>rest</code></li></ul>
+<hr>
+<h2 id="네-가지-목표-지정-방법">네 가지 목표 지정 방법<a class="anchor" href="#네-가지-목표-지정-방법">#</a></h2>
+<h3 id="방식-a-인터랙티브-마커-드래그-권장">방식 A — 인터랙티브 마커 드래그 (권장)<a class="anchor" href="#방식-a-인터랙티브-마커-드래그-권장">#</a></h3>
+<ol><li>3D 뷰에서 팔 말단의 <strong>인터랙티브 마커</strong>(색색의 화살표와 원환)를 찾습니다.</li><li><strong>화살표를 끌면 위치 이동</strong>, <strong>원환을 끌면 방향 회전</strong>입니다.</li><li>MoveIt이 실시간으로 IK를 풀어 관절 각을 갱신합니다.</li><li><strong>Plan</strong> 으로 주황색 궤적을 확인합니다.</li><li>확인 후 <strong>Execute</strong>.</li></ol>
+<div class="callout callout-tip"><div class="callout-title">드래그가 버벅일 때</div><div class="callout-body"><p><code>rest</code> 프리셋 자세에서 출발해 드래그하면 훨씬 부드럽습니다. 특이점 근처(팔을 완전히 편 상태)에서 시작하면 IK가 불안정해집니다.</p></div></div>
+<h3 id="방식-b-프리셋-자세">방식 B — 프리셋 자세<a class="anchor" href="#방식-b-프리셋-자세">#</a></h3>
+<ol><li><strong>Query Goal State</strong> 드롭다운 → <code>open</code> / <code>extended</code> / <code>rest</code> 등 선택</li><li><strong>Update</strong> 클릭</li><li><strong>Plan</strong> → <strong>Execute</strong></li></ol>
+<h3 id="방식-c-관절-각-직접-입력">방식 C — 관절 각 직접 입력<a class="anchor" href="#방식-c-관절-각-직접-입력">#</a></h3>
+<ol><li><strong>Query Goal State → Joints</strong> 탭</li><li>각 관절 슬라이더로 목표 각도 설정</li><li>관절 범위는 <a href="../lessons/ch15.html">15장 한계표</a> 참고</li></ol>
+<h3 id="방식-d-무작위-유효-목표">방식 D — 무작위 유효 목표<a class="anchor" href="#방식-d-무작위-유효-목표">#</a></h3>
+<p><strong>Random Valid</strong> 버튼을 누르면 도달 가능한 임의의 자세가 생성됩니다. <strong>Plan → Execute</strong>.</p>
+<div class="callout callout-tip"><div class="callout-title">작업영역 확인용으로 좋습니다</div><div class="callout-body"><p>Random Valid를 여러 번 눌러 보면 이 로봇이 실제로 어디까지 갈 수 있는지 감이 잡힙니다.</p></div></div>
+<hr>
+<h2 id="안전-수칙">안전 수칙<a class="anchor" href="#안전-수칙">#</a></h2>
+<div class="callout callout-danger"><div class="callout-title">실기에서 MoveIt을 실행할 때</div><div class="callout-body"><ol><li><strong>첫 사용은 속도를 낮추세요</strong> — Velocity / Acceleration 0.1~0.3</li><li><strong>긴급 정지</strong> — 언제든 <code>Ctrl+C</code>로 프로그램을 종료하거나 전원을 뽑으세요</li><li><strong>관절 한계</strong> — MoveIt은 <code>joint_limits.yaml</code> 범위를 넘지 않지만, <strong>설정이 정확해야</strong> 합니다</li><li><strong>공간 확보</strong> — 실행 전 팔 주변에 충분한 공간이 있는지 확인하세요</li></ol></div></div>
+<hr>
+<h2 id="moveit-설정-개요">MoveIt 설정 개요<a class="anchor" href="#moveit-설정-개요">#</a></h2>
+<h3 id="srdf-semantic-robot-description-format">SRDF (Semantic Robot Description Format)<a class="anchor" href="#srdf-semantic-robot-description-format">#</a></h3>
+<p>URDF가 &quot;물리 구조&quot;라면 SRDF는 &quot;의미론적 정보&quot;입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;robot name=&quot;so_arm101&quot;&gt;
+  &lt;!-- 플래닝 그룹 --&gt;
+  &lt;group name=&quot;manipulator&quot;&gt;
+    &lt;chain base_link=&quot;base_link&quot; tip_link=&quot;gripper_frame_link&quot;/&gt;
+  &lt;/group&gt;
+
+  &lt;group name=&quot;gripper&quot;&gt;
+    &lt;joint name=&quot;gripper&quot;/&gt;
+  &lt;/group&gt;
+
+  &lt;!-- 미리 정의된 자세 --&gt;
+  &lt;group_state name=&quot;rest&quot; group=&quot;manipulator&quot;&gt;
+    &lt;joint name=&quot;shoulder_pan&quot;  value=&quot;0&quot;/&gt;
+    &lt;joint name=&quot;shoulder_lift&quot; value=&quot;-1.68&quot;/&gt;
+    &lt;joint name=&quot;elbow_flex&quot;    value=&quot;1.60&quot;/&gt;
+    &lt;joint name=&quot;wrist_flex&quot;    value=&quot;0.75&quot;/&gt;
+    &lt;joint name=&quot;wrist_roll&quot;    value=&quot;0&quot;/&gt;
+  &lt;/group_state&gt;
+
+  &lt;group_state name=&quot;extended&quot; group=&quot;manipulator&quot;&gt;
+    &lt;joint name=&quot;shoulder_pan&quot;  value=&quot;0&quot;/&gt;
+    &lt;joint name=&quot;shoulder_lift&quot; value=&quot;0.35&quot;/&gt;
+    &lt;joint name=&quot;elbow_flex&quot;    value=&quot;-0.45&quot;/&gt;
+    &lt;joint name=&quot;wrist_flex&quot;    value=&quot;0.15&quot;/&gt;
+    &lt;joint name=&quot;wrist_roll&quot;    value=&quot;0&quot;/&gt;
+  &lt;/group_state&gt;
+
+  &lt;!-- 엔드 이펙터 --&gt;
+  &lt;end_effector name=&quot;eef&quot; parent_link=&quot;gripper_frame_link&quot; group=&quot;gripper&quot;/&gt;
+
+  &lt;!-- 충돌 검사 제외 쌍 (인접 링크는 항상 붙어 있으므로) --&gt;
+  &lt;disable_collisions link1=&quot;base_link&quot;      link2=&quot;shoulder_link&quot;  reason=&quot;Adjacent&quot;/&gt;
+  &lt;disable_collisions link1=&quot;shoulder_link&quot;  link2=&quot;upper_arm_link&quot; reason=&quot;Adjacent&quot;/&gt;
+  &lt;disable_collisions link1=&quot;upper_arm_link&quot; link2=&quot;lower_arm_link&quot; reason=&quot;Adjacent&quot;/&gt;
+  &lt;disable_collisions link1=&quot;lower_arm_link&quot; link2=&quot;wrist_link&quot;     reason=&quot;Adjacent&quot;/&gt;
+  &lt;disable_collisions link1=&quot;wrist_link&quot;     link2=&quot;gripper_link&quot;   reason=&quot;Adjacent&quot;/&gt;
+  &lt;disable_collisions link1=&quot;gripper_link&quot;   link2=&quot;moving_jaw_so101_v1_link&quot; reason=&quot;Adjacent&quot;/&gt;
+&lt;/robot&gt;</code></pre></div>
+<h3 id="setup-assistant로-직접-만들기">Setup Assistant로 직접 만들기<a class="anchor" href="#setup-assistant로-직접-만들기">#</a></h3>
+<p>기존 설정을 수정하거나 처음부터 만들려면:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 launch moveit_setup_assistant setup_assistant.launch.py</code></pre></div>
+<p>진행 순서:</p>
+<ol><li><strong>Load URDF</strong> — <code>so_arm101.urdf.xacro</code> 로드</li><li><strong>Self-Collisions</strong> — &quot;Generate Collision Matrix&quot; 클릭 (샘플링 밀도 기본값 OK)</li><li><strong>Planning Groups</strong> — <code>manipulator</code> 그룹 생성, Kinematic Chain을 <code>base_link</code> → <code>gripper_frame_link</code>로 설정, 솔버는 <code>KDLKinematicsPlugin</code></li><li><strong>Robot Poses</strong> — <code>rest</code>, <code>extended</code>, <code>zero</code>, <code>open</code> 정의</li><li><strong>End Effectors</strong> — <code>gripper_frame_link</code> 기준으로 정의</li><li><strong>ros2_control URDF Modification</strong> — 이미 xacro에 있으므로 건너뜀</li><li><strong>Controllers</strong> — <code>joint_trajectory_controller</code>를 <code>manipulator</code> 그룹에 연결</li><li><strong>Generate Package</strong> — <code>so_arm101_moveit_config</code>로 저장</li></ol>
+<div class="callout callout-warn"><div class="callout-title">컨트롤러 이름이 맞아야 합니다</div><div class="callout-body"><p><code>moveit_controllers.yaml</code>의 컨트롤러 이름이 <a href="../lessons/ch17.html">17장</a>의 <code>controllers.yaml</code>과 <strong>정확히 일치</strong>해야 Execute가 동작합니다. 여기서 실수하면 &quot;Plan은 되는데 Execute를 눌러도 안 움직이는&quot; 증상이 납니다.</p></div></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">yaml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-yaml"># moveit_controllers.yaml
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - joint_trajectory_controller
+
+  joint_trajectory_controller:
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
+    default: true
+    joints:
+      - shoulder_pan
+      - shoulder_lift
+      - elbow_flex
+      - wrist_flex
+      - wrist_roll
+      - gripper</code></pre></div>
+<hr>
+<h2 id="코드로-제어하기">코드로 제어하기<a class="anchor" href="#코드로-제어하기">#</a></h2>
+<h3 id="python-moveitpy">Python (moveit_py)<a class="anchor" href="#python-moveitpy">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">import rclpy
+from rclpy.node import Node
+from moveit.planning import MoveItPy
+
+rclpy.init()
+so101 = MoveItPy(node_name=&quot;so101_moveit_py&quot;)
+arm = so101.get_planning_component(&quot;manipulator&quot;)
+
+# 1) 프리셋 자세로
+arm.set_start_state_to_current_state()
+arm.set_goal_state(configuration_name=&quot;extended&quot;)
+plan = arm.plan()
+if plan:
+    so101.execute(plan.trajectory, controllers=[])
+
+# 2) TCP 목표 자세로
+from geometry_msgs.msg import PoseStamped
+
+target = PoseStamped()
+target.header.frame_id = &quot;base_link&quot;
+target.pose.position.x = 0.22
+target.pose.position.y = 0.05
+target.pose.position.z = 0.15
+target.pose.orientation.w = 1.0
+
+arm.set_start_state_to_current_state()
+arm.set_goal_state(pose_stamped_msg=target, pose_link=&quot;gripper_frame_link&quot;)
+plan = arm.plan()
+if plan:
+    so101.execute(plan.trajectory, controllers=[])</code></pre></div>
+<p>저장소의 예제:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 run so_arm_utils moveit_pick_place_demo</code></pre></div>
+<hr>
+<h2 id="pick-place-구현하기">Pick &amp; Place 구현하기<a class="anchor" href="#pick-place-구현하기">#</a></h2>
+<p>전형적인 픽앤플레이스는 다음 단계로 구성됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">1. 홈 자세로 이동
+2. 그리퍼 열기
+3. 물체 위 10cm (pre-grasp) 로 이동
+4. 물체까지 직선 하강 (Cartesian path)
+5. 그리퍼 닫기
+6. 직선 상승
+7. 목표 위 10cm 로 이동
+8. 하강
+9. 그리퍼 열기
+10. 상승 → 홈</code></pre></div>
+<p><strong>직선 이동(Cartesian path)</strong> 은 일반 플래닝과 다릅니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">waypoints = []
+pose = current_pose()
+pose.position.z -= 0.10        # 10cm 직선 하강
+waypoints.append(pose)
+
+fraction, trajectory = arm.compute_cartesian_path(
+    waypoints, eef_step=0.005, jump_threshold=0.0
+)
+if fraction &gt; 0.95:            # 95% 이상 성공했을 때만 실행
+    so101.execute(trajectory, controllers=[])</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">왜 직선 경로가 필요한가</div><div class="callout-body"><p>일반 플래닝(OMPL)은 충돌만 피하면 <strong>어떤 경로든</strong> 만듭니다. 물체를 집으러 내려갈 때 팔이 옆으로 휘면 물체를 건드려 쓰러뜨립니다. 파지 직전·직후는 반드시 직선 경로를 쓰세요.</p></div></div>
+<hr>
+<h2 id="문제-해결">문제 해결<a class="anchor" href="#문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td><code>Motion planning start tree could not be initialized</code></td><td>시작 상태가 관절 한계 초과</td><td>아래 상세 참고</td></tr><tr><td>같은 오류 + 자기 충돌</td><td>시작 자세에서 자기 충돌</td><td>아래 상세 참고</td></tr><tr><td>Execute 후 안 움직임</td><td>컨트롤러 비활성</td><td><code>ros2 control list_controllers</code> 확인</td></tr><tr><td>경로가 떨리고 매끄럽지 않음</td><td>플래너 특성</td><td>Planner를 <code>RRTConnect</code>로, Planning Time을 10초로</td></tr><tr><td>목표에 도달 못 함</td><td>작업영역 밖</td><td><strong>Random Valid</strong>로 도달 가능 범위 확인</td></tr><tr><td>RViz가 느림</td><td>충돌 메시 복잡</td><td>프리미티브 충돌 형상 사용</td></tr></tbody></table></div>
+<h3 id="motion-planning-start-tree-could-not-be-initialized-상세"><code>Motion planning start tree could not be initialized</code> 상세<a class="anchor" href="#motion-planning-start-tree-could-not-be-initialized-상세">#</a></h3>
+<p>원인은 보통 둘 중 하나입니다.</p>
+<p><strong>1) 관절이 한계를 벗어남</strong></p>
+<p>로그에서 <code>FixStartStateBounds</code> 출력을 확인하세요. 기본 허용 오차는 <strong>0.3 rad</strong>이며, 이 범위 안의 초과는 자동 보정됩니다. 그 이상이면:</p>
+<ul><li><code>start_state_max_bounds_error</code>를 늘리거나</li><li>서보 <code>position_offset</code>을 다시 잡으세요 (<a href="../lessons/ch17.html">17장</a>)</li></ul>
+<p><strong>2) 시작 상태에서 충돌</strong></p>
+<p>로그에서 <code>FixStartStateCollision</code> 출력을 확인하세요. <code>Unable to find a valid state nearby</code>가 뜨면 현재 자세에 <strong>자기 충돌</strong>이 있습니다.</p>
+<ul><li>팔이 접힌 자세(예: 그리퍼가 어깨에 닿음)일 가능성</li><li>오프셋이 잘못되어 실제와 다른 자세로 인식되는 경우</li></ul>
+<p>팔을 손으로 펴고 다시 시도하거나, 오프셋을 조정하세요.</p>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch19.html">19장 Gazebo 시뮬레이션과 시각화 툴</a> — 물리 엔진 위에서 중력과 마찰까지 포함해 검증합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch17.html"><span>이전</span>ros2_control과 실기 하드웨어 인터페이스</a><a class="pager-next" href="ch19.html"><span>다음</span>Gazebo 시뮬레이션과 시각화 툴</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#moveit-2가-해주는-일">MoveIt 2가 해주는 일</a><a class="toc-l2" href="#데모-실행-mock-하드웨어">데모 실행 (Mock 하드웨어)</a><a class="toc-l2" href="#motionplanning-패널-사용법">MotionPlanning 패널 사용법</a><a class="toc-l3" href="#planning-탭">Planning 탭</a><a class="toc-l3" href="#플래닝-파라미터">플래닝 파라미터</a><a class="toc-l3" href="#scene-objects-탭">Scene Objects 탭</a><a class="toc-l3" href="#stored-states-탭">Stored States 탭</a><a class="toc-l2" href="#네-가지-목표-지정-방법">네 가지 목표 지정 방법</a><a class="toc-l3" href="#방식-a-인터랙티브-마커-드래그-권장">방식 A — 인터랙티브 마커 드래그 (권장)</a><a class="toc-l3" href="#방식-b-프리셋-자세">방식 B — 프리셋 자세</a><a class="toc-l3" href="#방식-c-관절-각-직접-입력">방식 C — 관절 각 직접 입력</a><a class="toc-l3" href="#방식-d-무작위-유효-목표">방식 D — 무작위 유효 목표</a><a class="toc-l2" href="#안전-수칙">안전 수칙</a><a class="toc-l2" href="#moveit-설정-개요">MoveIt 설정 개요</a><a class="toc-l3" href="#srdf-semantic-robot-description-format">SRDF (Semantic Robot Description Format)</a><a class="toc-l3" href="#setup-assistant로-직접-만들기">Setup Assistant로 직접 만들기</a><a class="toc-l2" href="#코드로-제어하기">코드로 제어하기</a><a class="toc-l3" href="#python-moveitpy">Python (moveit_py)</a><a class="toc-l2" href="#pick-place-구현하기">Pick &amp; Place 구현하기</a><a class="toc-l2" href="#문제-해결">문제 해결</a><a class="toc-l3" href="#motion-planning-start-tree-could-not-be-initialized-상세">`Motion planning start tree could not be initialized` 상세</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="PC에서 서보까지의 배선 구조">
+  <defs>
+    <marker id="wr-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- PC -->
+  <rect class="box" x="16" y="96" width="96" height="56" rx="7"/>
+  <text class="lbl" x="64" y="122" text-anchor="middle" font-size="12.5">PC</text>
+  <text class="sub" x="64" y="139" text-anchor="middle">또는 라즈베리파이</text>
+
+  <!-- USB -->
+  <path class="ln" stroke="var(--border)" stroke-width="2" d="M112 124 H176"
+        marker-end="url(#wr-a)" color="var(--border)"/>
+  <text class="sub" x="144" y="114" text-anchor="middle">USB-C</text>
+  <text class="tag mono" x="144" y="142" text-anchor="middle" font-size="10">/dev/ttyACM0</text>
+
+  <!-- 드라이버 보드 -->
+  <rect class="box-hi" x="180" y="88" width="112" height="72" rx="7"/>
+  <text class="hi" x="236" y="112" text-anchor="middle" font-size="12.5">서보 드라이버 보드</text>
+  <text class="sub" x="236" y="129" text-anchor="middle">USB ↔ TTL 시리얼</text>
+  <text class="tag" x="236" y="146" text-anchor="middle" font-size="10.5">점퍼는 B 채널(USB)</text>
+
+  <!-- 전원 -->
+  <rect class="box" x="180" y="210" width="112" height="46" rx="7"/>
+  <text class="wr" x="236" y="230" text-anchor="middle" font-size="12">전원 어댑터</text>
+  <text class="sub" x="236" y="246" text-anchor="middle">팔로워 12V 5A / 리더 5V 6A</text>
+  <path stroke="var(--warn)" stroke-width="2" stroke-dasharray="5 3" d="M236 210 V160"/>
+  <text class="wr" x="246" y="186" font-size="10.5">없으면 통신만 되고</text>
+  <text class="wr" x="246" y="199" font-size="10.5">서보는 안 움직입니다</text>
+
+  <!-- 3핀 데이지체인 -->
+  <path class="ln-hi" stroke-width="2" d="M292 124 H332" marker-end="url(#wr-a)"
+        color="var(--accent)"/>
+
+  <g>
+    <rect class="box" x="336" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="380" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="424" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="468" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="512" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="556" y="100" width="40" height="48" rx="5"/>
+  </g>
+  <g class="hi mono" text-anchor="middle" font-size="14">
+    <text x="356" y="130">1</text><text x="400" y="130">2</text>
+    <text x="444" y="130">3</text><text x="488" y="130">4</text>
+    <text x="532" y="130">5</text><text x="576" y="130">6</text>
+  </g>
+  <g class="ln-hi" stroke-width="2">
+    <path d="M376 124 H380"/><path d="M420 124 H424"/><path d="M464 124 H468"/>
+    <path d="M508 124 H512"/><path d="M552 124 H556"/>
+  </g>
+  <g class="sub" text-anchor="middle" font-size="10">
+    <text x="356" y="166">어깨</text><text x="400" y="166">어깨</text>
+    <text x="444" y="166">팔꿈치</text><text x="488" y="166">손목</text>
+    <text x="532" y="166">손목</text><text x="576" y="166">그리퍼</text>
+    <text x="356" y="178">회전</text><text x="400" y="178">들기</text>
+    <text x="532" y="178">회전</text>
+  </g>
+
+  <text class="lbl" x="466" y="74" text-anchor="middle" font-size="12.5">
+    STS3215 버스 서보 × 6 — 3핀 데이지체인</text>
+  <text class="sub" x="466" y="212" text-anchor="middle">
+    선 한 줄에 6개가 모두 매달립니다. 그래서 <tspan class="hi">ID가 겹치면 안 됩니다</tspan>.</text>
+  <text class="sub" x="466" y="230" text-anchor="middle">
+    보레이트 1,000,000 bps · 반이중 TTL · SCS 프로토콜</text>
+
+  <text class="sub" x="16" y="30">
+    포트를 확실히 구분하려면 <tspan class="lbl">팔로워를 먼저 꽂고 리더를 나중에</tspan> 꽂습니다.</text>
+  <text class="sub" x="16" y="48">
+    보통 팔로워가 ttyACM0, 리더가 ttyACM1 이 됩니다.</text>
+</svg>

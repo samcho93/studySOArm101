@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01. SO-ARM101이란 무엇인가 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="LeRobot 생태계와 SO-ARM101의 위치, 이 강좌에서 무엇을 만들게 되는지 로드맵을 잡습니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" class="active" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch01">
+  <div class="lesson-head">
+    <div class="crumbs">PART 1 기초 다지기 &middot; 약 15분</div>
+    <h1><span class="lesson-no">01</span>SO-ARM101이란 무엇인가</h1>
+    <p class="lede">LeRobot 생태계와 SO-ARM101의 위치, 이 강좌에서 무엇을 만들게 되는지 로드맵을 잡습니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="한-줄-요약">한 줄 요약<a class="anchor" href="#한-줄-요약">#</a></h2>
+<p><strong>SO-ARM101</strong>은 Hugging Face의 로봇 학습 프레임워크 <strong>LeRobot</strong> 팀이 TheRobotStudio와 함께 설계한, 3D 프린팅 구조물 + 피드백 버스 서보로 만드는 <strong>6자유도 오픈소스 로봇팔</strong>입니다. 팔로워 1대 기준 부품값이 <strong>$122 수준</strong>이라 &quot;학생도 살 수 있는 실체형 로봇(embodied AI body)&quot;이라 불립니다.</p>
+<div class="callout callout-tip"><div class="callout-title">이 강좌의 목표</div><div class="callout-body"><p>실물이 없어도 <strong>브라우저 3D 시뮬레이터</strong>로 기구학·텔레오퍼레이션·궤적 녹화를 먼저 체험하고, 실물이 도착하면 <strong>조립 → 캘리브레이션 → 데이터 수집 → 정책 학습 → ROS 2 연동</strong>까지 끊김 없이 이어갈 수 있게 하는 것.</p></div></div>
+<hr>
+<h2 id="체화된-지능embodied-ai과-lerobot">체화된 지능(Embodied AI)과 LeRobot<a class="anchor" href="#체화된-지능embodied-ai과-lerobot">#</a></h2>
+<h3 id="체화된-지능이란">체화된 지능이란<a class="anchor" href="#체화된-지능이란">#</a></h3>
+<p>중국어 원문의 <strong>具身智能</strong>, 영어로는 <strong>Embodied AI</strong>, 한국어로는 보통 <strong>체화된 지능</strong> 또는 <strong>신체화 지능</strong>이라고 옮깁니다. 말 그대로 <strong>몸을 가진 지능</strong>입니다. AI를 실제 하드웨어에 연결해 물리 세계에서 행동하게 만드는 분야로, 4족 로봇개, 2족 휴머노이드, 휠-레그 로봇, 드론, 자율주행차가 모두 여기에 속합니다. 로봇팔은 그중 <strong>가장 싸게, 가장 빨리 손에 넣을 수 있는 입문용 몸체</strong>입니다.</p>
+<h3 id="lerobot이란">LeRobot이란<a class="anchor" href="#lerobot이란">#</a></h3>
+<p>LeRobot은 Hugging Face가 공개한 <strong>로봇 AI(체화 지능) 소프트웨어 프레임워크</strong>입니다.</p>
+<ul><li>저장소: <a href="https://github.com/huggingface/lerobot" target="_blank" rel="noopener">github.com/huggingface/lerobot</a></li><li>PyTorch 기반. 강화학습과 <strong>모방학습(VLA)</strong> 의 <em>데이터 수집 → 알고리즘 학습 → 추론 배포</em> 전 과정을 낮은 진입장벽으로 제공합니다.</li><li>지원 로봇 범위가 넓습니다. 수십만 원대 SO-ARM101·LeKiwi 소형 카트부터, 수백만 원대 산업용 팔(AgileX Piper, StarAI), Hope-JR 다지 손, 천만 원대 Unitree G1 휴머노이드까지. 사실상 <strong>업계 데이터 수집·학습의 사실상 표준(de facto standard)</strong> 이 되었습니다.</li><li>자신의 로봇을 LeRobot 규격에 맞춰 적응시키는 것도 가능합니다.</li></ul>
+<h3 id="lerobot-데이터셋과-모델">LeRobot 데이터셋과 모델<a class="anchor" href="#lerobot-데이터셋과-모델">#</a></h3>
+<p>LeRobot은 자체 모방학습 데이터셋 포맷(<strong>LeRobotDataset</strong>)을 정의합니다. Hugging Face Hub에 공개된 모든 데이터셋·모델을 열람·다운로드·학습에 사용할 수 있고, 내가 만든 데이터셋을 업로드해 공유할 수도 있습니다.</p>
+<hr>
+<h2 id="모방학습과-vla">모방학습과 VLA<a class="anchor" href="#모방학습과-vla">#</a></h2>
+<p>사람이 로봇팔을 <strong>직접 끌어서(시연, demonstration)</strong> 동작을 보여주면, 그 궤적과 카메라 영상이 데이터셋이 됩니다. 이 데이터셋으로 모방학습 알고리즘을 학습시키고 로봇에 배포하면, 로봇은 <strong>원격조작 없이 스스로</strong> 그 동작을 재현하고 새로운 상황에도 일반화합니다.</p>
+<p>원문 튜토리얼의 예시처럼 &quot;가재를 집어 → 양념에 찍고 → 기름솥에 넣는&quot; 동작을 50회 시연으로 학습시키면, 처음 보는 가재가 와도 로봇이 즉시 반응해 작업을 완수합니다.</p>
+<p>모방학습은 요즘 <strong>VLA(Vision-Language-Action, 시각-언어-행동 대형 모델)</strong> 라는 이름으로도 불립니다. 체화 지능 분야에서 가장 빠르게 발전하고, 투자가 몰리고, 오픈소스 생태계가 활발한 영역입니다.</p>
+<figure class="fig" id="fig-pipeline"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="LeRobot 모방학습 전체 파이프라인">
+  <defs>
+    <marker id="pl-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">모방학습 전체 흐름</text>
+  <text class="sub" x="16" y="42">한 바퀴로 끝나지 않습니다 — 평가 결과가 다시 데이터 수집으로 돌아옵니다</text>
+
+  <!-- 단계 박스 -->
+  <g>
+    <rect class="box" x="16"  y="66" width="104" height="70" rx="8"/>
+    <rect class="box" x="140" y="66" width="104" height="70" rx="8"/>
+    <rect class="box" x="264" y="66" width="104" height="70" rx="8"/>
+    <rect class="box" x="388" y="66" width="104" height="70" rx="8"/>
+    <rect class="box-hi" x="496" y="66" width="88" height="70" rx="8"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text class="tag mono" x="68"  y="86" font-size="10">STEP 1–8</text>
+    <text class="lbl" x="68"  y="106" font-size="12.5">조립 · 설정</text>
+    <text class="sub" x="68"  y="123" font-size="10.5">ID · 캘리브레이션</text>
+
+    <text class="tag mono" x="192" y="86" font-size="10">STEP 9–10</text>
+    <text class="lbl" x="192" y="106" font-size="12.5">텔레오퍼레이션</text>
+    <text class="sub" x="192" y="123" font-size="10.5">카메라 배치</text>
+
+    <text class="tag mono" x="316" y="86" font-size="10">STEP 11–12</text>
+    <text class="lbl" x="316" y="106" font-size="12.5">데이터 수집</text>
+    <text class="sub" x="316" y="123" font-size="10.5">실기 또는 시뮬</text>
+
+    <text class="tag mono" x="440" y="86" font-size="10">STEP 13</text>
+    <text class="lbl" x="440" y="106" font-size="12.5">정책 학습</text>
+    <text class="sub" x="440" y="123" font-size="10.5">ACT · VLA</text>
+
+    <text class="tag mono" x="540" y="86" font-size="10">STEP 14</text>
+    <text class="hi" x="540" y="106" font-size="12.5">배포 · 평가</text>
+    <text class="sub" x="540" y="123" font-size="10.5">성공률</text>
+  </g>
+
+  <g class="ln-hi" stroke-width="2" color="var(--accent)">
+    <path d="M120 101 H134" marker-end="url(#pl-a)"/>
+    <path d="M244 101 H258" marker-end="url(#pl-a)"/>
+    <path d="M368 101 H382" marker-end="url(#pl-a)"/>
+    <path d="M492 101 H490" marker-end="url(#pl-a)"/>
+  </g>
+
+  <!-- 되먹임 -->
+  <path stroke="var(--warn)" stroke-width="2" fill="none" stroke-dasharray="5 4"
+        d="M540 136 V170 H316 V142" marker-end="url(#pl-a)" color="var(--warn)"/>
+  <text class="wr" x="428" y="186" text-anchor="middle" font-size="11.5">
+    실패 양상을 보고 그 상황 데이터를 보강 — 보통 2~3회 반복</text>
+
+  <!-- 산출물 -->
+  <g>
+    <rect class="box" x="16" y="212" width="568" height="66" rx="8"/>
+    <text class="sub" x="32" y="234" font-size="11">각 단계가 남기는 것</text>
+    <text class="tag mono" x="32"  y="256" font-size="10.5">calibration/*.json</text>
+    <text class="tag mono" x="176" y="256" font-size="10.5">datasets/…/data · videos</text>
+    <text class="tag mono" x="360" y="256" font-size="10.5">checkpoints/…/pretrained_model</text>
+    <text class="tag mono" x="32"  y="272" font-size="10.5">← 개체마다 다름</text>
+    <text class="tag mono" x="176" y="272" font-size="10.5">← Hub 공유 가능</text>
+    <text class="tag mono" x="360" y="272" font-size="10.5">← Hub 공유 가능 · 개체 간 전이</text>
+  </g>
+</svg><figcaption>이 강좌 전체가 그리는 한 바퀴. <strong>평가 결과가 다시 데이터 수집으로 돌아오는 것</strong>이 핵심입니다.</figcaption></figure>
+<p>LeRobot이 주로 지원하는 모방학습 알고리즘:</p>
+<div class="table-wrap"><table><thead><tr><th>알고리즘</th><th>특징</th><th>이 강좌에서</th></tr></thead><tbody><tr><td><strong>ACT</strong> (Action Chunking Transformer)</td><td>가볍고 학습이 빠름. SO-ARM101의 사실상 기본값</td><td><a href="../lessons/ch13.html">13장</a> 주력</td></tr><tr><td><strong>Diffusion Policy</strong></td><td>다봉(multimodal) 분포에 강함. 데이터가 많을 때 유리</td><td>13장 비교</td></tr><tr><td><strong>SmolVLA</strong></td><td>소형 VLA. 언어 지시 + 시각 입력</td><td>13장 비교</td></tr><tr><td><strong>π0 / π0.5 (Pi0)</strong></td><td>대형 VLA. 프리트레인 기반 범용성</td><td>13장 소개</td></tr><tr><td><strong>Wall-OSS</strong></td><td>오픈소스 VLA 계열</td><td>참고</td></tr></tbody></table></div>
+<hr>
+<h2 id="so-arm101-한눈에-보기">SO-ARM101 한눈에 보기<a class="anchor" href="#so-arm101-한눈에-보기">#</a></h2>
+<p>SO-ARM101은 <strong>리더 암(Leader)</strong> 과 <strong>팔로워 암(Follower)</strong> 두 대가 한 세트입니다. 중국어 원문에서는 각각 <strong>주동팔(主动臂)</strong>, <strong>종동팔(从动臂)</strong> 이라고 부릅니다.</p>
+<ul><li><strong>리더 암</strong>: 사람이 손으로 잡고 움직이는 쪽. 손잡이와 트리거가 달려 있습니다. 힘을 적게 들여 움직일 수 있도록 <strong>감속비가 낮은 서보</strong>를 씁니다.</li><li><strong>팔로워 암</strong>: 실제로 물건을 집는 쪽. 끝에 그리퍼(집게)가 달려 있고, 자기 무게와 부하를 버티도록 <strong>감속비가 높은 고토크 서보</strong>를 씁니다.</li></ul>
+<p>두 팔 모두 <strong>5자유도 + 그리퍼 1자유도</strong> 구성입니다. (본 강좌와 URDF에서는 그리퍼를 포함해 6개 조인트로 다룹니다.)</p>
+<div class="callout callout-info"><div class="callout-title">왜 &quot;101&quot;인가</div><div class="callout-body"><p>전작 <strong>SO-100</strong>의 개선판입니다. 배선이 정리되었고, 조립 시 <strong>기어를 빼낼 필요가 없어졌으며</strong>, 리더 암의 서보가 감속비별로 최적화되었습니다. SO-100은 현재 deprecated 상태이므로 새로 시작한다면 무조건 101입니다.</p></div></div>
+<hr>
+<h2 id="필요한-pc-사양">필요한 PC 사양<a class="anchor" href="#필요한-pc-사양">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>환경</th><th>가능한 작업</th></tr></thead><tbody><tr><td>일반 Windows 노트북</td><td><strong>학습(training) 직전까지 모든 작업</strong> — 조립, 캘리브레이션, 텔레오퍼레이션, 데이터 수집</td></tr><tr><td>일반 Mac (Apple Silicon)</td><td><strong>거의 모든 작업</strong> — <code>policy.device=mps</code>로 소규모 학습도 가능</td></tr><tr><td>NVIDIA GPU 탑재 Ubuntu PC</td><td><strong>모든 작업</strong> — 실기 제어 + ACT/VLA 학습 + ROS 2 / Gazebo</td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">GPU가 없어도 됩니다</div><div class="callout-body"><p>학습은 Google Colab, Hugging Face Jobs, 또는 국내 클라우드 GPU에서 돌릴 수 있습니다. 실제로 이 강좌의 13장은 <strong>로컬 GPU가 없는 경우의 학습 경로</strong>를 따로 다룹니다.</p></div></div>
+<p>ROS 2 파트(15~20장)는 <strong>Ubuntu 22.04 + ROS 2 Humble</strong> 또는 <strong>Ubuntu 24.04 + ROS 2 Jazzy</strong>를 권장합니다. Windows 사용자는 WSL2에 Ubuntu를 올려 진행하면 됩니다.</p>
+<hr>
+<h2 id="이-강좌의-구성">이 강좌의 구성<a class="anchor" href="#이-강좌의-구성">#</a></h2>
+<p>이 강좌는 钜犀科技(Juxi Tech, 쥐시테크)의 <strong>SO-ARM101机械臂教程</strong> 위키 목차를 한국어로 재구성하고, LeRobot 공식 문서·TheRobotStudio 저장소·ROS 2 생태계 자료를 추가해 만들었습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>파트</th><th>내용</th><th>실물 필요</th></tr></thead><tbody><tr><td>PART 1 (1~4장)</td><td>기구학 기초, 하드웨어 해부, 조립</td><td>4장부터</td></tr><tr><td>PART 2 (5~8장)</td><td>서보 ID 설정, LeRobot 설치, 포트, 캘리브레이션</td><td>필요</td></tr><tr><td>PART 3 (9~12장)</td><td>텔레오퍼레이션, 카메라, 데이터셋 수집</td><td>12장은 불필요(시뮬)</td></tr><tr><td>PART 4 (13~14장)</td><td>정책 학습과 추론</td><td>학습은 불필요</td></tr><tr><td>PART 5 (15~20장)</td><td>URDF, ROS 2, ros2_control, MoveIt 2, Gazebo</td><td>19장까지 불필요</td></tr><tr><td>PART 6 (21~22장)</td><td>확장, 트러블슈팅, 종합 프로젝트</td><td>선택</td></tr><tr><td>PART 7 (23장)</td><td>참고 강좌·프로젝트·커뮤니티, 용어 대조표</td><td>불필요</td></tr></tbody></table></div>
+<h3 id="강좌에-포함된-도구">강좌에 포함된 도구<a class="anchor" href="#강좌에-포함된-도구">#</a></h3>
+<ul><li><strong><a href="../sim/index.html">3D 시뮬레이터</a></strong> — URDF에서 추출한 실제 기구학으로 움직입니다. 조인트 슬라이더, IK 타깃 드래그, 리더→팔로워 텔레오퍼레이션, 궤적 녹화/재생, 손목 카메라 뷰, <code>joint_states</code> JSON 출력까지 지원합니다.</li><li><strong><a href="../tools/cli-builder.html">명령어 생성기</a></strong> — 내 포트/ID/카메라 설정을 입력하면 <code>lerobot-*</code> 명령을 완성해 줍니다. 오타로 인한 시행착오를 없애줍니다.</li><li>**<code>ros2_ws/</code>** — 바로 <code>colcon build</code> 가능한 ROS 2 패키지 스켈레톤(description / bringup / moveit_config).</li><li>**<code>scripts/</code>** — 파이썬 실습 예제(FK·IK 계산, 키보드 텔레오퍼레이션, LeRobot↔ROS 2 브릿지).</li></ul>
+<hr>
+<h2 id="학습-순서-제안">학습 순서 제안<a class="anchor" href="#학습-순서-제안">#</a></h2>
+<ol><li><strong>실물이 아직 없다면</strong>: 1 → 2 → 3 → 15 → 16 → 18 → 19 순서로, 시뮬레이터와 ROS 2 중심으로 먼저 익히세요.</li><li><strong>키트가 방금 도착했다면</strong>: 1 → 3 → 4 → 5 → 6 → 7 → 8 → 9 순서로 조립과 구동을 먼저 끝내세요.</li><li><strong>이미 구동까지 끝냈다면</strong>: 10 → 11 → 13 → 14로 바로 모방학습에 들어가세요.</li></ol>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch02.html">2장 로봇팔 기초 지식</a>에서 시뮬레이터를 열어 놓고 자유도·정기구학·역기구학을 직접 만져보며 익힙니다. 지금 시뮬레이터를 한 번 열어 두세요.</p></div></div>
+      <nav class="pager"><span class="pager-prev disabled"></span><a class="pager-next" href="ch02.html"><span>다음</span>로봇팔 기초 지식</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#한-줄-요약">한 줄 요약</a><a class="toc-l2" href="#체화된-지능embodied-ai과-lerobot">체화된 지능(Embodied AI)과 LeRobot</a><a class="toc-l3" href="#체화된-지능이란">체화된 지능이란</a><a class="toc-l3" href="#lerobot이란">LeRobot이란</a><a class="toc-l3" href="#lerobot-데이터셋과-모델">LeRobot 데이터셋과 모델</a><a class="toc-l2" href="#모방학습과-vla">모방학습과 VLA</a><a class="toc-l2" href="#so-arm101-한눈에-보기">SO-ARM101 한눈에 보기</a><a class="toc-l2" href="#필요한-pc-사양">필요한 PC 사양</a><a class="toc-l2" href="#이-강좌의-구성">이 강좌의 구성</a><a class="toc-l3" href="#강좌에-포함된-도구">강좌에 포함된 도구</a><a class="toc-l2" href="#학습-순서-제안">학습 순서 제안</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

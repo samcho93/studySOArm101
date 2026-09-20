@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>21. 확장 — 듀얼 암, 모바일, 손 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="듀얼 팔로워 구성, LeKiwi·XLeRobot 모바일 플랫폼, AmazingHand, 7축 변형까지.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" class="active" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch21">
+  <div class="lesson-head">
+    <div class="crumbs">PART 6 확장과 마무리 &middot; 약 30분</div>
+    <h1><span class="lesson-no">21</span>확장 — 듀얼 암, 모바일, 손</h1>
+    <p class="lede">듀얼 팔로워 구성, LeKiwi·XLeRobot 모바일 플랫폼, AmazingHand, 7축 변형까지.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="듀얼-팔로워-구성">듀얼 팔로워 구성<a class="anchor" href="#듀얼-팔로워-구성">#</a></h2>
+<p>한 팔로는 못 하는 작업이 많습니다. &quot;왼손으로 물건을 집어 오른손에 건네기&quot;, &quot;한 손으로 잡고 다른 손으로 조작하기&quot; 같은 양손 협조 작업입니다.</p>
+<p>SO-ARM101 듀얼 구성은 <strong>리더 2대 + 팔로워 2대</strong>, 총 4개의 팔입니다.</p>
+<h3 id="배선표">배선표<a class="anchor" href="#배선표">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>역할</th><th>포트</th></tr></thead><tbody><tr><td>왼쪽 팔로워</td><td><code>/dev/ttyACM0</code></td></tr><tr><td>오른쪽 팔로워</td><td><code>/dev/ttyACM1</code></td></tr><tr><td>왼쪽 리더</td><td><code>/dev/ttyACM2</code></td></tr><tr><td>오른쪽 리더</td><td><code>/dev/ttyACM3</code></td></tr></tbody></table></div>
+<p>팔로워 타입은 <code>so101_follower</code>, 리더 타입은 <code>so101_leader</code>입니다. (LeRobot에서 <code>so100_leader</code>와 <code>so101_leader</code>는 같은 구현을 공유합니다.)</p>
+<div class="callout callout-danger"><div class="callout-title">포트 4개는 반드시 udev로 고정하세요</div><div class="callout-body"><p>포트 번호가 섞이면 왼팔·오른팔이 뒤바뀌어 위험합니다. <a href="../lessons/ch07.html">7장</a>의 udev 규칙으로 <code>/dev/so101_follower_left</code> 같은 고정 이름을 만드세요.</p></div></div>
+<h3 id="usb-권한">USB 권한<a class="anchor" href="#usb-권한">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo chmod 666 /dev/ttyACM0 /dev/ttyACM1 /dev/ttyACM2 /dev/ttyACM3</code></pre></div>
+<hr>
+<h2 id="듀얼-암-캘리브레이션">듀얼 암 캘리브레이션<a class="anchor" href="#듀얼-암-캘리브레이션">#</a></h2>
+<p>각 팔을 <strong>개별적으로</strong> 캘리브레이션합니다. 이름 규칙이 중요합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 왼쪽 팔로워
+lerobot-calibrate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0 \
+    --robot.id=my_so101_bi_follower_left
+
+# 오른쪽 팔로워
+lerobot-calibrate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM1 \
+    --robot.id=my_so101_bi_follower_right
+
+# 왼쪽 리더
+lerobot-calibrate \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM2 \
+    --teleop.id=my_so101_bi_leader_left
+
+# 오른쪽 리더
+lerobot-calibrate \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM3 \
+    --teleop.id=my_so101_bi_leader_right</code></pre></div>
+<p>캘리브레이션 파일 위치:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_so101_bi_follower_left.json
+~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_so101_bi_follower_right.json
+~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/my_so101_bi_leader_left.json
+~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/my_so101_bi_leader_right.json</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">`_left` / `_right` 접미사가 필수입니다</div><div class="callout-body"><p><code>bi_so_follower</code> 타입은 <code>&lt;id&gt;_left</code> / <code>&lt;id&gt;_right</code> 형태의 캘리브레이션 파일을 찾습니다. 이 규칙을 지키지 않으면 텔레오퍼레이션 시 <strong>다시 캘리브레이션하라는 안내</strong>가 반복됩니다.</p></div></div>
+<h3 id="기존-캘리브레이션-재활용">기존 캘리브레이션 재활용<a class="anchor" href="#기존-캘리브레이션-재활용">#</a></h3>
+<p>이전에 다른 id로 캘리브레이션했다면 파일을 복사하면 됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">CAL_DIR=~/.cache/huggingface/lerobot/calibration
+
+cp $CAL_DIR/robots/so_follower/my_awesome_follower_arm1.json \
+   $CAL_DIR/robots/so_follower/my_so101_bi_follower_left.json
+cp $CAL_DIR/robots/so_follower/my_awesome_follower_arm2.json \
+   $CAL_DIR/robots/so_follower/my_so101_bi_follower_right.json
+cp $CAL_DIR/teleoperators/so_leader/my_awesome_leader_arm3.json \
+   $CAL_DIR/teleoperators/so_leader/my_so101_bi_leader_left.json
+cp $CAL_DIR/teleoperators/so_leader/my_awesome_leader_arm4.json \
+   $CAL_DIR/teleoperators/so_leader/my_so101_bi_leader_right.json</code></pre></div>
+<hr>
+<h2 id="듀얼-암-텔레오퍼레이션">듀얼 암 텔레오퍼레이션<a class="anchor" href="#듀얼-암-텔레오퍼레이션">#</a></h2>
+<h3 id="카메라-없이">카메라 없이<a class="anchor" href="#카메라-없이">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
+    --robot.type=bi_so_follower \
+    --robot.left_arm_config.port=/dev/ttyACM0 \
+    --robot.right_arm_config.port=/dev/ttyACM1 \
+    --robot.id=my_so101_bi_follower \
+    --teleop.type=bi_so_leader \
+    --teleop.left_arm_config.port=/dev/ttyACM2 \
+    --teleop.right_arm_config.port=/dev/ttyACM3 \
+    --teleop.id=my_so101_bi_leader \
+    --display_data=true</code></pre></div>
+<h3 id="카메라-포함">카메라 포함<a class="anchor" href="#카메라-포함">#</a></h3>
+<p>카메라 인덱스는 <code>lerobot-find-cameras opencv</code>로 확인합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
+    --robot.type=bi_so_follower \
+    --robot.left_arm_config.port=/dev/ttyACM0 \
+    --robot.left_arm_config.cameras=&#x27;{
+      left_wrist: {&quot;type&quot;: &quot;opencv&quot;, &quot;index_or_path&quot;: 2, &quot;width&quot;: 640, &quot;height&quot;: 480, &quot;fps&quot;: 30}
+    }&#x27; \
+    --robot.right_arm_config.port=/dev/ttyACM1 \
+    --robot.right_arm_config.cameras=&#x27;{
+      right_wrist: {&quot;type&quot;: &quot;opencv&quot;, &quot;index_or_path&quot;: 4, &quot;width&quot;: 640, &quot;height&quot;: 480, &quot;fps&quot;: 30}
+    }&#x27; \
+    --robot.id=my_so101_bi_follower \
+    --teleop.type=bi_so_leader \
+    --teleop.left_arm_config.port=/dev/ttyACM2 \
+    --teleop.right_arm_config.port=/dev/ttyACM3 \
+    --teleop.id=my_so101_bi_leader \
+    --display_data=true</code></pre></div>
+<div class="callout callout-danger"><div class="callout-title">두 팔이 서로 부딪힙니다</div><div class="callout-body"><p>듀얼 암에서 가장 흔한 사고는 <strong>두 팔로워가 충돌</strong>하는 것입니다. LeRobot 텔레오퍼레이션에는 팔 간 충돌 검사가 없습니다.</p>
+<ul><li>두 팔의 작업영역이 겹치는 범위를 미리 파악하세요.</li><li>처음에는 <strong>간격을 넉넉히</strong> 두고 배치하세요.</li><li>충돌 회피가 꼭 필요하면 MoveIt 2의 다중 그룹 플래닝을 쓰세요. (<a href="../lessons/ch18.html">18장</a>)</li></ul></div></div>
+<hr>
+<h2 id="듀얼-암-데이터셋-수집">듀얼 암 데이터셋 수집<a class="anchor" href="#듀얼-암-데이터셋-수집">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-record \
+    --robot.type=bi_so_follower \
+    --robot.left_arm_config.port=/dev/ttyACM0 \
+    --robot.right_arm_config.port=/dev/ttyACM1 \
+    --robot.id=my_so101_bi_follower \
+    --teleop.type=bi_so_leader \
+    --teleop.left_arm_config.port=/dev/ttyACM2 \
+    --teleop.right_arm_config.port=/dev/ttyACM3 \
+    --teleop.id=my_so101_bi_leader \
+    --dataset.repo_id=myname/bi_so101_task \
+    --dataset.root=./datasets/bi_so101_task \
+    --dataset.push_to_hub=false \
+    --dataset.no_stamp=true \
+    --dataset.single_task=&quot;Pick the cube with left arm and hand it to right arm&quot; \
+    --dataset.num_episodes=50 \
+    --dataset.fps=30 \
+    --dataset.episode_time_s=30 \
+    --dataset.reset_time_s=10 \
+    --dataset.video=true</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">영상 코덱</div><div class="callout-body"><p>기본 코덱은 이미 <code>libsvtav1</code>이므로 따로 지정할 필요가 없습니다. 바꾸려면 중첩 파라미터를 쓰세요.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">--dataset.rgb_encoder.vcodec=h264</code></pre></div>
+<p>(구버전의 <code>--dataset.vcodec=...</code> 은 더 이상 존재하지 않습니다.)</p></div></div>
+<h3 id="이어-녹화">이어 녹화<a class="anchor" href="#이어-녹화">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-record \
+    ... \
+    --dataset.repo_id=myname/bi_so101_task \
+    --dataset.root=./datasets/bi_so101_task \
+    --resume=true \
+    --dataset.num_episodes=35</code></pre></div>
+<p><a href="../lessons/ch11.html">11장</a>의 resume 주의사항이 그대로 적용됩니다.</p>
+<h3 id="학습">학습<a class="anchor" href="#학습">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+    --dataset.repo_id=myname/bi_so101_task \
+    --dataset.root=./datasets/bi_so101_task \
+    --policy.type=act \
+    --policy.device=cuda \
+    --steps=60000 \
+    --output_dir=outputs/train/act_bi_so101 \
+    --wandb.enable=false \
+    --policy.push_to_hub=false</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">듀얼 암은 데이터가 더 필요합니다</div><div class="callout-body"><p>행동 차원이 두 배(12차원)이고 협조 작업은 더 복잡합니다. 단일 팔에서 50개면 되던 작업이 듀얼에서는 <strong>100~150개</strong>를 요구하는 경우가 많습니다. 학습 스텝도 100,000까지 늘려 보세요.</p></div></div>
+<h3 id="배포">배포<a class="anchor" href="#배포">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-rollout \
+    --strategy.type=episodic \
+    --policy.path=outputs/train/act_bi_so101/checkpoints/last/pretrained_model \
+    --robot.type=bi_so_follower \
+    --robot.left_arm_config.port=/dev/ttyACM0 \
+    --robot.right_arm_config.port=/dev/ttyACM1 \
+    --robot.id=my_so101_bi_follower \
+    --dataset.repo_id=myname/rollout_bi_so101_task \
+    --dataset.root=./datasets/rollout_bi_so101_task \
+    --dataset.num_episodes=10</code></pre></div>
+<hr>
+<h2 id="듀얼-암-문제-해결">듀얼 암 문제 해결<a class="anchor" href="#듀얼-암-문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>문제</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>텔레오퍼레이션 시 재캘리브레이션 요구</td><td><code>_left</code>/<code>_right</code> 접미사 없는 캘리브레이션 파일</td><td>접미사 포함 id로 재캘리브레이션 또는 파일 복사</td></tr><tr><td>리더가 손으로 안 움직임</td><td>리더 토크가 꺼지지 않음</td><td>재캘리브레이션 또는 서보 점검</td></tr><tr><td>이어 녹화 시 &quot;디렉터리 존재&quot; 오류</td><td><code>--resume=true</code> 누락</td><td>추가</td></tr><tr><td>resume 시 root 요구 오류</td><td>데이터셋 디렉터리 미지정</td><td><code>--dataset.root=</code> 를 첫 녹화와 동일하게</td></tr><tr><td>디렉터리에 타임스탬프가 붙음</td><td><code>no_stamp</code> 미설정</td><td><code>--dataset.no_stamp=true</code></td></tr><tr><td><code>--dataset.vcodec</code> 인자 없음</td><td>구버전 파라미터</td><td><code>--dataset.rgb_encoder.vcodec=h264</code></td></tr><tr><td>배포 시 <code>--policy.path</code> / <code>eval_</code> 오류</td><td><code>lerobot-record</code>로 배포 시도</td><td><code>lerobot-rollout --strategy.type=episodic</code>, 데이터셋명 <code>rollout_</code> 시작</td></tr><tr><td>좌우가 바뀜</td><td>포트 설정 오류</td><td><code>left_arm_config.port</code> ↔ <code>right_arm_config.port</code> 교체</td></tr><tr><td>학습 시 데이터셋 못 찾음</td><td>로컬 데이터셋에 root 미지정</td><td><code>--dataset.root=./datasets/xxx</code></td></tr><tr><td>데이터셋이 자동 업로드됨</td><td><code>push_to_hub</code> 기본값 true</td><td><code>--dataset.push_to_hub=false</code></td></tr><tr><td>종료 시 <code>You must add one or several frames...</code></td><td>reset 단계에서 종료</td><td>기록된 데이터엔 영향 없음. <code>--resume=true</code>로 계속</td></tr></tbody></table></div>
+<hr>
+<h2 id="모바일-플랫폼-lekiwi와-xlerobot">모바일 플랫폼 — LeKiwi와 XLeRobot<a class="anchor" href="#모바일-플랫폼-lekiwi와-xlerobot">#</a></h2>
+<p>팔이 고정되어 있으면 작업 반경이 최대 48cm, 실용 구간은 30cm 안쪽입니다. 바퀴를 달면 방 전체가 작업영역이 됩니다.</p>
+<h3 id="lekiwi">LeKiwi<a class="anchor" href="#lekiwi">#</a></h3>
+<p>SO-ARM101을 <strong>3륜 옴니휠 모바일 베이스</strong>에 올린 구성입니다.</p>
+<ul><li>라즈베리파이가 로봇에 탑재되고, PC와 무선으로 통신합니다.</li><li>LeRobot에 <code>lekiwi</code> 타입으로 통합되어 있어 텔레오퍼레이션·녹화·학습 흐름이 동일합니다.</li><li>행동 공간에 <strong>베이스 이동(x, y, θ)</strong> 이 추가됩니다.</li></ul>
+<h3 id="xlerobot">XLeRobot<a class="anchor" href="#xlerobot">#</a></h3>
+<p><strong>듀얼 SO-ARM101 + 모바일 베이스</strong> 구성입니다. 총 비용 약 $660 수준으로, 양손 모바일 조작(mobile manipulation) 연구를 저비용으로 할 수 있습니다.</p>
+<div class="callout callout-info"><div class="callout-title">원문 위키에도 항목이 있습니다</div><div class="callout-body"><p>Juxi 위키에는 <code>Lekiwi移动机器人使用教程</code>(레키위 모바일 로봇 사용 튜토리얼)와 <code>Xlerobot</code> 항목이 별도로 존재합니다. 하드웨어 구성과 배선이 다르므로 해당 문서를 참고하세요.</p></div></div>
+<hr>
+<h2 id="다지-손-amazinghand">다지 손 — AmazingHand<a class="anchor" href="#다지-손-amazinghand">#</a></h2>
+<p>2지 그리퍼로는 못 하는 작업이 있습니다. <strong>AmazingHand</strong>는 SO-ARM101 손목에 장착하는 오픈소스 다관절 손입니다.</p>
+<ul><li>장착 시 행동 차원이 크게 늘어납니다 (손가락 관절 수만큼).</li><li>데이터 수집 난이도가 올라갑니다. 리더 암만으로는 손가락을 제어할 수 없어, 별도의 입력 장치(글러브, 원격조작 손)가 필요합니다.</li><li>원문 위키에 <code>AmazingHand灵巧手使用教程</code>(AmazingHand 다지 손 사용 튜토리얼)와 <code>SO-ARM101&amp;AmazingHand使用教程</code> 항목이 있습니다.</li></ul>
+<hr>
+<h2 id="7축-변형">7축 변형<a class="anchor" href="#7축-변형">#</a></h2>
+<p>기본 SO-ARM101은 5자유도라 <strong>위치와 방향을 동시에 완전히 만족시킬 수 없습니다</strong>(<a href="../lessons/ch02.html">2장</a>). 관절을 추가하면 이 제약이 풀립니다.</p>
+<ul><li>원문 위키의 <code>SO-ARM101机械臂 7轴 教程</code>(SO-ARM101 7축 튜토리얼) 참고.</li><li>ROS 2 쪽에서는 <code>elbow_rotate</code> 조인트를 전완과 손목 사이에 추가해 <strong>6자유도 데카르트 자세 계획</strong>을 가능하게 한 커뮤니티 구현도 있습니다.</li></ul>
+<div class="callout callout-warn"><div class="callout-title">축을 추가하면 모든 것이 바뀝니다</div><div class="callout-body"><p>URDF, SRDF, ros2_control 설정, LeRobot 로봇 타입 정의, 기존 데이터셋 호환성이 전부 영향을 받습니다. 기존 데이터셋으로 학습한 정책은 <strong>사용할 수 없습니다.</strong></p></div></div>
+<hr>
+<h2 id="그-밖의-확장-모듈">그 밖의 확장 모듈<a class="anchor" href="#그-밖의-확장-모듈">#</a></h2>
+<p>원문 위키에 별도 튜토리얼이 있는 주변 모듈들입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>모듈</th><th>용도</th></tr></thead><tbody><tr><td><strong>RealSense D405 / D435i</strong></td><td>깊이 카메라. 정밀 파지 연구</td></tr><tr><td><strong>IMU 모듈</strong></td><td>자세 추정</td></tr><tr><td><strong>CSI 카메라</strong></td><td>라즈베리파이/Jetson용 저지연 카메라</td></tr><tr><td><strong>OLED 부화면</strong></td><td>상태 표시</td></tr><tr><td><strong>KWS 음성인식 사운드카드</strong></td><td>음성 명령</td></tr><tr><td><strong>AI 음성 대화 모듈</strong></td><td>자연어 인터페이스</td></tr><tr><td><strong>2자유도 서보 짐벌</strong></td><td>전역 카메라 능동 제어</td></tr><tr><td><strong>ESP32 영상전송 모듈</strong></td><td>무선 카메라</td></tr><tr><td><strong>ESP32-S3 무선 텔레오퍼레이션</strong></td><td>케이블 없는 리더 암</td></tr><tr><td><strong>MAX30102 심박·산소 센서</strong></td><td>생체 신호 실험</td></tr><tr><td><strong>Jetson Orin Nano/NX</strong></td><td>엣지 추론 플랫폼</td></tr><tr><td><strong>KVM 스위치 / HDMI 캡처</strong></td><td>다중 장비 개발 환경</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch22.html">22장 트러블슈팅과 종합 프로젝트</a> — 지금까지의 문제 해결을 한곳에 모으고, 최종 프로젝트를 진행합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch20.html"><span>이전</span>LeRobot ↔ ROS 2 브릿지</a><a class="pager-next" href="ch22.html"><span>다음</span>트러블슈팅과 종합 프로젝트</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#듀얼-팔로워-구성">듀얼 팔로워 구성</a><a class="toc-l3" href="#배선표">배선표</a><a class="toc-l3" href="#usb-권한">USB 권한</a><a class="toc-l2" href="#듀얼-암-캘리브레이션">듀얼 암 캘리브레이션</a><a class="toc-l3" href="#기존-캘리브레이션-재활용">기존 캘리브레이션 재활용</a><a class="toc-l2" href="#듀얼-암-텔레오퍼레이션">듀얼 암 텔레오퍼레이션</a><a class="toc-l3" href="#카메라-없이">카메라 없이</a><a class="toc-l3" href="#카메라-포함">카메라 포함</a><a class="toc-l2" href="#듀얼-암-데이터셋-수집">듀얼 암 데이터셋 수집</a><a class="toc-l3" href="#이어-녹화">이어 녹화</a><a class="toc-l3" href="#학습">학습</a><a class="toc-l3" href="#배포">배포</a><a class="toc-l2" href="#듀얼-암-문제-해결">듀얼 암 문제 해결</a><a class="toc-l2" href="#모바일-플랫폼-lekiwi와-xlerobot">모바일 플랫폼 — LeKiwi와 XLeRobot</a><a class="toc-l3" href="#lekiwi">LeKiwi</a><a class="toc-l3" href="#xlerobot">XLeRobot</a><a class="toc-l2" href="#다지-손-amazinghand">다지 손 — AmazingHand</a><a class="toc-l2" href="#7축-변형">7축 변형</a><a class="toc-l2" href="#그-밖의-확장-모듈">그 밖의 확장 모듈</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

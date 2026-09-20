@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10. 카메라 연동과 시각화 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="손목/전역 카메라 구성, OpenCV·RealSense 설정, rerun으로 관측값을 실시간 확인합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" class="active" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch10">
+  <div class="lesson-head">
+    <div class="crumbs">PART 3 텔레오퍼레이션과 데이터 수집 &middot; 약 30분</div>
+    <h1><span class="lesson-no">10</span>카메라 연동과 시각화</h1>
+    <p class="lede">손목/전역 카메라 구성, OpenCV·RealSense 설정, rerun으로 관측값을 실시간 확인합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="카메라가-모방학습의-절반이다">카메라가 모방학습의 절반이다<a class="anchor" href="#카메라가-모방학습의-절반이다">#</a></h2>
+<p>모방학습 정책의 입력은 <strong>관절 상태 + 카메라 영상</strong>입니다. 관절 상태는 서보가 정확히 알려주지만, 카메라는 여러분이 어떻게 배치하느냐에 따라 성능이 극적으로 달라집니다.</p>
+<div class="callout callout-tip"><div class="callout-title">좋은 카메라 배치의 판별 기준</div><div class="callout-body"><blockquote><p><strong>&quot;카메라 영상만 보고 여러분이 직접 그 작업을 수행할 수 있는가?&quot;</strong></p></blockquote>
+<p>할 수 없다면 정책도 할 수 없습니다. 물체가 가려지거나, 그리퍼가 프레임 밖으로 나가거나, 깊이 감각이 전혀 없다면 카메라를 다시 배치해야 합니다.</p></div></div>
+<hr>
+<h2 id="표준-2카메라-구성">표준 2카메라 구성<a class="anchor" href="#표준-2카메라-구성">#</a></h2>
+<p>SO-ARM101의 기본 구성은 <strong>손목 카메라 + 전역 카메라</strong> 조합입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>위치</th><th>이름 예시</th><th>보는 것</th><th>역할</th></tr></thead><tbody><tr><td><strong>손목(wrist)</strong></td><td><code>wrist</code></td><td>그리퍼 바로 앞</td><td>파지 직전 정밀 정렬</td></tr><tr><td><strong>전역(top/front)</strong></td><td><code>top</code>, <code>front</code></td><td>작업 공간 전체</td><td>물체 탐색, 전체 맥락</td></tr></tbody></table></div>
+<p>원문 위키는 이를 <strong>&quot;말단 카메라가 근거리 파지 장면을 세밀하게 잡고, 전역 카메라가 작업 환경 전체를 담아내며, 두 영상을 합쳐 입체적인 상황 인식을 만든다&quot;</strong> 는 취지로 설명합니다.</p>
+<div class="callout callout-info"><div class="callout-title">전역 카메라 각도</div><div class="callout-body"><ul><li><strong>상단(top)</strong>: 물체 위치를 x-y 평면에서 잘 보여줍니다. 테이블 작업에 유리.</li><li><strong>정면(front)</strong>: 높이(z)를 잘 보여줍니다. 쌓기·삽입 작업에 유리.</li><li>둘 중 하나만 쓴다면 <strong>작업의 주된 오차 방향</strong>을 보여주는 쪽을 고르세요.</li></ul></div></div>
+<hr>
+<figure class="fig" id="fig-camera-layout"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="손목 카메라와 전역 카메라의 배치와 시야">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">두 대가 서로 다른 것을 봅니다</text>
+
+  <!-- 바닥 -->
+  <path stroke="var(--border)" stroke-width="1.6" d="M30 246 H570"/>
+  <text class="sub" x="566" y="264" text-anchor="end">작업대</text>
+
+  <!-- 팔 -->
+  <rect class="box" x="66" y="222" width="52" height="24" rx="4"/>
+  <g stroke="var(--accent)" stroke-width="11" stroke-linecap="round" fill="none" opacity="0.5">
+    <path d="M92 222 V184"/>
+    <path d="M92 184 L166 140"/>
+    <path d="M166 140 L246 176"/>
+  </g>
+  <circle class="box-hi" cx="92" cy="184" r="6"/>
+  <circle class="box-hi" cx="166" cy="140" r="6"/>
+  <circle class="box-hi" cx="246" cy="176" r="6"/>
+
+  <!-- 큐브 -->
+  <rect class="box" x="286" y="228" width="20" height="18" rx="2"/>
+  <text class="sub" x="296" y="264" text-anchor="middle" font-size="10.5">대상물</text>
+
+  <!-- 손목 카메라 -->
+  <rect class="box-hi" x="228" y="150" width="30" height="18" rx="3"/>
+  <text class="hi mono" x="243" y="143" text-anchor="middle" font-size="10">wrist</text>
+  <path fill="var(--accent)" opacity="0.14" d="M252 168 L330 214 L268 246 Z"/>
+  <path stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" fill="none"
+        d="M252 168 L330 214 M252 168 L268 246"/>
+
+  <!-- 전역 카메라 -->
+  <rect class="box" x="470" y="70" width="40" height="24" rx="4"/>
+  <text class="lbl mono" x="490" y="62" text-anchor="middle" font-size="10.5">top</text>
+  <path fill="var(--info)" opacity="0.10" d="M478 94 L200 246 L470 246 Z"/>
+  <path stroke="var(--info)" stroke-width="1" stroke-dasharray="3 3" fill="none"
+        d="M478 94 L200 246 M478 94 L470 246"/>
+  <rect class="box" x="484" y="94" width="12" height="152" rx="2"/>
+  <text class="sub" x="516" y="176" font-size="10.5">삼각대에</text>
+  <text class="sub" x="516" y="189" font-size="10.5">고정</text>
+
+  <!-- 설명 -->
+  <g>
+    <rect class="box-hi" x="16" y="44" width="264" height="44" rx="6"/>
+    <text class="hi" x="30" y="64" font-size="12">손목 카메라 — 파지 직전 정밀 정렬</text>
+    <text class="sub" x="30" y="80" font-size="10.5">그리퍼 조가 화면 아래에 살짝 보이게 각도를 잡으세요</text>
+
+    <rect class="box" x="296" y="44" width="288" height="44" rx="6"/>
+    <text class="lbl" x="310" y="64" font-size="12">전역 카메라 — 물체 탐색과 전체 맥락</text>
+    <text class="sub" x="310" y="80" font-size="10.5">로봇 베이스가 아니라 별도 스탠드에 — 진동이 전달됩니다</text>
+  </g>
+
+  <text class="dg" x="16" y="286" font-size="11.5">
+    판별 기준 — 이 두 화면만 보고 사람이 작업을 할 수 있는가? 못 하면 정책도 못 합니다.</text>
+</svg><figcaption>두 카메라가 보는 것이 다릅니다. 전역 카메라는 <strong>로봇이 아니라 별도 스탠드</strong>에 고정하세요.</figcaption></figure>
+<h2 id="카메라-찾기">카메라 찾기<a class="anchor" href="#카메라-찾기">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-find-cameras opencv</code></pre></div>
+<p>연결된 카메라의 인덱스와 지원 해상도를 보여줍니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">Camera #0: /dev/video0  (1920x1080 @30fps, 1280x720 @30fps, 640x480 @30fps)
+Camera #2: /dev/video2  (640x480 @30fps)</code></pre></div>
+<p>RealSense 계열은:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-find-cameras realsense</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">Linux의 video 인덱스</div><div class="callout-body"><p>Linux에서는 카메라 하나가 <code>/dev/video0</code>과 <code>/dev/video1</code> <strong>두 개로 잡히는 경우가 흔합니다</strong>(영상 스트림 + 메타데이터). 실제 영상이 나오는 쪽은 보통 <strong>짝수 번호</strong>입니다. <code>lerobot-find-cameras</code>가 알려주는 값을 그대로 쓰세요.</p>
+<p>인덱스는 USB 재연결 시 바뀔 수 있습니다. 고정하려면 <code>/dev/v4l/by-id/...</code> 경로를 <code>index_or_path</code>에 직접 넣으면 됩니다.</p></div></div>
+<hr>
+<h2 id="카메라를-붙여-텔레오퍼레이션">카메라를 붙여 텔레오퍼레이션<a class="anchor" href="#카메라를-붙여-텔레오퍼레이션">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0 \
+    --robot.id=my_follower_arm \
+    --robot.cameras=&quot;{front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}}&quot; \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM1 \
+    --teleop.id=my_leader_arm \
+    --display_data=true</code></pre></div>
+<p>카메라 두 대:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">--robot.cameras=&quot;{ \
+  wrist: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}, \
+  top:   {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 30} \
+}&quot;</code></pre></div>
+<p>RealSense를 섞어 쓰는 경우:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">--robot.cameras=&quot;{ \
+  up:   {type: opencv, index_or_path: /dev/video10, width: 640, height: 480, fps: 30}, \
+  side: {type: intelrealsense, serial_number_or_name: 233522074606, width: 640, height: 480, fps: 30} \
+}&quot;</code></pre></div>
+<h3 id="파이썬-api">파이썬 API<a class="anchor" href="#파이썬-api">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">from lerobot.cameras.opencv import OpenCVCameraConfig
+from lerobot.robots.so_follower import SO101Follower, SO101FollowerConfig
+
+robot_config = SO101FollowerConfig(
+    port=&quot;/dev/ttyACM0&quot;,
+    id=&quot;my_follower_arm&quot;,
+    cameras={
+        &quot;wrist&quot;: OpenCVCameraConfig(index_or_path=0, width=640, height=480, fps=30),
+        &quot;top&quot;:   OpenCVCameraConfig(index_or_path=2, width=640, height=480, fps=30),
+    },
+)</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">카메라 이름이 곧 데이터셋 컬럼명입니다</div><div class="callout-body"><p><code>wrist</code>, <code>top</code> 같은 키가 데이터셋의 <code>observation.images.wrist</code> 컬럼이 됩니다. <strong>녹화·학습·추론에서 이름이 반드시 일치</strong>해야 합니다. 중간에 이름을 바꾸면 이전 데이터셋으로 학습한 모델을 쓸 수 없습니다.</p></div></div>
+<hr>
+<h2 id="해상도와-fps-선택">해상도와 FPS 선택<a class="anchor" href="#해상도와-fps-선택">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>설정</th><th>권장</th><th>이유</th></tr></thead><tbody><tr><td>해상도</td><td><strong>640×480</strong></td><td>정책 입력은 보통 224×224로 리사이즈됨. 더 키워도 학습 이득이 적고 디스크·대역폭만 소모</td></tr><tr><td>FPS</td><td><strong>30</strong></td><td>데이터셋 fps와 맞춰야 함</td></tr><tr><td>카메라 수</td><td><strong>1~2대</strong></td><td>3대 이상은 USB 대역폭 문제 발생</td></tr></tbody></table></div>
+<div class="callout callout-danger"><div class="callout-title">USB 대역폭 주의</div><div class="callout-body"><p>USB 2.0 허브 하나에 카메라 2대 + 서보 보드 2개를 물리면 <strong>영상 프레임 드롭이나 시리얼 통신 끊김</strong>이 발생합니다.</p>
+<ul><li>카메라는 가능하면 <strong>PC의 서로 다른 USB 컨트롤러</strong>에 나눠 꽂으세요.</li><li>MJPEG 지원 카메라를 쓰면 대역폭을 크게 줄일 수 있습니다.</li><li>노트북이라면 <strong>USB 3.0 포트</strong>를 우선 사용하세요.</li></ul></div></div>
+<p>전역 카메라만 고해상도로 쓰고 싶다면:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">--robot.cameras=&quot;{ \
+  front: {type: opencv, index_or_path: 0, width: 1920, height: 1080, fps: 30}, \
+  wrist: {type: opencv, index_or_path: 2, width: 640,  height: 480,  fps: 30} \
+}&quot;</code></pre></div>
+<hr>
+<h2 id="시각화-도구">시각화 도구<a class="anchor" href="#시각화-도구">#</a></h2>
+<h3 id="rerun-기본">rerun (기본)<a class="anchor" href="#rerun-기본">#</a></h3>
+<p><code>--display_data=true</code>를 주면 <a href="https://rerun.io" target="_blank" rel="noopener">rerun</a> 뷰어가 열려 카메라 영상과 관절 그래프를 한 화면에서 보여줍니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">from lerobot.utils.visualization_utils import (
+    init_visualization, log_visualization_data, shutdown_visualization
+)
+
+init_visualization(&quot;rerun&quot;, session_name=&quot;teleoperation&quot;)
+# ... 루프 안에서
+log_visualization_data(&quot;rerun&quot;, observation=observation, action=action)</code></pre></div>
+<h3 id="foxglove">Foxglove<a class="anchor" href="#foxglove">#</a></h3>
+<p><code>init_visualization(&quot;foxglove&quot;, ...)</code> 로 전환하면 Foxglove로 스트리밍됩니다. ROS 2 토픽과 함께 보고 싶을 때 유용합니다. (<a href="../lessons/ch19.html">19장</a>)</p>
+<hr>
+<h2 id="시뮬레이터의-카메라-뷰">시뮬레이터의 카메라 뷰<a class="anchor" href="#시뮬레이터의-카메라-뷰">#</a></h2>
+<p>실물 카메라가 없어도 배치 감각을 익힐 수 있습니다.</p>
+<div class="callout callout-task"><div class="callout-title">실습 — 시뮬레이터 카메라 패널</div><div class="callout-body"><p><a href="../sim/index.html">3D 시뮬레이터</a>의 <strong>&quot;카메라&quot; 패널</strong>을 켜면 화면 우측에 두 개의 뷰가 나타납니다.</p>
+<ul><li><strong>손목 뷰</strong> — <code>gripper_frame_link</code>(TCP)에 부착된 가상 카메라. 팔을 움직이면 시점이 함께 움직입니다.</li><li><strong>전역 뷰</strong> — 작업대 위를 비스듬히 내려다보는 고정 카메라.</li></ul>
+<p>큐브를 집는 동작을 하면서 <strong>두 뷰만 보고도 작업을 판단할 수 있는지</strong> 확인해 보세요. 손목 뷰에서 큐브가 프레임을 벗어나면, 실물에서도 같은 문제가 생깁니다.</p></div></div>
+<hr>
+<h2 id="카메라-장착-팁">카메라 장착 팁<a class="anchor" href="#카메라-장착-팁">#</a></h2>
+<ul><li><strong>손목 카메라는 그리퍼 조(jaw)가 프레임 하단에 살짝 보이도록</strong> 각도를 잡으세요. 그리퍼와 물체의 상대 거리를 정책이 파악할 수 있습니다.</li><li><strong>전역 카메라는 삼각대나 별도 스탠드</strong>에 고정하세요. 로봇 베이스에 붙이면 팔 진동이 영상에 전달됩니다.</li><li><strong>조명을 일정하게</strong> 유지하세요. 창가에서 수집한 데이터는 시간대에 따라 밝기가 달라져 정책이 혼란스러워합니다.</li><li>카메라 USB 케이블을 <strong>관절 사이에 끼이지 않게</strong> 정리하세요. 케이블 장력이 관절 동작을 방해하면 데이터가 오염됩니다.</li></ul>
+<div class="callout callout-danger"><div class="callout-title">데이터 수집 중 카메라를 움직이지 마세요</div><div class="callout-body"><p>50개 에피소드를 수집하는 중간에 카메라를 건드리면, 그 전후 데이터가 <strong>서로 다른 분포</strong>가 되어 학습이 망가집니다. 실수로 건드렸다면 그 시점부터 다시 수집하거나, 처음부터 다시 하는 편이 낫습니다.</p></div></div>
+<hr>
+<h2 id="문제-해결">문제 해결<a class="anchor" href="#문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>카메라가 검출 안 됨</td><td>권한 없음</td><td><code>sudo usermod -a -G video $USER</code></td></tr><tr><td>영상이 검게 나옴</td><td>잘못된 video 인덱스</td><td><code>lerobot-find-cameras opencv</code> 재확인</td></tr><tr><td>프레임이 뚝뚝 끊김</td><td>USB 대역폭 부족</td><td>다른 포트로 분산, 해상도 낮춤</td></tr><tr><td><code>VIDIOC_STREAMON</code> 오류</td><td>다른 프로그램이 카메라 점유</td><td>영상 앱·브라우저 탭 종료</td></tr><tr><td>영상이 뒤집혀 나옴</td><td>카메라 물리 장착 방향</td><td>물리적으로 회전시켜 장착</td></tr><tr><td>두 카메라 중 하나만 나옴</td><td>동일 USB 컨트롤러 대역폭 초과</td><td>포트 분리, MJPEG 카메라 사용</td></tr><tr><td>Windows에서 인식 안 됨</td><td>DirectShow 백엔드 문제</td><td>카메라 드라이버 업데이트</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch11.html">11장 실기 데이터셋 수집</a> — 드디어 학습용 데이터를 만듭니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch09.html"><span>이전</span>텔레오퍼레이션 기초</a><a class="pager-next" href="ch11.html"><span>다음</span>실기 데이터셋 수집</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#카메라가-모방학습의-절반이다">카메라가 모방학습의 절반이다</a><a class="toc-l2" href="#표준-2카메라-구성">표준 2카메라 구성</a><a class="toc-l2" href="#카메라-찾기">카메라 찾기</a><a class="toc-l2" href="#카메라를-붙여-텔레오퍼레이션">카메라를 붙여 텔레오퍼레이션</a><a class="toc-l3" href="#파이썬-api">파이썬 API</a><a class="toc-l2" href="#해상도와-fps-선택">해상도와 FPS 선택</a><a class="toc-l2" href="#시각화-도구">시각화 도구</a><a class="toc-l3" href="#rerun-기본">rerun (기본)</a><a class="toc-l3" href="#foxglove">Foxglove</a><a class="toc-l2" href="#시뮬레이터의-카메라-뷰">시뮬레이터의 카메라 뷰</a><a class="toc-l2" href="#카메라-장착-팁">카메라 장착 팁</a><a class="toc-l2" href="#문제-해결">문제 해결</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

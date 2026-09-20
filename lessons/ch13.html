@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13. 정책 모델 학습 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="ACT·Diffusion Policy·SmolVLA·π0의 차이와 lerobot-train 하이퍼파라미터 운용법.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" class="active" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch13">
+  <div class="lesson-head">
+    <div class="crumbs">PART 4 정책 학습과 추론 &middot; 약 45분</div>
+    <h1><span class="lesson-no">13</span>정책 모델 학습</h1>
+    <p class="lede">ACT·Diffusion Policy·SmolVLA·π0의 차이와 lerobot-train 하이퍼파라미터 운용법.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="정책policy이란">정책(policy)이란<a class="anchor" href="#정책policy이란">#</a></h2>
+<p><strong>관측(observation)을 입력받아 행동(action)을 출력하는 신경망</strong>입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">입력:  카메라 영상(들) + 현재 관절 상태
+   ↓  [신경망]
+출력:  다음에 보낼 관절 목표값</code></pre></div>
+<p>모방학습은 이 함수를 <strong>사람의 시연 데이터로 지도학습</strong>하는 것입니다.</p>
+<hr>
+<h2 id="어떤-정책을-고를까">어떤 정책을 고를까<a class="anchor" href="#어떤-정책을-고를까">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>정책</th><th>파라미터</th><th>학습 시간</th><th>데이터 요구</th><th>특징</th></tr></thead><tbody><tr><td><strong>ACT</strong></td><td>~80M</td><td>짧음 (수 시간)</td><td>50~100 ep</td><td><strong>SO-ARM101의 기본 선택.</strong> Action chunking으로 부드러운 궤적</td></tr><tr><td><strong>Diffusion Policy</strong></td><td>~100M</td><td>중간</td><td>100+ ep</td><td>다봉 분포(같은 상황에 여러 정답)에 강함</td></tr><tr><td><strong>SmolVLA</strong></td><td>~450M</td><td>김</td><td>50+ ep</td><td>언어 지시 이해. 여러 작업을 한 모델로</td></tr><tr><td><strong>π0 / π0.5</strong></td><td>3B+</td><td>매우 김</td><td>파인튜닝</td><td>대규모 사전학습 VLA. 범용성 최고, 자원 소모 큼</td></tr></tbody></table></div>
+<figure class="fig" id="fig-act-chunking"><svg viewBox="0 0 600 270" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="ACT의 action chunking과 temporal ensembling">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    ACT 는 다음 한 스텝이 아니라 다음 100스텝을 한꺼번에 예측합니다</text>
+
+  <!-- 시간축 -->
+  <path stroke="var(--border)" stroke-width="1.4" d="M60 214 H578"/>
+  <text class="sub" x="578" y="232" text-anchor="end" font-size="10.5">시간 →</text>
+
+  <!-- 일반 정책 -->
+  <text class="sub" x="16" y="62" font-size="11">한 스텝씩</text>
+  <g fill="var(--text-faint)" opacity="0.55">
+    <rect x="60"  y="52" width="16" height="14" rx="2"/>
+    <rect x="86"  y="52" width="16" height="14" rx="2"/>
+    <rect x="112" y="52" width="16" height="14" rx="2"/>
+    <rect x="138" y="52" width="16" height="14" rx="2"/>
+    <rect x="164" y="52" width="16" height="14" rx="2"/>
+    <rect x="190" y="52" width="16" height="14" rx="2"/>
+  </g>
+  <text class="sub" x="216" y="63" font-size="10.5">매 스텝 추론 → 느린 모델은 따라가지 못함</text>
+
+  <!-- 청크 -->
+  <text class="sub" x="16" y="104" font-size="11">청크 1</text>
+  <rect fill="var(--accent)" opacity="0.32" x="60" y="92" width="280" height="16" rx="3"/>
+  <text class="hi" x="200" y="105" text-anchor="middle" font-size="10.5">t 시점에 예측한 100스텝</text>
+
+  <text class="sub" x="16" y="134" font-size="11">청크 2</text>
+  <rect fill="var(--accent)" opacity="0.32" x="150" y="122" width="280" height="16" rx="3"/>
+  <text class="hi" x="290" y="135" text-anchor="middle" font-size="10.5">t+k 에 예측한 100스텝</text>
+
+  <text class="sub" x="16" y="164" font-size="11">청크 3</text>
+  <rect fill="var(--accent)" opacity="0.32" x="240" y="152" width="280" height="16" rx="3"/>
+  <text class="hi" x="380" y="165" text-anchor="middle" font-size="10.5">t+2k 에 예측한 100스텝</text>
+
+  <!-- 겹침 -->
+  <rect fill="var(--warn)" opacity="0.18" x="240" y="86" width="100" height="88" rx="3"/>
+  <text class="wr" x="290" y="192" text-anchor="middle" font-size="10.5">겹치는 구간은 평균</text>
+
+  <!-- 실행 -->
+  <path stroke="var(--accent)" stroke-width="2.6" fill="none"
+        d="M60 214 C 140 206, 200 220, 260 210 S 380 202, 460 212 S 540 208, 578 214"/>
+  <text class="hi" x="76" y="204" font-size="10.5">실제 실행 궤적 — 매끄럽게 이어집니다</text>
+
+  <text class="sub" x="16" y="258">
+    <tspan class="lbl">장점</tspan> 추론이 느려도 동작이 끊기지 않습니다  ·
+    <tspan class="lbl">단점</tspan> 청크 도중 상황이 바뀌면 대응이 늦습니다  ·
+    이 겹쳐 평균내기가 <tspan class="hi">temporal ensembling</tspan> 입니다</text>
+</svg><figcaption>ACT 의 핵심인 action chunking 과 temporal ensembling.</figcaption></figure>
+<div class="callout callout-tip"><div class="callout-title">처음이라면 무조건 ACT</div><div class="callout-body"><p>ACT는 학습이 빠르고 하이퍼파라미터에 덜 민감합니다. <strong>ACT로 성공률을 확보한 뒤</strong> 다른 정책을 시도하세요. 원문 위키의 듀얼암 튜토리얼도 ACT를 기준으로 작성되어 있습니다.</p></div></div>
+<div class="callout callout-info"><div class="callout-title">Action Chunking이란</div><div class="callout-body"><p>ACT의 핵심 아이디어입니다. 다음 <strong>1개</strong> 행동이 아니라 다음 <strong>100개(chunk_size)</strong> 행동을 한꺼번에 예측합니다.</p>
+<ul><li>장점: 예측이 매끄럽고, 매 스텝 추론하지 않아도 되어 지연에 강합니다.</li><li>단점: 예측한 청크 도중 환경이 바뀌면 대응이 늦습니다.</li></ul>
+<p>그래서 실제로는 여러 청크를 겹쳐 평균내는 <strong>temporal ensembling</strong>을 씁니다.</p></div></div>
+<hr>
+<h2 id="기본-학습-명령">기본 학습 명령<a class="anchor" href="#기본-학습-명령">#</a></h2>
+<p>Hub 데이터셋으로:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+  --dataset.repo_id=${HF_USER}/so101_pick_cube \
+  --policy.type=act \
+  --output_dir=outputs/train/act_so101_pick \
+  --job_name=act_so101_pick \
+  --policy.device=cuda \
+  --wandb.enable=true \
+  --policy.repo_id=${HF_USER}/my_policy</code></pre></div>
+<p>로컬 데이터셋으로:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+  --dataset.repo_id=myname/so101_pick_cube \
+  --dataset.root=./datasets/so101_pick_cube \
+  --policy.type=act \
+  --policy.device=cuda \
+  --steps=60000 \
+  --output_dir=outputs/train/act_so101_pick \
+  --wandb.enable=false \
+  --policy.push_to_hub=false</code></pre></div>
+<h3 id="인자-설명">인자 설명<a class="anchor" href="#인자-설명">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>인자</th><th>의미</th></tr></thead><tbody><tr><td><code>--dataset.repo_id</code></td><td>데이터셋 식별자. 로컬이면 <code>--dataset.root</code>와 함께</td></tr><tr><td><code>--policy.type=act</code></td><td>정책 종류. 데이터셋의 관절 수·카메라 수에 <strong>자동으로 맞춰집니다</strong></td></tr><tr><td><code>--policy.device</code></td><td><code>cuda</code> (NVIDIA), <code>mps</code> (Apple Silicon), <code>cpu</code></td></tr><tr><td><code>--steps</code></td><td>학습 스텝 수. ACT는 보통 <strong>60,000~100,000</strong></td></tr><tr><td><code>--output_dir</code></td><td>체크포인트 저장 경로</td></tr><tr><td><code>--wandb.enable</code></td><td>Weights &amp; Biases 로깅. 쓰려면 <code>wandb login</code> 먼저</td></tr><tr><td><code>--policy.push_to_hub</code></td><td>학습 후 Hub 업로드 여부</td></tr></tbody></table></div>
+<div class="callout callout-warn"><div class="callout-title">`--output_dir` 이 이미 존재하면</div><div class="callout-body"><p><code>FileExistsError</code>가 납니다. <strong>새 디렉터리를 쓰거나</strong> <code>--resume=true</code>로 이어서 학습하세요.</p></div></div>
+<hr>
+<h2 id="학습-재개">학습 재개<a class="anchor" href="#학습-재개">#</a></h2>
+<p>로컬 체크포인트에서:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+  --config_path=outputs/train/act_so101_pick/checkpoints/last/pretrained_model/train_config.json \
+  --resume=true</code></pre></div>
+<p>Hub에 푸시한 런에서 (<code>--save_checkpoint_to_hub=true</code>로 학습했다면):</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train --config_path=${HF_USER}/my_policy --resume=true</code></pre></div>
+<p>옵티마이저·스케줄러·스텝 카운터·데이터 순서까지 복원됩니다.</p>
+<hr>
+<h2 id="gpu가-없을-때">GPU가 없을 때<a class="anchor" href="#gpu가-없을-때">#</a></h2>
+<h3 id="google-colab">Google Colab<a class="anchor" href="#google-colab">#</a></h3>
+<p>LeRobot은 <a href="https://huggingface.co/docs/lerobot/en/notebooks#training-act" target="_blank" rel="noopener">ACT 학습 노트북</a>을 제공합니다. 데이터셋을 Hub에 올려 두면 Colab에서 바로 학습할 수 있습니다.</p>
+<h3 id="hugging-face-jobs">Hugging Face Jobs<a class="anchor" href="#hugging-face-jobs">#</a></h3>
+<p>초 단위 종량제로 클라우드 GPU에서 학습합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">hf auth login
+lerobot-train \
+  --dataset.repo_id=${HF_USER}/so101_pick_cube \
+  --policy.type=act \
+  --policy.repo_id=${HF_USER}/my_policy \
+  --job.target=a10g-small</code></pre></div>
+<p>사용 가능한 하드웨어와 가격:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">hf jobs hardware</code></pre></div>
+<p>로그는 터미널로 스트리밍되고, <strong>Ctrl-C로 떼어내도 작업은 클라우드에서 계속 돕니다.</strong></p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">hf jobs logs &lt;job-id&gt;
+hf jobs cancel &lt;job-id&gt;</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">로컬 데이터셋도 됩니다</div><div class="callout-body"><p>Hub에 없는 로컬 데이터셋은 <strong>자동으로 비공개 Hub 저장소에 업로드</strong>되어 작업이 내려받습니다. 공개되지 않습니다.</p></div></div>
+<p>기본 제한 시간은 48시간이며 <code>--job.timeout=4h</code> 처럼 조정할 수 있습니다. 중간 체크포인트도 Hub에 올리려면 <code>--save_checkpoint_to_hub=true</code>를 추가하세요.</p>
+<h3 id="클라우드-gpu-렌탈">클라우드 GPU 렌탈<a class="anchor" href="#클라우드-gpu-렌탈">#</a></h3>
+<p>원문 위키는 &quot;본 튜토리얼에서는 클라우드 GPU 플랫폼으로 모델을 학습하므로 내 컴퓨터가 고사양일 필요가 없다&quot;고 안내합니다. 국내에서도 시간당 과금 GPU 서비스를 쓰면 됩니다.</p>
+<hr>
+<h2 id="하이퍼파라미터-다루기">하이퍼파라미터 다루기<a class="anchor" href="#하이퍼파라미터-다루기">#</a></h2>
+<p>ACT 기본값(<code>chunk_size=100</code>, <code>dim_model=512</code> 등)은 대체로 잘 동작합니다. 손대야 할 때는 이 순서로 보세요.</p>
+<div class="table-wrap"><table><thead><tr><th>상황</th><th>조정</th></tr></thead><tbody><tr><td>학습 loss는 내려가는데 실기 성능이 나쁨</td><td><strong>데이터 문제</strong>입니다. 하이퍼파라미터가 아니라 데이터셋을 점검하세요</td></tr><tr><td>동작이 끊기고 튐</td><td><code>chunk_size</code>를 키우거나 temporal ensembling 확인</td></tr><tr><td>느린 동작만 배움</td><td>데이터의 정지 구간이 너무 긺</td></tr><tr><td>GPU 메모리 부족</td><td><code>--batch_size</code> 축소</td></tr><tr><td>과적합 (train loss만 하락)</td><td>데이터 다양성 확대, 스텝 수 축소</td></tr></tbody></table></div>
+<div class="callout callout-danger"><div class="callout-title">하이퍼파라미터로 데이터 문제를 고칠 수 없습니다</div><div class="callout-body"><p>모방학습에서 성능의 80%는 <strong>데이터 품질</strong>이 결정합니다. 성공률이 낮다면 우선 다음을 점검하세요.</p>
+<ul><li>에피소드 수가 충분한가? (최소 50)</li><li>카메라 영상만 보고 사람이 작업을 판단할 수 있는가?</li><li>시연이 일관적인가? (매번 다른 방식으로 잡지 않았는가)</li><li>실패한 시연이 섞여 있지 않은가?</li></ul></div></div>
+<hr>
+<h2 id="학습-모니터링">학습 모니터링<a class="anchor" href="#학습-모니터링">#</a></h2>
+<h3 id="weights-biases">Weights &amp; Biases<a class="anchor" href="#weights-biases">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">wandb login</code></pre></div>
+<p><code>--wandb.enable=true</code>로 학습하면 loss 곡선, 학습률, 샘플 이미지가 웹 대시보드에 기록됩니다.</p>
+<h3 id="읽어야-할-지표">읽어야 할 지표<a class="anchor" href="#읽어야-할-지표">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>지표</th><th>정상 패턴</th></tr></thead><tbody><tr><td><code>loss</code></td><td>초기 급락 후 완만한 하락</td></tr><tr><td><code>l1_loss</code></td><td>행동 예측 오차. 꾸준히 감소</td></tr><tr><td><code>kld_loss</code> (ACT)</td><td>VAE 정규화 항. 너무 커지면 잠재 붕괴 의심</td></tr><tr><td>학습률</td><td>스케줄대로 감소</td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">언제 멈출까</div><div class="callout-body"><p>loss가 평탄해졌다고 최적은 아닙니다. <strong>여러 체크포인트(예: 20k, 40k, 60k)를 실기에서 평가</strong>해 성공률이 가장 높은 것을 고르세요. 학습이 더 진행될수록 실기 성능이 떨어지는 경우도 흔합니다.</p></div></div>
+<hr>
+<h2 id="체크포인트-관리">체크포인트 관리<a class="anchor" href="#체크포인트-관리">#</a></h2>
+<p>학습 결과는 다음에 저장됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">outputs/train/act_so101_pick/checkpoints/
+├── 010000/pretrained_model/
+├── 020000/pretrained_model/
+└── last/pretrained_model/</code></pre></div>
+<p>Hub 업로드:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">hf upload ${HF_USER}/act_so101_pick \
+  outputs/train/act_so101_pick/checkpoints/last/pretrained_model</code></pre></div>
+<p>중간 체크포인트:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">CKPT=010000
+hf upload ${HF_USER}/act_so101_pick${CKPT} \
+  outputs/train/act_so101_pick/checkpoints/${CKPT}/pretrained_model</code></pre></div>
+<p>비공개·태그·라이선스 지정:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">--policy.private=true --policy.tags=\[act,so101\] --policy.license=mit</code></pre></div>
+<hr>
+<h2 id="다른-정책-시도하기">다른 정책 시도하기<a class="anchor" href="#다른-정책-시도하기">#</a></h2>
+<h3 id="diffusion-policy">Diffusion Policy<a class="anchor" href="#diffusion-policy">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install &#x27;lerobot[diffusion]&#x27;</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+  --dataset.repo_id=${HF_USER}/so101_pick_cube \
+  --policy.type=diffusion \
+  --policy.device=cuda \
+  --output_dir=outputs/train/diffusion_so101</code></pre></div>
+<h3 id="smolvla">SmolVLA<a class="anchor" href="#smolvla">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install &#x27;lerobot[smolvla]&#x27;</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+  --dataset.repo_id=${HF_USER}/so101_pick_cube \
+  --policy.type=smolvla \
+  --policy.device=cuda \
+  --output_dir=outputs/train/smolvla_so101</code></pre></div>
+<h3 id="0-계열">π0 계열<a class="anchor" href="#0-계열">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install &#x27;lerobot[pi]&#x27;</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">대형 VLA의 현실</div><div class="callout-body"><p>π0 계열은 VRAM 24GB 이상을 요구하며, 추론 속도도 느려 <strong>RTC(real-time chunking) 추론</strong>과 함께 써야 합니다. SO-ARM101 단일 작업이라면 ACT가 훨씬 실용적입니다.</p></div></div>
+<hr>
+<h2 id="학습-시간-참고">학습 시간 참고<a class="anchor" href="#학습-시간-참고">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>환경</th><th>ACT 60k 스텝 예상 시간</th></tr></thead><tbody><tr><td>RTX 4090</td><td>약 2~3시간</td></tr><tr><td>RTX 3060</td><td>약 6~8시간</td></tr><tr><td>Apple M2 Pro (mps)</td><td>약 12시간+</td></tr><tr><td>HF Jobs a10g-small</td><td>약 4~5시간</td></tr><tr><td>CPU만</td><td>비현실적</td></tr></tbody></table></div>
+<p>원문 위키가 인용하는 사례로는 <strong>15초짜리 조작 영상 50개로 2시간 학습</strong>해 옷 개기·열쇠 꽂기·부품 분류를 습득한 예가 있습니다.</p>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch14.html">14장 모델 추론과 평가</a> — 학습한 정책을 실제 로봇에서 돌리고 성공률을 측정합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch12.html"><span>이전</span>시뮬레이션 데이터 수집 (LeIsaac)</a><a class="pager-next" href="ch14.html"><span>다음</span>모델 추론과 평가</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#정책policy이란">정책(policy)이란</a><a class="toc-l2" href="#어떤-정책을-고를까">어떤 정책을 고를까</a><a class="toc-l2" href="#기본-학습-명령">기본 학습 명령</a><a class="toc-l3" href="#인자-설명">인자 설명</a><a class="toc-l2" href="#학습-재개">학습 재개</a><a class="toc-l2" href="#gpu가-없을-때">GPU가 없을 때</a><a class="toc-l3" href="#google-colab">Google Colab</a><a class="toc-l3" href="#hugging-face-jobs">Hugging Face Jobs</a><a class="toc-l3" href="#클라우드-gpu-렌탈">클라우드 GPU 렌탈</a><a class="toc-l2" href="#하이퍼파라미터-다루기">하이퍼파라미터 다루기</a><a class="toc-l2" href="#학습-모니터링">학습 모니터링</a><a class="toc-l3" href="#weights-biases">Weights &amp; Biases</a><a class="toc-l3" href="#읽어야-할-지표">읽어야 할 지표</a><a class="toc-l2" href="#체크포인트-관리">체크포인트 관리</a><a class="toc-l2" href="#다른-정책-시도하기">다른 정책 시도하기</a><a class="toc-l3" href="#diffusion-policy">Diffusion Policy</a><a class="toc-l3" href="#smolvla">SmolVLA</a><a class="toc-l3" href="#0-계열">π0 계열</a><a class="toc-l2" href="#학습-시간-참고">학습 시간 참고</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

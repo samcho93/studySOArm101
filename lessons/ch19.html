@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>19. Gazebo 시뮬레이션과 시각화 툴 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="Gazebo Harmonic에서 물리 시뮬레이션을 돌리고 RViz2·Foxglove·PlotJuggler로 관찰합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" class="active" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch19">
+  <div class="lesson-head">
+    <div class="crumbs">PART 5 ROS 2 연동과 시뮬레이션 &middot; 약 40분</div>
+    <h1><span class="lesson-no">19</span>Gazebo 시뮬레이션과 시각화 툴</h1>
+    <p class="lede">Gazebo Harmonic에서 물리 시뮬레이션을 돌리고 RViz2·Foxglove·PlotJuggler로 관찰합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="gazebo를-쓰는-이유">Gazebo를 쓰는 이유<a class="anchor" href="#gazebo를-쓰는-이유">#</a></h2>
+<p>RViz2와 MoveIt의 Mock 모드는 <strong>물리를 모릅니다.</strong> 중력도, 마찰도, 관성도 없습니다. 명령한 대로 링크가 움직일 뿐입니다.</p>
+<p>Gazebo는 물리 엔진 위에서 돌기 때문에 다음을 검증할 수 있습니다.</p>
+<ul><li>팔이 <strong>중력을 이기고 자세를 유지</strong>할 수 있는가</li><li>그리퍼가 물체를 <strong>실제로 잡을 수 있는가</strong> (마찰)</li><li>빠른 동작 시 <strong>관성으로 흔들리지</strong> 않는가</li><li>물체가 <strong>넘어지거나 굴러가지</strong> 않는가</li></ul>
+<div class="callout callout-info"><div class="callout-title">Gazebo 버전</div><div class="callout-body"><ul><li><strong>Gazebo Classic</strong> (gazebo11) — 구버전, Humble에서 여전히 널리 쓰임</li><li><strong>Gazebo Sim / Harmonic</strong> (gz-sim8) — 신버전, Jazzy의 기본. 브릿지는 <code>ros_gz</code> 패키지</li></ul>
+<p>이 강좌는 **<code>gz_ros2_control</code>** 기반 구성을 다룹니다.</p></div></div>
+<h3 id="설치">설치<a class="anchor" href="#설치">#</a></h3>
+<p>Humble + Gazebo Fortress/Harmonic:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install ros-humble-ros-gz ros-humble-gz-ros2-control</code></pre></div>
+<p>Jazzy + Gazebo Harmonic:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install ros-jazzy-ros-gz ros-jazzy-gz-ros2-control</code></pre></div>
+<hr>
+<h2 id="gazebo-실행-터미널-4개">Gazebo 실행 — 터미널 4개<a class="anchor" href="#gazebo-실행-터미널-4개">#</a></h2>
+<div class="callout callout-warn"><div class="callout-title">순서를 반드시 지키세요</div><div class="callout-body"><p>Gazebo 구성은 4개의 터미널을 순서대로 실행해야 합니다. 순서가 틀리면 컨트롤러가 활성화되지 않습니다.</p></div></div>
+<h3 id="터미널-1-gazebo-시뮬레이션-시작">터미널 1 — Gazebo 시뮬레이션 시작<a class="anchor" href="#터미널-1-gazebo-시뮬레이션-시작">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">source ~/so101_ws/install/setup.bash
+ros2 launch so_arm_gz so_arm_gz_bringup.launch.py</code></pre></div>
+<p>Gazebo 창이 뜨고, 로봇이 공중에 잠시 떠 있다가 바닥에 내려앉습니다. 이 과정이 끝날 때까지 기다리세요.</p>
+<h3 id="터미널-2-궤적-컨트롤러-전환">터미널 2 — 궤적 컨트롤러 전환<a class="anchor" href="#터미널-2-궤적-컨트롤러-전환">#</a></h3>
+<p>Gazebo는 기본적으로 <code>forward_position_controller</code>만 활성화합니다. <code>joint_trajectory_controller</code>로 수동 전환해야 합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">source ~/so101_ws/install/setup.bash
+
+# 단계 A — forward_position_controller 비활성화
+ros2 control set_controller_state forward_position_controller inactive
+
+# 단계 B — spawner로 joint_trajectory_controller 로드 + 활성화
+ros2 run controller_manager spawner joint_trajectory_controller
+
+# 단계 C — 검증
+ros2 control list_controllers</code></pre></div>
+<p>기대 출력:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">forward_position_controller  inactive
+joint_state_broadcaster      active
+joint_trajectory_controller  active</code></pre></div>
+<div class="callout callout-danger"><div class="callout-title">`ros2 control load_controller` 를 먼저 쓰지 마세요</div><div class="callout-body"><p><code>load_controller</code>를 먼저 실행하면 컨트롤러가 **<code>unconfigured</code> 상태**가 되어 <code>spawner</code>가 활성화하지 못합니다.</p>
+<p>이미 그렇게 했다면 먼저 언로드하고 다시 시작하세요.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 control unload_controller joint_trajectory_controller</code></pre></div></div></div>
+<h3 id="터미널-3-movegroup">터미널 3 — move_group<a class="anchor" href="#터미널-3-movegroup">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">source ~/so101_ws/install/setup.bash
+ros2 launch so_arm101_moveit_config move_group.launch.py use_sim_time:=True</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">`use_sim_time:=True` 를 빠뜨리지 마세요</div><div class="callout-body"><p>Gazebo는 자체 시뮬레이션 시계를 씁니다. 이 인자가 없으면 MoveIt이 실제 시간을 기준으로 동작해 궤적 타이밍이 어긋납니다.</p></div></div>
+<h3 id="터미널-4-rviz">터미널 4 — RViz<a class="anchor" href="#터미널-4-rviz">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">source ~/so101_ws/install/setup.bash
+ros2 launch so_arm101_moveit_config moveit_rviz.launch.py</code></pre></div>
+<p>RViz가 준비되면:</p>
+<ol><li>**Planning Group → <code>manipulator</code>**</li><li>**Goal State → <code>open</code>** (또는 <code>extended</code>, <code>rest</code>)</li><li><strong>Plan → Execute</strong></li></ol>
+<p>Gazebo 안의 팔 관절이 함께 움직입니다.</p>
+<hr>
+<h2 id="헤드리스-모드-gui-없이">헤드리스 모드 (GUI 없이)<a class="anchor" href="#헤드리스-모드-gui-없이">#</a></h2>
+<p>CI나 서버에서 돌릴 때 유용합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 launch so_arm_gz so_arm_gz_bringup.launch.py \
+  gazebo_gui:=false \
+  launch_rviz:=false</code></pre></div>
+<hr>
+<h2 id="알려진-제약">알려진 제약<a class="anchor" href="#알려진-제약">#</a></h2>
+<div class="callout callout-warn"><div class="callout-title">Gazebo에서 그리퍼가 안 움직입니다</div><div class="callout-body"><p><code>gz_ros2_control</code>의 Humble 버전은 <strong>PID 게인이 0.1로 하드코딩</strong>되어 있어 URDF 파라미터로 덮어쓸 수 없습니다. 그 결과 그리퍼를 여는 궤적이 <strong>실행 로그에는 성공으로 찍히지만 물리 시뮬레이션에서는 실제로 벌어지지 않습니다.</strong></p>
+<p><strong>Mock 모드와 실기에서는 이 문제가 없습니다.</strong> Gazebo에서 파지 실험이 꼭 필요하다면 최신 <code>gz_ros2_control</code>을 소스 빌드하거나 Gazebo Classic의 <code>gazebo_ros2_control</code>을 검토하세요.</p></div></div>
+<hr>
+<h2 id="반복-로드-실패-시-초기화">반복 로드 실패 시 초기화<a class="anchor" href="#반복-로드-실패-시-초기화">#</a></h2>
+<p><code>spawner</code>가 계속 <code>Failed to activate controller</code>를 낸다면 완전 초기화합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 1. 걸린 컨트롤러 언로드
+ros2 control unload_controller joint_trajectory_controller
+
+# 2. forward_position_controller 비활성화
+ros2 control set_controller_state forward_position_controller inactive
+
+# 3. 다시 spawn
+ros2 run controller_manager spawner joint_trajectory_controller</code></pre></div>
+<p>그래도 안 되면 모든 터미널을 종료하고 터미널 1부터 다시 시작하세요.</p>
+<hr>
+<h2 id="gazebo-월드에-물체-추가">Gazebo 월드에 물체 추가<a class="anchor" href="#gazebo-월드에-물체-추가">#</a></h2>
+<p>픽앤플레이스를 실험하려면 잡을 물체가 필요합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;!-- so_arm_gz/worlds/table_with_cube.sdf --&gt;
+&lt;model name=&quot;cube&quot;&gt;
+  &lt;pose&gt;0.22 0.0 0.025 0 0 0&lt;/pose&gt;
+  &lt;link name=&quot;link&quot;&gt;
+    &lt;inertial&gt;
+      &lt;mass&gt;0.05&lt;/mass&gt;
+      &lt;inertia&gt;&lt;ixx&gt;2.1e-5&lt;/ixx&gt;&lt;iyy&gt;2.1e-5&lt;/iyy&gt;&lt;izz&gt;2.1e-5&lt;/izz&gt;
+               &lt;ixy&gt;0&lt;/ixy&gt;&lt;ixz&gt;0&lt;/ixz&gt;&lt;iyz&gt;0&lt;/iyz&gt;&lt;/inertia&gt;
+    &lt;/inertial&gt;
+    &lt;collision name=&quot;collision&quot;&gt;
+      &lt;geometry&gt;&lt;box&gt;&lt;size&gt;0.04 0.04 0.04&lt;/size&gt;&lt;/box&gt;&lt;/geometry&gt;
+      &lt;surface&gt;
+        &lt;friction&gt;&lt;ode&gt;&lt;mu&gt;1.2&lt;/mu&gt;&lt;mu2&gt;1.2&lt;/mu2&gt;&lt;/ode&gt;&lt;/friction&gt;
+      &lt;/surface&gt;
+    &lt;/collision&gt;
+    &lt;visual name=&quot;visual&quot;&gt;
+      &lt;geometry&gt;&lt;box&gt;&lt;size&gt;0.04 0.04 0.04&lt;/size&gt;&lt;/box&gt;&lt;/geometry&gt;
+      &lt;material&gt;&lt;ambient&gt;0.1 0.1 0.1 1&lt;/ambient&gt;&lt;/material&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+&lt;/model&gt;</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">마찰 계수가 핵심입니다</div><div class="callout-body"><p>그리퍼가 물체를 잡지 못한다면 <code>mu</code> 값을 올려 보세요. 실제 PLA 그리퍼 + 고무 패드 조합은 대략 <code>mu = 1.0~1.5</code> 수준입니다. 너무 낮으면 미끄러지고, 너무 높으면 비현실적으로 달라붙습니다.</p></div></div>
+<hr>
+<h2 id="시각화-도구-모음">시각화 도구 모음<a class="anchor" href="#시각화-도구-모음">#</a></h2>
+<h3 id="rviz2">RViz2<a class="anchor" href="#rviz2">#</a></h3>
+<p>ROS 2의 기본 시각화 도구입니다. 로봇 모델, TF, 궤적, 센서 데이터를 봅니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">rviz2</code></pre></div>
+<h3 id="foxglove-studio">Foxglove Studio<a class="anchor" href="#foxglove-studio">#</a></h3>
+<p>브라우저/데스크톱에서 ROS 2 데이터를 보는 현대적 도구입니다. 웹에서 원격 접속할 수 있고 레이아웃이 유연합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install ros-humble-foxglove-bridge
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml</code></pre></div>
+<p>Foxglove Studio에서 <code>ws://localhost:8765</code>로 접속합니다.</p>
+<div class="callout callout-tip"><div class="callout-title">LeRobot과 Foxglove</div><div class="callout-body"><p>LeRobot의 시각화도 Foxglove로 스트리밍할 수 있습니다. (<a href="../lessons/ch10.html">10장</a>)</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">init_visualization(&quot;foxglove&quot;, session_name=&quot;teleoperation&quot;)</code></pre></div>
+<p>ROS 2 토픽과 LeRobot 관측값을 <strong>한 화면에서</strong> 볼 수 있습니다.</p></div></div>
+<h3 id="plotjuggler">PlotJuggler<a class="anchor" href="#plotjuggler">#</a></h3>
+<p>시계열 데이터를 정밀하게 분석하는 도구입니다. 관절 추종 오차 분석에 탁월합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install ros-humble-plotjuggler-ros
+ros2 run plotjuggler plotjuggler</code></pre></div>
+<p><strong>Start → ROS2 Topic Subscriber</strong> 로 <code>/joint_states</code>를 구독하면 각 관절의 position/velocity/effort를 그래프로 볼 수 있습니다.</p>
+<div class="callout callout-task"><div class="callout-title">실습 — 추종 오차 분석</div><div class="callout-body"><ol><li>PlotJuggler에서 <code>/joint_states/position/elbow_flex</code> 와 <code>/joint_trajectory_controller/controller_state/reference/positions[2]</code> 를 같은 축에 올립니다.</li><li>MoveIt으로 빠른 동작을 실행합니다.</li><li>두 곡선의 간격이 <strong>추종 오차</strong>입니다.</li></ol>
+<p>속도를 올릴수록 오차가 커지는 것을 확인하세요. 실기에서 <code>joint_limits.yaml</code>의 <code>max_velocity</code>를 어디까지 올려도 되는지 판단하는 근거가 됩니다.</p></div></div>
+<h3 id="rqt-도구-모음">rqt 도구 모음<a class="anchor" href="#rqt-도구-모음">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 노드·토픽 그래프
+rqt_graph
+
+# 토픽 값 실시간 표시
+ros2 run rqt_topic rqt_topic
+
+# 파라미터 편집
+ros2 run rqt_reconfigure rqt_reconfigure
+
+# 로그 뷰어
+ros2 run rqt_console rqt_console</code></pre></div>
+<h3 id="이-강좌의-브라우저-시뮬레이터">이 강좌의 브라우저 시뮬레이터<a class="anchor" href="#이-강좌의-브라우저-시뮬레이터">#</a></h3>
+<p>설치 없이 즉시 기구학을 확인해야 할 때 가장 빠릅니다.</p>
+<ul><li><a href="../sim/index.html">3D 시뮬레이터</a> — FK/IK, 텔레오퍼레이션, 궤적 녹화, 손목 카메라 뷰</li><li><strong>ROS 2 탭</strong>에서 현재 자세를 <code>sensor_msgs/JointState</code> JSON으로 출력할 수 있어, 실제 토픽 값과 비교하기 좋습니다.</li></ul>
+<hr>
+<h2 id="시뮬레이션-전략-정리">시뮬레이션 전략 정리<a class="anchor" href="#시뮬레이션-전략-정리">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>목적</th><th>최적 도구</th></tr></thead><tbody><tr><td>기구학 개념 이해, 궤적 스케치</td><td><strong>브라우저 시뮬레이터</strong></td></tr><tr><td>URDF 검증, TF 확인</td><td><strong>RViz2 + joint_state_publisher_gui</strong></td></tr><tr><td>경로 계획, 충돌 회피 로직</td><td><strong>MoveIt 2 Mock 모드</strong></td></tr><tr><td>물리 검증(중력·마찰·관성)</td><td><strong>Gazebo</strong></td></tr><tr><td>대규모 학습 데이터 생성</td><td><strong>Isaac Lab / LeIsaac</strong> (<a href="../lessons/ch12.html">12장</a>)</td></tr><tr><td>제어 알고리즘 빠른 반복</td><td><strong>MuJoCo</strong></td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">단계적 검증이 가장 안전합니다</div><div class="callout-body"><p>브라우저 시뮬 → RViz Mock → Gazebo → 실기 순서로 올라가세요. 각 단계에서 걸러지는 버그의 종류가 다릅니다. 실기에서 처음 발견하는 버그가 가장 비쌉니다.</p></div></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch20.html">20장 LeRobot ↔ ROS 2 브릿지</a> — 학습한 정책을 ROS 2 파이프라인에 연결합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch18.html"><span>이전</span>MoveIt 2 모션 플래닝</a><a class="pager-next" href="ch20.html"><span>다음</span>LeRobot ↔ ROS 2 브릿지</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#gazebo를-쓰는-이유">Gazebo를 쓰는 이유</a><a class="toc-l3" href="#설치">설치</a><a class="toc-l2" href="#gazebo-실행-터미널-4개">Gazebo 실행 — 터미널 4개</a><a class="toc-l3" href="#터미널-1-gazebo-시뮬레이션-시작">터미널 1 — Gazebo 시뮬레이션 시작</a><a class="toc-l3" href="#터미널-2-궤적-컨트롤러-전환">터미널 2 — 궤적 컨트롤러 전환</a><a class="toc-l3" href="#터미널-3-movegroup">터미널 3 — move_group</a><a class="toc-l3" href="#터미널-4-rviz">터미널 4 — RViz</a><a class="toc-l2" href="#헤드리스-모드-gui-없이">헤드리스 모드 (GUI 없이)</a><a class="toc-l2" href="#알려진-제약">알려진 제약</a><a class="toc-l2" href="#반복-로드-실패-시-초기화">반복 로드 실패 시 초기화</a><a class="toc-l2" href="#gazebo-월드에-물체-추가">Gazebo 월드에 물체 추가</a><a class="toc-l2" href="#시각화-도구-모음">시각화 도구 모음</a><a class="toc-l3" href="#rviz2">RViz2</a><a class="toc-l3" href="#foxglove-studio">Foxglove Studio</a><a class="toc-l3" href="#plotjuggler">PlotJuggler</a><a class="toc-l3" href="#rqt-도구-모음">rqt 도구 모음</a><a class="toc-l3" href="#이-강좌의-브라우저-시뮬레이터">이 강좌의 브라우저 시뮬레이터</a><a class="toc-l2" href="#시뮬레이션-전략-정리">시뮬레이션 전략 정리</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

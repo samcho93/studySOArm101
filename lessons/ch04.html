@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04. 3D 프린팅과 조립 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="출력 설정부터 관절 1~6 조립 순서, 조립 중 흔한 실수와 검수 포인트를 정리합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" class="active" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch04">
+  <div class="lesson-head">
+    <div class="crumbs">PART 1 기초 다지기 &middot; 약 40분</div>
+    <h1><span class="lesson-no">04</span>3D 프린팅과 조립</h1>
+    <p class="lede">출력 설정부터 관절 1~6 조립 순서, 조립 중 흔한 실수와 검수 포인트를 정리합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<div class="callout callout-info"><div class="callout-title">완제품을 구입했다면</div><div class="callout-body"><p>이미 조립된 제품을 샀다면 이 장은 건너뛰고 <a href="../lessons/ch05.html">5장</a> 또는 <a href="../lessons/ch06.html">6장</a>으로 바로 가세요. 다만 <strong>서보 ID와 중위 캘리브레이션이 제대로 되어 있는지</strong>는 반드시 확인해야 합니다.</p></div></div>
+<h2 id="작업-순서-한눈에">작업 순서 한눈에<a class="anchor" href="#작업-순서-한눈에">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">1) 3D 프린팅         ─ 부품 출력
+2) 서포트 제거        ─ 모든 구멍/홈 확인  ← 가장 많이 실수하는 단계
+3) 서보 ID 설정       ─ 조립 전에! (5장)
+4) 중립 위치 보정      ─ 조립 전에! (5장)
+5) 관절 1~6 조립      ─ 이 장
+6) 드라이버 보드 장착  ─ 이 장
+7) 배선 및 전원        ─ 3장</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">순서를 지키세요</div><div class="callout-body"><p><strong>서보 ID 설정과 중위 캘리브레이션은 반드시 조립 전에</strong> 해야 합니다. 조립 후에는 서보 하나만 버스에 연결하는 것이 불가능해져, ID를 다시 잡으려면 팔을 뜯어야 합니다.</p></div></div>
+<hr>
+<figure class="fig" id="fig-assembly-order"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="조립 순서와 나사 종류">
+  <defs>
+    <marker id="ao-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">순서를 지키는 것이 전부입니다</text>
+
+  <!-- 전체 순서 -->
+  <g>
+    <rect class="box" x="16"  y="44" width="104" height="46" rx="6"/>
+    <rect class="box" x="132" y="44" width="104" height="46" rx="6"/>
+    <rect class="box-hi" x="248" y="44" width="120" height="46" rx="6"/>
+    <rect class="box" x="380" y="44" width="104" height="46" rx="6"/>
+    <rect class="box" x="496" y="44" width="88" height="46" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="lbl" x="68"  y="64" font-size="12">3D 프린팅</text>
+    <text class="sub" x="68"  y="80" font-size="10">PLA+ · 인필 15%</text>
+    <text class="lbl" x="184" y="64" font-size="12">서포트 제거</text>
+    <text class="sub" x="184" y="80" font-size="10">모든 구멍 확인</text>
+    <text class="hi"  x="308" y="64" font-size="12">서보 ID · 중위</text>
+    <text class="sub" x="308" y="80" font-size="10">반드시 조립 전에</text>
+    <text class="lbl" x="432" y="64" font-size="12">관절 1~6 조립</text>
+    <text class="sub" x="432" y="80" font-size="10">혼 → 서보 → 구조물</text>
+    <text class="lbl" x="540" y="64" font-size="12">보드 · 배선</text>
+    <text class="sub" x="540" y="80" font-size="10">M2.5×8</text>
+  </g>
+  <g class="ln-hi" stroke-width="1.8" color="var(--accent)">
+    <path d="M120 67 H126" marker-end="url(#ao-a)"/>
+    <path d="M236 67 H242" marker-end="url(#ao-a)"/>
+    <path d="M368 67 H374" marker-end="url(#ao-a)"/>
+    <path d="M484 67 H490" marker-end="url(#ao-a)"/>
+  </g>
+  <text class="dg" x="308" y="108" text-anchor="middle" font-size="11">
+    ↑ 이걸 건너뛰면 팔을 다시 뜯어야 합니다</text>
+
+  <!-- 관절 공통 패턴 -->
+  <rect class="box" x="16" y="128" width="330" height="152" rx="8"/>
+  <text class="lbl" x="32" y="150" font-size="12.5">관절마다 반복되는 패턴</text>
+  <g class="sub" font-size="11">
+    <text x="32" y="176">① 서보 혼 2개 설치 — 위쪽만 <tspan class="hi mono">M3×6</tspan> 고정</text>
+    <text x="32" y="198">② 서보를 프레임에 넣고 <tspan class="hi mono">M2×6</tspan> 4개로 고정</text>
+    <text x="32" y="220">③ 다음 구조물을 <tspan class="hi mono">M3×6</tspan> 로 양쪽 결합</text>
+    <text x="32" y="248" class="wr">예외 — 관절 5(손목 회전)는 혼을 하나만 답니다</text>
+    <text x="32" y="268" class="wr">예외 — 12단계 이후 리더/팔로워가 갈립니다</text>
+  </g>
+
+  <!-- 나사 -->
+  <rect class="box" x="362" y="128" width="222" height="152" rx="8"/>
+  <text class="lbl" x="378" y="150" font-size="12.5">나사 세 종류</text>
+
+  <g>
+    <rect fill="var(--accent)" opacity="0.5" x="378" y="164" width="26" height="7" rx="2"/>
+    <text class="hi mono" x="414" y="172" font-size="11">M2×6</text>
+    <text class="sub" x="470" y="172" font-size="10.5">서보 고정 · 가장 작음</text>
+
+    <rect fill="var(--accent)" opacity="0.5" x="378" y="192" width="34" height="9" rx="2"/>
+    <text class="hi mono" x="420" y="201" font-size="11">M3×6</text>
+    <text class="sub" x="470" y="201" font-size="10.5">구조물 · 혼 고정</text>
+
+    <rect fill="var(--accent)" opacity="0.5" x="378" y="220" width="40" height="10" rx="2"/>
+    <text class="hi mono" x="426" y="229" font-size="11">M2.5×8</text>
+    <text class="sub" x="470" y="229" font-size="10.5">드라이버 보드</text>
+  </g>
+  <text class="sub" x="378" y="258" font-size="10.5">
+    관절이 뻑뻑하면 과조임입니다 —</text>
+  <text class="sub" x="378" y="272" font-size="10.5">
+    1/4바퀴 풀고 혼 정렬을 다시 보세요</text>
+</svg><figcaption>조립 전체 흐름과 관절마다 반복되는 패턴. <strong>서보 ID·중위 설정이 조립 앞에 있는 것</strong>이 이 그림의 요점입니다.</figcaption></figure>
+<div class="callout callout-info"><div class="callout-title">이 강좌의 그림에 대하여</div><div class="callout-body"><p>조립은 <strong>실물 사진과 영상이 있어야 확실합니다.</strong> 다만 남의 사진을 퍼오면 저작권 문제가 있고, 공유 링크(Artifact)에서는 외부 사이트 이미지가 아예 차단됩니다. 그래서 이 강좌는 <strong>개념과 순서를 직접 그린 도해</strong>로 설명하고, 실물은 아래 공식 자료로 안내합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>보고 싶은 것</th><th>어디에서</th></tr></thead><tbody><tr><td>관절 1~6 조립 <strong>영상</strong></td><td><a href="https://huggingface.co/docs/lerobot/so101" target="_blank" rel="noopener">LeRobot 공식 SO-101 조립 문서</a> — 관절별 mp4가 붙어 있습니다</td></tr><tr><td>부품 <strong>사진</strong>과 BOM</td><td><a href="https://github.com/TheRobotStudio/SO-ARM100" target="_blank" rel="noopener">TheRobotStudio/SO-ARM100</a></td></tr><tr><td>한국어 조립 <strong>사진</strong></td><td><a href="https://roboseasy.github.io/docs/physical-ai/lerobot/so-arm/hardware/assembly/" target="_blank" rel="noopener">RoboSEasy 조립 가이드</a></td></tr><tr><td>서보 ID 설정 <strong>영상</strong></td><td><a href="https://wiki.seeedstudio.com/lerobot_so100m_new/" target="_blank" rel="noopener">Seeed Studio 위키</a> · 원문 위키</td></tr></tbody></table></div></div></div>
+<h2 id="3d-프린팅">3D 프린팅<a class="anchor" href="#3d-프린팅">#</a></h2>
+<h3 id="권장-출력-설정">권장 출력 설정<a class="anchor" href="#권장-출력-설정">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>재료</td><td><strong>PLA+</strong> (PLA보다 인성이 높음)</td></tr><tr><td>레이어 높이</td><td>0.4mm 노즐 → <strong>0.2mm</strong> / 0.6mm 노즐 → <strong>0.4mm</strong></td></tr><tr><td>인필</td><td><strong>15%</strong></td></tr><tr><td>서포트</td><td><strong>Everywhere, 단 45° 이상 경사는 무시</strong></td></tr><tr><td>베드</td><td>220×220mm (Ender 계열) 또는 205×250mm (Prusa/UP 계열)</td></tr></tbody></table></div>
+<p>STL 파일은 <a href="https://github.com/TheRobotStudio/SO-ARM100" target="_blank" rel="noopener">TheRobotStudio/SO-ARM100</a> 저장소에 베드 크기별로 나뉘어 있습니다. 프린터가 없다면 출력 대행 서비스나 키트 벤더를 이용하세요.</p>
+<h3 id="출력-시-주의">출력 시 주의<a class="anchor" href="#출력-시-주의">#</a></h3>
+<ul><li><strong>ABS/PETG도 가능</strong>하지만 수축률이 달라 나사 구멍 치수가 어긋날 수 있습니다. 처음이라면 PLA+로 시작하세요.</li><li>첫 레이어 접착이 중요한 긴 부품(upper arm, lower arm)은 <strong>브림(brim)</strong> 을 넣으면 휨을 줄일 수 있습니다.</li><li>실패 시 재출력 시간이 부품당 2~6시간이므로, <strong>여분으로 그리퍼 조(jaw)와 모터 홀더는 한 벌 더</strong> 뽑아 두면 마음이 편합니다.</li></ul>
+<hr>
+<h2 id="서포트-제거-가장-중요한-준비-단계">서포트 제거 — 가장 중요한 준비 단계<a class="anchor" href="#서포트-제거-가장-중요한-준비-단계">#</a></h2>
+<p>원문 튜토리얼이 <strong>&quot;이 단계가 매우 중요하다&quot;</strong> 고 못 박는 부분입니다.</p>
+<blockquote><p>모든 구멍·홈·슬롯·격자를 하나하나 확인하세요. 특히 <strong>주사위 5의 눈처럼 다섯 개의 원이 모여 있는 패턴</strong>(원문은 마작패 &quot;오통五筒&quot;에 비유합니다)을 꼭 점검하세요.</p></blockquote>
+<p>서포트가 조금이라도 남아 있으면 <strong>나중에 나사가 들어가지 않습니다.</strong> 그 시점에는 이미 다른 부품이 조립되어 있어 되돌리기가 매우 번거롭습니다.</p>
+<div class="callout callout-tip"><div class="callout-title">제거 요령</div><div class="callout-body"><p>작은 일자 드라이버를 서포트 아래로 밀어 넣어 들어 올리면 깔끔하게 떨어집니다. 마무리는 3mm 드릴비트나 줄로 구멍을 한 번씩 훑어 주세요.</p></div></div>
+<p>서포트 제거가 끝나면, <strong>서보에 3핀 케이블을 미리 한 개씩 꽂아 두는 것</strong>을 권장합니다. 조립 후에는 손이 들어가지 않는 위치가 생깁니다.</p>
+<hr>
+<h2 id="조립-전-준비물">조립 전 준비물<a class="anchor" href="#조립-전-준비물">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>규격</th><th>용도</th></tr></thead><tbody><tr><td>나사</td><td><strong>M2×6mm</strong></td><td>서보를 프레임에 고정 (가장 작은 나사)</td></tr><tr><td>나사</td><td><strong>M3×6mm</strong></td><td>구조물 간 결합, 서보 혼(horn) 고정</td></tr><tr><td>나사</td><td><strong>M2.5×8mm</strong></td><td>드라이버 보드 고정</td></tr><tr><td>스탠드오프</td><td>M2.5 동봉</td><td>드라이버 보드 받침</td></tr><tr><td>공구</td><td>정밀 드라이버 세트</td><td>—</td></tr></tbody></table></div>
+<hr>
+<h2 id="관절별-조립">관절별 조립<a class="anchor" href="#관절별-조립">#</a></h2>
+<p>각 관절은 <strong>서보 혼(horn) 두 개를 먼저 설치</strong>하는 공통 패턴을 따릅니다. 위쪽 혼은 <strong>M3×6 나사로 고정</strong>하고, 아래쪽 혼은 나사 없이 끼우기만 합니다.</p>
+<h3 id="관절-1-베이스-어깨-회전-shoulderpan">관절 1 — 베이스 / 어깨 회전 (shoulder_pan)<a class="anchor" href="#관절-1-베이스-어깨-회전-shoulderpan">#</a></h3>
+<ol><li>서보 혼 두 개 설치. 위쪽 혼은 M3×6으로 고정.</li><li>1번 서보를 베이스에 넣습니다.</li><li><strong>M2×6 나사 4개</strong>로 서보를 고정합니다. (위에서 2개, 아래에서 2개)</li><li>첫 번째 모터 홀더를 밀어 넣고 <strong>M2×6 나사 2개</strong>(양쪽 하나씩)로 고정.</li><li>어깨(shoulder) 부품을 붙입니다.</li><li><strong>M3×6 나사 4개를 위에, 4개를 아래에</strong> 조여 어깨 부품을 고정.</li><li>어깨 모터 홀더를 추가합니다.</li></ol>
+<h3 id="관절-2-어깨-들기-shoulderlift">관절 2 — 어깨 들기 (shoulder_lift)<a class="anchor" href="#관절-2-어깨-들기-shoulderlift">#</a></h3>
+<ol><li>서보 혼 두 개 설치. 위쪽 혼은 M3×6으로 고정.</li><li>2번 서보를 <strong>위에서 아래로</strong> 밀어 넣습니다.</li><li><strong>M2×6 나사 4개</strong>로 고정.</li><li>상완(upper arm)을 <strong>양쪽에 M3×6 나사 4개씩</strong> 으로 결합.</li></ol>
+<h3 id="관절-3-팔꿈치-elbowflex">관절 3 — 팔꿈치 (elbow_flex)<a class="anchor" href="#관절-3-팔꿈치-elbowflex">#</a></h3>
+<ol><li>서보 혼 두 개 설치. 위쪽 혼은 M3×6으로 고정.</li><li>3번 서보를 넣고 <strong>M2×6 나사 4개</strong>로 고정.</li><li>전완(forearm)을 3번 서보에 <strong>양쪽 M3×6 나사 4개씩</strong> 으로 결합.</li></ol>
+<h3 id="관절-4-손목-굽힘-wristflex">관절 4 — 손목 굽힘 (wrist_flex)<a class="anchor" href="#관절-4-손목-굽힘-wristflex">#</a></h3>
+<ol><li>서보 혼 두 개 설치. 위쪽 혼은 M3×6으로 고정.</li><li>4번 모터 홀더를 밀어 끼웁니다.</li><li>4번 서보를 밀어 넣습니다.</li><li><strong>M2×6 나사 4개</strong>로 고정.</li></ol>
+<h3 id="관절-5-손목-회전-wristroll">관절 5 — 손목 회전 (wrist_roll)<a class="anchor" href="#관절-5-손목-회전-wristroll">#</a></h3>
+<ol><li>5번 서보를 손목 홀더에 넣고 <strong>앞쪽 M2×6 나사 2개</strong>로 고정.</li><li><strong>손목 서보에는 혼을 하나만</strong> 설치하고 M3×6 혼 나사로 고정합니다. (다른 관절과 다릅니다)</li><li>손목을 4번 서보에 <strong>양쪽 M3×6 나사 4개씩</strong> 으로 고정.</li></ol>
+<h3 id="관절-6-그리퍼-팔로워-또는-손잡이-리더">관절 6 — 그리퍼 (팔로워) 또는 손잡이 (리더)<a class="anchor" href="#관절-6-그리퍼-팔로워-또는-손잡이-리더">#</a></h3>
+<p>여기서부터 두 팔이 갈립니다.</p>
+<p><strong>팔로워 — 그리퍼</strong></p>
+<ol><li>그리퍼를 5번 서보에 붙이고, 손목의 서보 혼에 <strong>M3×6 나사 4개</strong>로 고정.</li><li>그리퍼 서보를 넣고 <strong>양쪽 M2×6 나사 2개씩</strong> 으로 고정.</li><li>그리퍼 서보에 혼 두 개 설치. 위쪽 혼은 M3×6으로 고정.</li><li>그리퍼 조(claw)를 설치하고 <strong>양쪽 M3×6 나사 4개씩</strong> 으로 고정.</li></ol>
+<p><strong>리더 — 손잡이와 트리거</strong></p>
+<ol><li>리더 홀더를 손목에 장착하고 <strong>M3×6 나사 4개</strong>로 고정.</li><li>손잡이(handle)를 리더 홀더에 <strong>M2×6 나사 1개</strong>로 부착.</li><li>그리퍼 서보를 넣고 양쪽 <strong>M2×6 나사 2개씩</strong>, 혼은 <strong>M3×6 혼 나사</strong>로 고정.</li><li>팔로워 트리거를 <strong>M3×6 나사 4개</strong>로 부착.</li></ol>
+<div class="callout callout-tip"><div class="callout-title">리더와 팔로워의 조립 차이</div><div class="callout-body"><p>원문 튜토리얼 표현으로는 <strong>&quot;12단계까지는 완전히 동일하고, 그 이후 말단 장치(그리퍼 vs 손잡이)만 다르다&quot;</strong> 입니다. 두 팔을 동시에 조립하면 같은 단계를 두 번씩 하면 되니 효율적입니다.</p></div></div>
+<hr>
+<h2 id="드라이버-보드-장착">드라이버 보드 장착<a class="anchor" href="#드라이버-보드-장착">#</a></h2>
+<ol><li><strong>M2.5 동 스탠드오프 4개</strong>를 베이스에 세웁니다.</li><li><strong>M2.5×8 나사 4개</strong>로 서보 드라이버 보드를 고정합니다.</li><li>보드를 팔 베이스에 장착하고 배선합니다.</li><li>ID=1인 첫 서보(shoulder_pan)의 3핀 케이블을 보드에 연결합니다.</li></ol>
+<hr>
+<h2 id="조립-후-검수-체크리스트">조립 후 검수 체크리스트<a class="anchor" href="#조립-후-검수-체크리스트">#</a></h2>
+<div class="callout callout-check"><div class="callout-title">전원을 넣기 전에 반드시 확인</div><div class="callout-body"><ul><li>[ ] 모든 관절을 손으로 돌려봤을 때 <strong>걸리는 구간 없이 부드러운가</strong>? 뻑뻑하면 나사를 과도하게 조였거나 서포트가 남은 것입니다.</li><li>[ ] 관절을 최대로 꺾었을 때 <strong>3D 프린팅 부품끼리 부딪히지 않는가</strong>?</li><li>[ ] <strong>케이블이 관절 사이에 끼이지 않는가</strong>? 특히 손목 회전 시 케이블이 감기는지 확인.</li><li>[ ] 서보 ID가 <strong>1~6으로 중복 없이</strong> 설정되어 있는가?</li><li>[ ] 전원 어댑터가 <strong>팔 종류와 맞는가</strong>? (리더 5V 6A / 팔로워 12V 5A)</li><li>[ ] 드라이버 보드 점퍼가 <strong>B 채널(USB)</strong> 에 있는가? (Waveshare 보드)</li><li>[ ] 테이블 클램프로 <strong>베이스가 단단히 고정</strong>되어 있는가?</li></ul></div></div>
+<div class="callout callout-danger"><div class="callout-title">클램프는 필수입니다</div><div class="callout-body"><p>팔로워 암은 고감속 서보의 토크가 강해서, 고정하지 않으면 팔이 움직일 때 <strong>베이스가 통째로 넘어갑니다.</strong> 테이블 클램프 2개로 반드시 고정하세요.</p></div></div>
+<hr>
+<h2 id="자주-겪는-조립-문제">자주 겪는 조립 문제<a class="anchor" href="#자주-겪는-조립-문제">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>나사가 안 들어감</td><td>서포트 잔여물</td><td>드릴비트로 구멍 정리</td></tr><tr><td>관절이 뻑뻑함</td><td>나사 과조임 / 혼 정렬 불량</td><td>나사를 1/4바퀴 풀고 혼 위치 재확인</td></tr><tr><td>서보 혼이 헛돎</td><td>위쪽 혼 M3 나사 누락</td><td>M3×6 혼 나사 체결</td></tr><tr><td>조립 후 한쪽 방향만 안 돎</td><td>중위 캘리브레이션 없이 조립</td><td>분해 후 5장 재수행</td></tr><tr><td>팔이 처짐</td><td>팔로워에 리더용 저감속 서보를 끼움</td><td>서보 모델 라벨(C001/C044/C046/C018) 재확인</td></tr><tr><td>통신은 되는데 안 움직임</td><td>외부 전원 미연결</td><td>어댑터 연결 확인</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch05.html">5장 STS3215 서보 ID와 보레이트 설정</a> — 조립을 시작하기 <em>전에</em> 읽어야 하는 장입니다. 이미 조립을 마쳤다면 웹 기반 도구로 ID를 확인하는 방법도 함께 다룹니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch03.html"><span>이전</span>하드웨어 완전 해부</a><a class="pager-next" href="ch05.html"><span>다음</span>STS3215 서보 ID와 보레이트 설정</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#작업-순서-한눈에">작업 순서 한눈에</a><a class="toc-l2" href="#3d-프린팅">3D 프린팅</a><a class="toc-l3" href="#권장-출력-설정">권장 출력 설정</a><a class="toc-l3" href="#출력-시-주의">출력 시 주의</a><a class="toc-l2" href="#서포트-제거-가장-중요한-준비-단계">서포트 제거 — 가장 중요한 준비 단계</a><a class="toc-l2" href="#조립-전-준비물">조립 전 준비물</a><a class="toc-l2" href="#관절별-조립">관절별 조립</a><a class="toc-l3" href="#관절-1-베이스-어깨-회전-shoulderpan">관절 1 — 베이스 / 어깨 회전 (shoulder_pan)</a><a class="toc-l3" href="#관절-2-어깨-들기-shoulderlift">관절 2 — 어깨 들기 (shoulder_lift)</a><a class="toc-l3" href="#관절-3-팔꿈치-elbowflex">관절 3 — 팔꿈치 (elbow_flex)</a><a class="toc-l3" href="#관절-4-손목-굽힘-wristflex">관절 4 — 손목 굽힘 (wrist_flex)</a><a class="toc-l3" href="#관절-5-손목-회전-wristroll">관절 5 — 손목 회전 (wrist_roll)</a><a class="toc-l3" href="#관절-6-그리퍼-팔로워-또는-손잡이-리더">관절 6 — 그리퍼 (팔로워) 또는 손잡이 (리더)</a><a class="toc-l2" href="#드라이버-보드-장착">드라이버 보드 장착</a><a class="toc-l2" href="#조립-후-검수-체크리스트">조립 후 검수 체크리스트</a><a class="toc-l2" href="#자주-겪는-조립-문제">자주 겪는 조립 문제</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

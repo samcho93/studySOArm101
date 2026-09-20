@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12. 시뮬레이션 데이터 수집 (LeIsaac) · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="Isaac Lab 기반 LeIsaac으로 가상 환경에서 원격조작 데이터를 모으고 LeRobot 포맷으로 변환합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" class="active" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch12">
+  <div class="lesson-head">
+    <div class="crumbs">PART 3 텔레오퍼레이션과 데이터 수집 &middot; 약 35분</div>
+    <h1><span class="lesson-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</h1>
+    <p class="lede">Isaac Lab 기반 LeIsaac으로 가상 환경에서 원격조작 데이터를 모으고 LeRobot 포맷으로 변환합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="왜-시뮬레이션인가">왜 시뮬레이션인가<a class="anchor" href="#왜-시뮬레이션인가">#</a></h2>
+<p>실기 데이터 수집은 정직하지만 느립니다. 에피소드 하나에 30초, 50개면 리셋 시간까지 합쳐 약 1시간. 물체를 매번 제자리에 갖다 놓는 것도 사람 몫입니다.</p>
+<p>시뮬레이션은 이 병목을 깨줍니다.</p>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>실기</th><th>시뮬레이션</th></tr></thead><tbody><tr><td>리셋</td><td>사람이 손으로</td><td><strong>자동, 즉시</strong></td></tr><tr><td>병렬 수집</td><td>불가</td><td><strong>수십 개 환경 동시</strong></td></tr><tr><td>물체 다양성</td><td>실제로 사야 함</td><td><strong>에셋 교체로 무한</strong></td></tr><tr><td>도메인 격차</td><td>없음</td><td><strong>있음 (Sim2Real gap)</strong></td></tr><tr><td>파손 위험</td><td>있음</td><td>없음</td></tr></tbody></table></div>
+<div class="callout callout-info"><div class="callout-title">현실적인 사용법</div><div class="callout-body"><p>시뮬레이션만으로 실기 성능을 내기는 어렵습니다. 보통 <strong>시뮬레이션으로 대량 사전학습 → 실기 데이터 소량으로 파인튜닝</strong> 하는 방식을 씁니다.</p></div></div>
+<hr>
+<h2 id="leisaac이란">LeIsaac이란<a class="anchor" href="#leisaac이란">#</a></h2>
+<p><strong>LeIsaac</strong>은 光轮智能(LightwheelAI, 라이트휠 AI)이 만든 도구로, NVIDIA <strong>Isaac Lab</strong> 안에서 <strong>SO101Leader(LeRobot 리더 암)</strong> 로 원격조작을 수행하고, 데이터 수집 → 변환 → 정책 학습까지 이어주는 프레임워크입니다.</p>
+<ul><li>저장소: <a href="https://github.com/LightwheelAI/leisaac" target="_blank" rel="noopener">github.com/LightwheelAI/leisaac</a></li><li>문서: <a href="https://lightwheelai.github.io/leisaac" target="_blank" rel="noopener">lightwheelai.github.io/leisaac</a></li></ul>
+<h3 id="핵심-기능">핵심 기능<a class="anchor" href="#핵심-기능">#</a></h3>
+<ul><li>Isaac Lab 안에서 <strong>SO101Follower를 로봇으로</strong> 사용하고, 여기에 맞는 원격조작 방식을 제공합니다.</li><li>수집한 <strong>HDF5 데이터를 LeRobot Dataset 포맷으로 변환</strong>하는 스크립트를 제공합니다.</li><li>시뮬레이션에서 모은 데이터로 <strong>GR00T N1.5 등을 파인튜닝해 실기에 배포</strong>하는 경로를 지원합니다.</li><li><strong>datagen 모듈</strong>로 모션 궤적을 프로그래밍 방식으로 생성할 수 있습니다.</li><li><strong>원격 텔레오퍼레이션</strong>(다른 PC에서 조작) 을 지원합니다.</li></ul>
+<hr>
+<h2 id="시스템-요구사항">시스템 요구사항<a class="anchor" href="#시스템-요구사항">#</a></h2>
+<div class="callout callout-warn"><div class="callout-title">하드웨어 장벽이 있습니다</div><div class="callout-body"><p>Isaac Lab은 <strong>NVIDIA RTX GPU가 필수</strong>입니다. (RTX 3070 이상 권장, VRAM 8GB+) macOS와 AMD GPU에서는 동작하지 않습니다. 이 장은 해당 환경이 없으면 <strong>읽고 넘어가도 괜찮습니다.</strong></p></div></div>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>요구</th></tr></thead><tbody><tr><td>OS</td><td>Ubuntu 22.04 / 24.04 (Windows도 가능하나 Ubuntu 권장)</td></tr><tr><td>GPU</td><td>NVIDIA RTX 계열, VRAM 8GB 이상</td></tr><tr><td>드라이버</td><td>Isaac Sim 요구 버전 이상</td></tr><tr><td>저장공간</td><td>약 50GB+ (Isaac Sim 에셋 포함)</td></tr><tr><td>입력 장치</td><td>SO-101 리더 암 (또는 키보드/게임패드)</td></tr></tbody></table></div>
+<hr>
+<h2 id="설치-개요">설치 개요<a class="anchor" href="#설치-개요">#</a></h2>
+<div class="callout callout-info"><div class="callout-title">버전 의존성이 큽니다</div><div class="callout-body"><p>Isaac Sim과 Isaac Lab은 버전 조합에 민감합니다. 아래는 개요이고, <strong>반드시 <a href="https://lightwheelai.github.io/leisaac" target="_blank" rel="noopener">LeIsaac 공식 문서</a>의 최신 설치 절차</strong>를 따르세요.</p></div></div>
+<h3 id="1-isaac-sim-isaac-lab">1. Isaac Sim + Isaac Lab<a class="anchor" href="#1-isaac-sim-isaac-lab">#</a></h3>
+<p>NVIDIA 공식 문서에 따라 Isaac Sim을 설치하고, Isaac Lab을 클론해 <code>./isaaclab.sh --install</code> 로 설정합니다.</p>
+<h3 id="2-leisaac-설치">2. LeIsaac 설치<a class="anchor" href="#2-leisaac-설치">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">git clone https://github.com/LightwheelAI/leisaac.git
+cd leisaac
+pip install -e .</code></pre></div>
+<h3 id="3-씬scene-에셋-준비">3. 씬(scene) 에셋 준비<a class="anchor" href="#3-씬scene-에셋-준비">#</a></h3>
+<p>LeIsaac은 주방·테이블 등 미리 만들어진 씬을 제공합니다. 문서 안내에 따라 에셋을 다운로드해 지정된 경로에 배치합니다.</p>
+<hr>
+<h2 id="데이터-수집-흐름">데이터 수집 흐름<a class="anchor" href="#데이터-수집-흐름">#</a></h2>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">[1] 씬 로드          Isaac Lab에 SO101Follower + 작업 물체 배치
+      ↓
+[2] 원격조작 수집     리더 암(또는 키보드)으로 시뮬 로봇 조작 → HDF5 저장
+      ↓
+[3] 포맷 변환        HDF5 → LeRobotDataset
+      ↓
+[4] 정책 학습        lerobot-train (13장) 또는 GR00T 파인튜닝
+      ↓
+[5] 실기 배포        lerobot-rollout (14장) + 실기 데이터로 파인튜닝</code></pre></div>
+<h3 id="1-원격조작으로-수집">1) 원격조작으로 수집<a class="anchor" href="#1-원격조작으로-수집">#</a></h3>
+<p>LeIsaac은 대략 다음 형태의 실행 스크립트를 제공합니다. (정확한 인자는 공식 문서 확인)</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/environments/teleoperation/teleop_se3_agent.py \
+    --task=LeIsaac-SO101-PickOrange-v0 \
+    --teleop_device=so101leader \
+    --port=/dev/ttyACM1 \
+    --num_envs=1 \
+    --device=cuda \
+    --enable_cameras \
+    --record \
+    --dataset_file=./datasets/pick_orange.hdf5</code></pre></div>
+<p>리더 암을 손으로 움직이면 시뮬레이션 속 팔로워가 따라옵니다. <strong>텔레오퍼레이션 감각은 실기와 똑같습니다.</strong></p>
+<div class="callout callout-tip"><div class="callout-title">리더 암 없이도 가능</div><div class="callout-body"><p><code>--teleop_device=keyboard</code> 로 키보드 조작이 가능합니다. 정밀도는 떨어지지만 파이프라인 학습 목적에는 충분합니다.</p></div></div>
+<h3 id="2-lerobot-포맷으로-변환">2) LeRobot 포맷으로 변환<a class="anchor" href="#2-lerobot-포맷으로-변환">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/convert/isaaclab2lerobot.py \
+    --dataset_file=./datasets/pick_orange.hdf5 \
+    --repo_id=myname/sim_pick_orange</code></pre></div>
+<p>변환 결과는 <a href="../lessons/ch11.html">11장</a>에서 본 것과 동일한 LeRobotDataset 구조입니다. 그래서 <strong>이후 학습 과정이 완전히 동일</strong>합니다.</p>
+<h3 id="3-학습">3) 학습<a class="anchor" href="#3-학습">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-train \
+    --dataset.repo_id=myname/sim_pick_orange \
+    --dataset.root=./datasets/sim_pick_orange \
+    --policy.type=act \
+    --policy.device=cuda \
+    --steps=60000 \
+    --output_dir=outputs/train/act_sim_pick</code></pre></div>
+<hr>
+<h2 id="sim2real-격차-줄이기">Sim2Real 격차 줄이기<a class="anchor" href="#sim2real-격차-줄이기">#</a></h2>
+<p>시뮬레이션에서 완벽하던 정책이 실기에서 무너지는 것은 매우 흔합니다. 원인은 대체로 세 가지입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>격차</th><th>증상</th><th>완화 방법</th></tr></thead><tbody><tr><td><strong>시각 격차</strong></td><td>렌더링 영상과 실제 카메라 영상의 질감·조명 차이</td><td>도메인 랜덤화(조명·텍스처·카메라 노이즈), 실기 데이터로 파인튜닝</td></tr><tr><td><strong>동역학 격차</strong></td><td>시뮬레이션이 마찰·백래시를 정확히 모사하지 못함</td><td>시스템 식별, 액션 노이즈 추가</td></tr><tr><td><strong>기구 격차</strong></td><td>시뮬 URDF와 실물 조립 오차</td><td>캘리브레이션 정확도 향상 (<a href="../lessons/ch08.html">8장</a>)</td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">실무에서 잘 통하는 레시피</div><div class="callout-body"><ol><li>시뮬레이션에서 <strong>수백~수천 에피소드</strong>를 자동 생성해 사전학습.</li><li>실기에서 <strong>20~50 에피소드</strong>만 수집.</li><li>사전학습 모델을 실기 데이터로 <strong>파인튜닝</strong>.</li></ol>
+<p>실기만으로 200 에피소드를 모으는 것보다 훨씬 적은 노력으로 비슷하거나 더 나은 성능이 나오는 경우가 많습니다.</p></div></div>
+<hr>
+<h2 id="대안-가벼운-시뮬레이션-경로">대안 — 가벼운 시뮬레이션 경로<a class="anchor" href="#대안-가벼운-시뮬레이션-경로">#</a></h2>
+<p>Isaac Lab이 무겁다면 다음 대안도 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>도구</th><th>특징</th><th>적합한 용도</th></tr></thead><tbody><tr><td><strong>MuJoCo</strong></td><td>가볍고 빠름. SO-ARM101 MJCF 모델 존재</td><td>기구학·제어 알고리즘 검증</td></tr><tr><td><strong>Gazebo Harmonic</strong></td><td>ROS 2 통합이 자연스러움</td><td>ROS 2 파이프라인 검증 (<a href="../lessons/ch19.html">19장</a>)</td></tr><tr><td><strong>이 강좌의 3D 시뮬레이터</strong></td><td>브라우저에서 즉시 실행, 설치 불필요</td><td>기구학 이해, 궤적 설계, 교육</td></tr><tr><td><strong>gym-pusht / gym-aloha</strong></td><td>LeRobot 내장 환경</td><td>정책 알고리즘 벤치마킹</td></tr></tbody></table></div>
+<p>LeRobot 내장 시뮬 환경 설치:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip install -e &quot;.[pusht]&quot;    # 또는 &quot;.[aloha]&quot;</code></pre></div>
+<div class="callout callout-task"><div class="callout-title">실습 — 브라우저 시뮬레이터로 궤적 만들기</div><div class="callout-body"><p>Isaac Lab이 없어도 궤적 데이터 수집의 감각은 익힐 수 있습니다.</p>
+<ol><li><a href="../sim/index.html">3D 시뮬레이터</a>의 <strong>&quot;녹화&quot; 탭</strong>을 엽니다.</li><li><strong>녹화 시작</strong>을 누르고 IK 타깃을 드래그해 큐브를 집어 상자에 넣는 동작을 수행합니다.</li><li><strong>녹화 정지</strong> 후 <strong>JSON 내보내기</strong>를 누르면 타임스탬프별 관절 값이 담긴 파일이 저장됩니다.</li><li>이 JSON은 <code>scripts/trajectory_to_lerobot.py</code>로 LeRobotDataset 형태로 변환해 볼 수 있습니다. (영상은 없으므로 상태-행동 학습 실험용)</li></ol>
+<p>실기 데이터 수집에서 &quot;일정한 속도로, 일관된 경로로&quot; 움직이는 것이 왜 어려운지 체감할 수 있습니다.</p></div></div>
+<hr>
+<h2 id="클라우드에서-돌리기">클라우드에서 돌리기<a class="anchor" href="#클라우드에서-돌리기">#</a></h2>
+<p>GPU가 없다면 클라우드 옵션도 있습니다.</p>
+<ul><li><strong>AWS + Isaac Sim + ROS 2</strong> — 원문 위키가 링크하는 <a href="https://github.com/ti/ti.github.io/blob/95261efa4f8bdb4c8571920762318a532e58c7fd/%E5%BC%80%E5%8F%91/isaac/aws-ros2-isaac.md" target="_blank" rel="noopener">참고 문서</a>에서 클라우드 로봇 개발 파이프라인을 다룹니다.</li><li><strong>Hugging Face Jobs</strong> — 데이터 수집은 못 하지만 학습은 클라우드 GPU로 가능합니다. (<a href="../lessons/ch13.html">13장</a>)</li></ul>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch13.html">13장 정책 모델 학습</a> — 실기든 시뮬이든, 모은 데이터로 정책을 학습시킵니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch11.html"><span>이전</span>실기 데이터셋 수집</a><a class="pager-next" href="ch13.html"><span>다음</span>정책 모델 학습</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#왜-시뮬레이션인가">왜 시뮬레이션인가</a><a class="toc-l2" href="#leisaac이란">LeIsaac이란</a><a class="toc-l3" href="#핵심-기능">핵심 기능</a><a class="toc-l2" href="#시스템-요구사항">시스템 요구사항</a><a class="toc-l2" href="#설치-개요">설치 개요</a><a class="toc-l3" href="#1-isaac-sim-isaac-lab">1. Isaac Sim + Isaac Lab</a><a class="toc-l3" href="#2-leisaac-설치">2. LeIsaac 설치</a><a class="toc-l3" href="#3-씬scene-에셋-준비">3. 씬(scene) 에셋 준비</a><a class="toc-l2" href="#데이터-수집-흐름">데이터 수집 흐름</a><a class="toc-l3" href="#1-원격조작으로-수집">1) 원격조작으로 수집</a><a class="toc-l3" href="#2-lerobot-포맷으로-변환">2) LeRobot 포맷으로 변환</a><a class="toc-l3" href="#3-학습">3) 학습</a><a class="toc-l2" href="#sim2real-격차-줄이기">Sim2Real 격차 줄이기</a><a class="toc-l2" href="#대안-가벼운-시뮬레이션-경로">대안 — 가벼운 시뮬레이션 경로</a><a class="toc-l2" href="#클라우드에서-돌리기">클라우드에서 돌리기</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

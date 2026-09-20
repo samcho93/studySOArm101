@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02. 로봇팔 기초 지식 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="자유도·링크·조인트·좌표계와 정기구학/역기구학을 시뮬레이터로 직접 확인하며 익힙니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" class="active" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch02">
+  <div class="lesson-head">
+    <div class="crumbs">PART 1 기초 다지기 &middot; 약 35분</div>
+    <h1><span class="lesson-no">02</span>로봇팔 기초 지식</h1>
+    <p class="lede">자유도·링크·조인트·좌표계와 정기구학/역기구학을 시뮬레이터로 직접 확인하며 익힙니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="이-장에서-다루는-것">이 장에서 다루는 것<a class="anchor" href="#이-장에서-다루는-것">#</a></h2>
+<p>로봇팔을 다루는 데 반드시 필요한 최소한의 이론입니다. 수식은 <strong>SO-ARM101의 실제 URDF 값</strong>으로만 설명하고, 모든 개념은 <a href="../sim/index.html">3D 시뮬레이터</a>에서 슬라이더를 움직여 바로 확인할 수 있게 구성했습니다.</p>
+<div class="callout callout-task"><div class="callout-title">준비</div><div class="callout-body"><p>새 탭에서 <a href="../sim/index.html">시뮬레이터</a>를 열고 이 문서와 나란히 놓으세요. &quot;조인트&quot; 탭의 슬라이더를 움직이며 읽으면 이해가 훨씬 빠릅니다.</p></div></div>
+<hr>
+<h2 id="링크와-조인트">링크와 조인트<a class="anchor" href="#링크와-조인트">#</a></h2>
+<p>로봇팔은 <strong>링크(link, 강체 부품)</strong> 가 <strong>조인트(joint, 관절)</strong> 로 연결된 사슬입니다. SO-ARM101의 사슬은 다음과 같습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">base_link
+  └─[shoulder_pan]──  shoulder_link
+        └─[shoulder_lift]── upper_arm_link
+              └─[elbow_flex]── lower_arm_link
+                    └─[wrist_flex]── wrist_link
+                          └─[wrist_roll]── gripper_link
+                                ├─[gripper]── moving_jaw_link
+                                └─(fixed)──── gripper_frame_link  ← TCP</code></pre></div>
+<figure class="fig" id="fig-link-chain"><svg viewBox="0 0 600 552" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="SO-ARM101의 링크와 조인트 사슬 구조">
+  <defs>
+    <marker id="lc-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- 링크 상자 -->
+  <g>
+    <rect class="box" x="60" y="20"  width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="96"  width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="172" width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="248" width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="324" width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="400" width="220" height="36" rx="7"/>
+    <rect class="box" x="16"  y="486" width="176" height="36" rx="7"/>
+    <rect class="box-hi" x="222" y="486" width="220" height="36" rx="7"/>
+  </g>
+
+  <g class="lbl mono" text-anchor="middle" font-size="12.5">
+    <text x="170" y="43">base_link</text>
+    <text x="170" y="119">shoulder_link</text>
+    <text x="170" y="195">upper_arm_link</text>
+    <text x="170" y="271">lower_arm_link</text>
+    <text x="170" y="347">wrist_link</text>
+    <text x="170" y="423">gripper_link</text>
+    <text x="104" y="509" font-size="11">moving_jaw_…_link</text>
+    <text class="hi" x="332" y="509">gripper_frame_link</text>
+  </g>
+
+  <!-- 연결선 -->
+  <g class="ln" stroke-width="1.6">
+    <path d="M170 56  V96"/>
+    <path d="M170 132 V172"/>
+    <path d="M170 208 V248"/>
+    <path d="M170 284 V324"/>
+    <path d="M170 360 V400"/>
+    <path d="M170 436 V462 H104 V486"/>
+    <path d="M170 462 H332 V486"/>
+  </g>
+
+  <!-- 조인트 마커 -->
+  <g>
+    <circle class="box-hi" cx="170" cy="76"  r="10"/>
+    <circle class="box-hi" cx="170" cy="152" r="10"/>
+    <circle class="box-hi" cx="170" cy="228" r="10"/>
+    <circle class="box-hi" cx="170" cy="304" r="10"/>
+    <circle class="box-hi" cx="170" cy="380" r="10"/>
+    <circle class="box-hi" cx="104" cy="474" r="9"/>
+    <rect   class="box"    x="324" y="466" width="16" height="16" rx="3"/>
+  </g>
+
+  <!-- 조인트 이름 · 한계 -->
+  <g>
+    <text class="hi mono" x="300" y="72"  font-size="12.5">shoulder_pan</text>
+    <text class="sub"     x="300" y="88">±110°  ·  서보 1</text>
+
+    <text class="hi mono" x="300" y="148" font-size="12.5">shoulder_lift</text>
+    <text class="sub"     x="300" y="164">±100°  ·  서보 2</text>
+
+    <text class="hi mono" x="300" y="224" font-size="12.5">elbow_flex</text>
+    <text class="sub"     x="300" y="240">±96.8°  ·  서보 3</text>
+
+    <text class="hi mono" x="300" y="300" font-size="12.5">wrist_flex</text>
+    <text class="sub"     x="300" y="316">±95°  ·  서보 4</text>
+
+    <text class="hi mono" x="300" y="376" font-size="12.5">wrist_roll</text>
+    <text class="sub"     x="300" y="392">−157°~163°  ·  서보 5</text>
+
+    <text class="hi mono" x="16" y="458" font-size="12">gripper</text>
+    <text class="sub"     x="16" y="472" font-size="10.5">−10°~100° · 서보 6</text>
+
+    <text class="tag mono" x="352" y="472" font-size="11">fixed</text>
+  </g>
+
+  <!-- 범례 -->
+  <g>
+    <circle class="box-hi" cx="470" cy="34" r="9"/>
+    <text class="sub" x="486" y="38">revolute 조인트</text>
+    <rect class="box" x="461" y="60" width="16" height="16" rx="3"/>
+    <text class="sub" x="486" y="72">fixed 조인트</text>
+    <rect class="box" x="461" y="86" width="16" height="16" rx="3"/>
+    <text class="sub" x="486" y="98">링크(강체)</text>
+  </g>
+
+  <!-- 자유도 표시 -->
+  <g>
+    <path class="ln-hi" stroke-width="1.4" stroke-dasharray="4 4"
+          d="M44 76 V380" marker-start="url(#lc-arrow)" marker-end="url(#lc-arrow)"
+          color="var(--accent)"/>
+    <text class="hi" x="38" y="228" font-size="11.5" text-anchor="end"
+          transform="rotate(-90 38 228)">공간 자세를 정하는 5자유도</text>
+  </g>
+</svg><figcaption><code>so101_new_calib.urdf</code> 가 정의하는 링크·조인트 사슬. 오른쪽 숫자는 실제 조인트 한계와 서보 ID입니다.</figcaption></figure>
+<ul><li><strong>조인트가 6개</strong>이므로 6자유도(DOF)입니다. 단, 그리퍼는 물건을 잡는 용도이지 <strong>위치 결정에 기여하지 않으므로</strong>, 공간 자세 결정에 쓰이는 것은 앞의 5개입니다.</li><li>마지막 <code>gripper_frame_link</code>는 조인트가 아니라 <strong>고정 프레임</strong>입니다. 이 지점을 <strong>TCP(Tool Center Point, 툴 중심점)</strong> 라 부르며, &quot;로봇이 어디를 집는가&quot;의 기준이 됩니다.</li></ul>
+<div class="callout callout-info"><div class="callout-title">5자유도의 의미</div><div class="callout-body"><p>공간상의 자세는 위치 3 + 방향 3 = 6자유도입니다. SO-ARM101은 5개뿐이므로 <strong>원하는 위치와 원하는 방향을 동시에 완전히 만족시킬 수는 없습니다.</strong> 보통 위치 3자유도를 우선 맞추고, 방향은 &quot;접근 방향(approach)&quot; 정도만 근사합니다. 시뮬레이터의 IK 모드가 정확히 이렇게 동작합니다.</p></div></div>
+<hr>
+<h2 id="조인트-한계-joint-limits">조인트 한계 (Joint Limits)<a class="anchor" href="#조인트-한계-joint-limits">#</a></h2>
+<p>URDF <code>so101_new_calib.urdf</code>에 정의된 실제 값입니다. 이 범위를 넘기면 3D 프린팅 부품이 서로 간섭하거나 서보가 손상됩니다.</p>
+<div class="table-wrap"><table><thead><tr><th>조인트</th><th>한국어</th><th>하한 (rad)</th><th>상한 (rad)</th><th>하한 (°)</th><th>상한 (°)</th><th>가동범위</th></tr></thead><tbody><tr><td><code>shoulder_pan</code></td><td>어깨 회전</td><td>-1.91986</td><td>1.91986</td><td>-110.0°</td><td>110.0°</td><td>220°</td></tr><tr><td><code>shoulder_lift</code></td><td>어깨 들기</td><td>-1.74533</td><td>1.74533</td><td>-100.0°</td><td>100.0°</td><td>200°</td></tr><tr><td><code>elbow_flex</code></td><td>팔꿈치</td><td>-1.69000</td><td>1.69000</td><td>-96.8°</td><td>96.8°</td><td>194°</td></tr><tr><td><code>wrist_flex</code></td><td>손목 굽힘</td><td>-1.65806</td><td>1.65806</td><td>-95.0°</td><td>95.0°</td><td>190°</td></tr><tr><td><code>wrist_roll</code></td><td>손목 회전</td><td>-2.74385</td><td>2.84121</td><td>-157.2°</td><td>162.8°</td><td>320°</td></tr><tr><td><code>gripper</code></td><td>그리퍼</td><td>-0.174533</td><td>1.74533</td><td>-10.0°</td><td>100.0°</td><td>110°</td></tr></tbody></table></div>
+<figure class="fig" id="fig-joint-limits"><svg viewBox="0 0 600 386" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="SO-ARM101 조인트별 가동범위">
+  <!-- 자동 생성 — content/figures/gen_figures.py -->
+  <path fill="var(--accent)" opacity="0.30" d="M105.0 96.0 L56.1 113.8 A52.0 52.0 0 1 1 153.9 113.8 Z"/><circle stroke="var(--border)" stroke-width="1.2" fill="none" cx="105.0" cy="96.0" r="52.0"/><path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3" d="M105.0 96.0 L105.0 38.0"/><path stroke="var(--accent)" stroke-width="1.8" d="M105.0 96.0 L56.1 113.8"/><text class="hi" x="40.2" y="123.6" font-size="11" text-anchor="end">-110°</text><path stroke="var(--accent)" stroke-width="1.8" d="M105.0 96.0 L153.9 113.8"/><text class="hi" x="169.8" y="123.6" font-size="11" text-anchor="start">110°</text><circle class="box-hi" cx="105.0" cy="96.0" r="5"/><text class="lbl mono" x="105.0" y="186.0" text-anchor="middle" font-size="12">shoulder_pan</text><text class="sub" x="105.0" y="201.0" text-anchor="middle">어깨 회전 · 서보 1 · 가동 220°</text><path fill="var(--accent)" opacity="0.30" d="M300.0 96.0 L248.8 105.0 A52.0 52.0 0 1 1 351.2 105.0 Z"/><circle stroke="var(--border)" stroke-width="1.2" fill="none" cx="300.0" cy="96.0" r="52.0"/><path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3" d="M300.0 96.0 L300.0 38.0"/><path stroke="var(--accent)" stroke-width="1.8" d="M300.0 96.0 L248.8 105.0"/><text class="hi" x="232.0" y="112.0" font-size="11" text-anchor="end">-100°</text><path stroke="var(--accent)" stroke-width="1.8" d="M300.0 96.0 L351.2 105.0"/><text class="hi" x="368.0" y="112.0" font-size="11" text-anchor="start">100°</text><circle class="box-hi" cx="300.0" cy="96.0" r="5"/><text class="lbl mono" x="300.0" y="186.0" text-anchor="middle" font-size="12">shoulder_lift</text><text class="sub" x="300.0" y="201.0" text-anchor="middle">어깨 들기 · 서보 2 · 가동 200°</text><path fill="var(--accent)" opacity="0.30" d="M495.0 96.0 L443.4 102.2 A52.0 52.0 0 1 1 546.6 102.2 Z"/><circle stroke="var(--border)" stroke-width="1.2" fill="none" cx="495.0" cy="96.0" r="52.0"/><path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3" d="M495.0 96.0 L495.0 38.0"/><path stroke="var(--accent)" stroke-width="1.8" d="M495.0 96.0 L443.4 102.2"/><text class="hi" x="426.5" y="108.2" font-size="11" text-anchor="end">-97°</text><path stroke="var(--accent)" stroke-width="1.8" d="M495.0 96.0 L546.6 102.2"/><text class="hi" x="563.5" y="108.2" font-size="11" text-anchor="start">97°</text><circle class="box-hi" cx="495.0" cy="96.0" r="5"/><text class="lbl mono" x="495.0" y="186.0" text-anchor="middle" font-size="12">elbow_flex</text><text class="sub" x="495.0" y="201.0" text-anchor="middle">팔꿈치 · 서보 3 · 가동 194°</text><path fill="var(--accent)" opacity="0.30" d="M105.0 264.0 L53.2 268.5 A52.0 52.0 0 1 1 156.8 268.5 Z"/><circle stroke="var(--border)" stroke-width="1.2" fill="none" cx="105.0" cy="264.0" r="52.0"/><path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3" d="M105.0 264.0 L105.0 206.0"/><path stroke="var(--accent)" stroke-width="1.8" d="M105.0 264.0 L53.2 268.5"/><text class="hi" x="36.3" y="274.0" font-size="11" text-anchor="end">-95°</text><path stroke="var(--accent)" stroke-width="1.8" d="M105.0 264.0 L156.8 268.5"/><text class="hi" x="173.7" y="274.0" font-size="11" text-anchor="start">95°</text><circle class="box-hi" cx="105.0" cy="264.0" r="5"/><text class="lbl mono" x="105.0" y="354.0" text-anchor="middle" font-size="12">wrist_flex</text><text class="sub" x="105.0" y="369.0" text-anchor="middle">손목 굽힘 · 서보 4 · 가동 190°</text><path fill="var(--accent)" opacity="0.30" d="M300.0 264.0 L279.9 311.9 A52.0 52.0 0 1 1 315.4 313.7 Z"/><circle stroke="var(--border)" stroke-width="1.2" fill="none" cx="300.0" cy="264.0" r="52.0"/><path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3" d="M300.0 264.0 L300.0 206.0"/><path stroke="var(--accent)" stroke-width="1.8" d="M300.0 264.0 L279.9 311.9"/><text class="hi" x="273.3" y="331.6" font-size="11" text-anchor="end">-157°</text><path stroke="var(--accent)" stroke-width="1.8" d="M300.0 264.0 L315.4 313.7"/><text class="hi" x="320.4" y="333.9" font-size="11" text-anchor="start">163°</text><circle class="box-hi" cx="300.0" cy="264.0" r="5"/><text class="lbl mono" x="300.0" y="354.0" text-anchor="middle" font-size="12">wrist_roll</text><text class="sub" x="300.0" y="369.0" text-anchor="middle">손목 회전 · 서보 5 · 가동 320°</text><path fill="var(--accent)" opacity="0.30" d="M495.0 264.0 L486.0 212.8 A52.0 52.0 0 0 1 546.2 273.0 Z"/><circle stroke="var(--border)" stroke-width="1.2" fill="none" cx="495.0" cy="264.0" r="52.0"/><path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3" d="M495.0 264.0 L495.0 206.0"/><path stroke="var(--accent)" stroke-width="1.8" d="M495.0 264.0 L486.0 212.8"/><text class="hi" x="483.0" y="200.0" font-size="11" text-anchor="end">-10°</text><path stroke="var(--accent)" stroke-width="1.8" d="M495.0 264.0 L546.2 273.0"/><text class="hi" x="563.0" y="280.0" font-size="11" text-anchor="start">100°</text><circle class="box-hi" cx="495.0" cy="264.0" r="5"/><text class="lbl mono" x="495.0" y="354.0" text-anchor="middle" font-size="12">gripper</text><text class="sub" x="495.0" y="369.0" text-anchor="middle">그리퍼 · 서보 6 · 가동 110°</text>
+</svg><figcaption>각 조인트의 가동범위를 부채꼴로 그린 것. 점선이 0°, 초록 영역이 움직일 수 있는 범위입니다. <strong>URDF 값으로 직접 계산해 그렸습니다.</strong></figcaption></figure>
+<div class="callout callout-warn"><div class="callout-title">실물은 더 좁을 수 있습니다</div><div class="callout-body"><p>URDF의 한계는 <strong>설계값</strong>입니다. 실제 조립 상태·케이블 배선·카메라 마운트 때문에 물리적 한계가 더 좁아지는 경우가 흔합니다. 특히 <code>wrist_roll</code>은 서보 레지스터상 더 돌 수 있어도 <strong>케이블이 감겨 약 ±79° 부근에서 기계적으로 막히는</strong> 사례가 보고됩니다. 처음 구동할 때는 속도를 낮추고 한 관절씩 확인하세요.</p></div></div>
+<hr>
+<h2 id="좌표계와-변환">좌표계와 변환<a class="anchor" href="#좌표계와-변환">#</a></h2>
+<h3 id="urdf의-조인트-정의-읽는-법">URDF의 조인트 정의 읽는 법<a class="anchor" href="#urdf의-조인트-정의-읽는-법">#</a></h3>
+<p>URDF의 조인트 한 개는 이렇게 생겼습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;elbow_flex&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;-0.11257 -0.028 0&quot; rpy=&quot;0 0 1.5708&quot;/&gt;
+  &lt;parent link=&quot;upper_arm_link&quot;/&gt;
+  &lt;child  link=&quot;lower_arm_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-1.69&quot; upper=&quot;1.69&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<p>읽는 순서는 이렇습니다.</p>
+<ol><li><strong>부모 링크 좌표계</strong>에서 출발한다.</li><li><code>origin</code>의 <code>xyz</code>만큼 <strong>평행이동</strong>하고, <code>rpy</code>(roll-pitch-yaw, 고정축 X→Y→Z 순)만큼 <strong>회전</strong>해서 조인트 프레임을 만든다.</li><li>그 프레임에서 <code>axis</code>(여기선 +Z) 를 중심으로 <strong>조인트 각도 θ만큼 회전</strong>하면 자식 링크 좌표계가 된다.</li></ol>
+<p>행렬로 쓰면 다음과 같습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">T_parent→child(θ) = Translate(xyz) · RPY(rpy) · RotZ(θ)</code></pre></div>
+<p>SO-ARM101은 <strong>모든 조인트의 회전축이 자기 좌표계의 +Z</strong> 이므로 계산이 매우 단순합니다.</p>
+<h3 id="기준-좌표계">기준 좌표계<a class="anchor" href="#기준-좌표계">#</a></h3>
+<ul><li><code>base_link</code> 원점은 베이스 바닥 중심입니다. <strong>+Z가 위쪽</strong>입니다.</li><li>ROS 2에서는 이 관계를 <code>robot_state_publisher</code>가 <strong>TF 트리</strong>로 브로드캐스트합니다. RViz2에서 &quot;TF&quot; 디스플레이를 켜면 위 사슬이 그대로 보입니다. (<a href="../lessons/ch16.html">16장</a>)</li></ul>
+<hr>
+<h2 id="정기구학-forward-kinematics-fk">정기구학 (Forward Kinematics, FK)<a class="anchor" href="#정기구학-forward-kinematics-fk">#</a></h2>
+<blockquote><p><strong>조인트 각도를 알 때 → TCP가 어디 있는지 구하는 것.</strong></p></blockquote>
+<p>방법은 위 변환 행렬을 <strong>베이스부터 TCP까지 순서대로 곱하는 것</strong>이 전부입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">T_base→tool(q) = T_pan(q1) · T_lift(q2) · T_elbow(q3) · T_wristflex(q4) · T_wristroll(q5) · T_toolfixed</code></pre></div>
+<p>TCP의 위치는 결과 행렬의 4번째 열(평행이동 성분)이고, 방향은 왼쪽 위 3×3 회전 성분입니다.</p>
+<div class="callout callout-task"><div class="callout-title">실습 1 — FK 확인하기</div><div class="callout-body"><p>시뮬레이터에서 <strong>&quot;Zero&quot; 프리셋</strong>을 누르고 TCP 좌표를 확인하세요. 그다음 <code>shoulder_pan</code> 하나만 +90°로 돌려 보세요.</p>
+<ul><li>TCP의 <strong>높이(z)는 거의 변하지 않고</strong> x·y만 바뀝니다. → <code>shoulder_pan</code>이 수직축 회전이기 때문입니다.</li><li>이번엔 <code>shoulder_lift</code>만 움직여 보세요. <strong>z가 크게 변합니다.</strong></li></ul>
+<p>FK는 항상 <strong>해가 하나</strong>입니다. 조인트 각도가 정해지면 TCP는 반드시 한 곳입니다.</p></div></div>
+<p>파이썬으로 직접 계산해 보고 싶다면 저장소의 <code>scripts/so101_fk_ik.py</code>를 실행하세요.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/so101_fk_ik.py --fk 0 -30 45 60 0</code></pre></div>
+<hr>
+<h2 id="역기구학-inverse-kinematics-ik">역기구학 (Inverse Kinematics, IK)<a class="anchor" href="#역기구학-inverse-kinematics-ik">#</a></h2>
+<blockquote><p><strong>TCP를 여기에 두고 싶을 때 → 조인트 각도를 구하는 것.</strong></p></blockquote>
+<p>FK와 달리 IK는 어렵습니다.</p>
+<ul><li><strong>해가 여러 개일 수 있습니다.</strong> (팔꿈치를 위로 꺾어도, 아래로 꺾어도 같은 지점에 닿음)</li><li><strong>해가 아예 없을 수 있습니다.</strong> (작업영역 밖, 혹은 조인트 한계 때문)</li><li><strong>특이점(singularity)</strong> 에서는 해가 불안정해집니다. 팔을 완전히 편 자세가 대표적입니다.</li></ul>
+<figure class="fig" id="fig-fk-ik"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="정기구학과 역기구학의 방향 비교">
+  <defs>
+    <marker id="fi-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- FK -->
+  <g>
+    <rect class="box-hi" x="16" y="20" width="568" height="112" rx="9"/>
+    <text class="hi" x="32" y="44" font-size="13" font-weight="700">정기구학 FK — 쉽다</text>
+
+    <rect class="box" x="36" y="60" width="150" height="50" rx="7"/>
+    <text class="lbl" x="111" y="80" text-anchor="middle" font-size="12.5">조인트 각도</text>
+    <text class="sub mono" x="111" y="97" text-anchor="middle">q₁ … q₅</text>
+
+    <path class="ln-hi" stroke-width="2" d="M196 85 H288" marker-end="url(#fi-a)"
+          color="var(--accent)"/>
+    <text class="sub" x="242" y="76" text-anchor="middle">행렬 곱</text>
+
+    <rect class="box" x="300" y="60" width="150" height="50" rx="7"/>
+    <text class="lbl" x="375" y="80" text-anchor="middle" font-size="12.5">TCP 위치·자세</text>
+    <text class="sub mono" x="375" y="97" text-anchor="middle">x y z · rpy</text>
+
+    <text class="hi" x="470" y="80" font-size="12.5">해가 항상 1개</text>
+    <text class="sub" x="470" y="97">계산 즉시 끝</text>
+  </g>
+
+  <!-- IK -->
+  <g>
+    <rect class="box" x="16" y="152" width="568" height="132" rx="9"/>
+    <text class="wr" x="32" y="176" font-size="13" font-weight="700">역기구학 IK — 어렵다</text>
+
+    <rect class="box" x="300" y="192" width="150" height="50" rx="7"/>
+    <text class="lbl" x="375" y="212" text-anchor="middle" font-size="12.5">조인트 각도</text>
+    <text class="sub mono" x="375" y="229" text-anchor="middle">q₁ … q₅</text>
+
+    <path class="ln" stroke="var(--warn)" stroke-width="2" d="M288 217 H196"
+          marker-end="url(#fi-a)" color="var(--warn)"/>
+    <text class="sub" x="242" y="208" text-anchor="middle">반복 수치해</text>
+
+    <rect class="box" x="36" y="192" width="150" height="50" rx="7"/>
+    <text class="lbl" x="111" y="212" text-anchor="middle" font-size="12.5">원하는 TCP</text>
+    <text class="sub mono" x="111" y="229" text-anchor="middle">x y z</text>
+
+    <text class="wr" x="470" y="200" font-size="12">해가 0개 · 1개 · 여러 개</text>
+    <text class="sub" x="470" y="217">작업영역 밖이면 없음</text>
+    <text class="sub" x="470" y="233">특이점에서 불안정</text>
+
+    <text class="sub" x="32" y="268">이 강좌는 감쇠 최소자승(DLS)으로 풉니다 — 오차를 보고 조금씩 각도를 고쳐 나가는 반복법</text>
+  </g>
+</svg><figcaption>같은 기구학이지만 방향이 반대입니다. 한쪽은 계산 한 번, 다른 쪽은 반복 탐색입니다.</figcaption></figure>
+<h3 id="이-강좌에서-쓰는-방법-dls">이 강좌에서 쓰는 방법: DLS<a class="anchor" href="#이-강좌에서-쓰는-방법-dls">#</a></h3>
+<p>시뮬레이터와 <code>scripts/so101_fk_ik.py</code>는 <strong>감쇠 최소자승법(Damped Least Squares, Levenberg-Marquardt)</strong> 을 씁니다. 개념은 간단합니다.</p>
+<ol><li>현재 자세에서 FK를 계산해 <strong>목표까지의 오차 e</strong>를 구한다.</li><li>각 조인트를 아주 조금 움직였을 때 TCP가 얼마나 움직이는지 표로 만든다 → <strong>야코비안 J</strong>.</li><li><code>Δq = (JᵀJ + λ²I)⁻¹ Jᵀ e</code> 만큼 조인트를 움직인다. λ는 특이점 근처에서 해가 폭주하지 않게 잡아주는 <strong>감쇠 계수</strong>입니다.</li><li>오차가 충분히 작아질 때까지 반복한다.</li></ol>
+<div class="callout callout-task"><div class="callout-title">실습 2 — IK 만져보기</div><div class="callout-body"><p>시뮬레이터의 <strong>&quot;IK&quot; 탭</strong>을 켜고 빨간 목표 구(球)를 드래그해 보세요.</p>
+<ol><li>팔이 닿는 범위에서는 부드럽게 따라옵니다.</li><li>베이스에서 멀리 끌면 팔이 쭉 뻗은 채 <strong>더는 따라오지 못합니다</strong> → 작업영역의 경계입니다. 상태 표시에 &quot;도달 불가&quot;가 뜹니다.</li><li>목표를 베이스 바로 위로 끌어 보세요. 해가 여러 개라 팔이 <strong>덜덜 떨리거나 갑자기 자세가 뒤집히는</strong> 현상을 볼 수 있습니다 → 특이점입니다.</li></ol></div></div>
+<div class="callout callout-tip"><div class="callout-title">MoveIt 2와의 관계</div><div class="callout-body"><p>18장에서 쓸 MoveIt 2는 IK 솔버(KDL/TRAC-IK)와 <strong>충돌 회피 경로 계획(OMPL)</strong> 까지 함께 제공합니다. 여기서 배운 IK는 그 내부에서 벌어지는 일을 이해하기 위한 것입니다.</p></div></div>
+<hr>
+<h2 id="작업영역-workspace">작업영역 (Workspace)<a class="anchor" href="#작업영역-workspace">#</a></h2>
+<p>조인트 한계 안에서 TCP가 도달할 수 있는 3차원 공간입니다. SO-ARM101의 대략적인 수치는 다음과 같습니다.</p>
+<ul><li>베이스 중심에서 TCP까지 <strong>최대 수평 도달 약 48 cm</strong> (URDF 조인트 한계 기준)</li><li><strong>최대 높이 약 53 cm</strong></li><li>좌우 회전 범위 <strong>±110°</strong></li><li>실용적인 작업 영역은 이보다 좁습니다. 팔을 거의 다 편 자세는 토크가 부족하고 정밀도도 떨어지므로, <strong>반경 15~30 cm 구간</strong>에서 작업물을 배치하는 것이 안정적입니다.</li></ul>
+<figure class="fig" id="fig-workspace-section"><svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="SO-ARM101 TCP 도달 영역의 수평거리-높이 단면">
+  <!-- 자동 생성 — content/figures/gen_figures.py -->
+  <rect class="box" x="62" y="26" width="500" height="330" rx="4"/>
+
+  <!-- 도달 가능 영역 (400,000 샘플) -->
+  <g fill="var(--accent)" opacity="0.30">
+    <rect x="62.0" y="82.3" width="346.8" height="4.6"/><rect x="62.0" y="42.1" width="183.3" height="4.6"/><rect x="90.8" y="130.6" width="404.4" height="4.6"/><rect x="62.0" y="191.0" width="462.1" height="4.6"/><rect x="62.0" y="78.3" width="337.1" height="4.6"/><rect x="62.0" y="170.9" width="462.1" height="4.6"/><rect x="62.0" y="178.9" width="462.1" height="4.6"/><rect x="62.0" y="46.1" width="202.5" height="4.6"/><rect x="62.0" y="183.0" width="462.1" height="4.6"/><rect x="81.2" y="323.8" width="298.7" height="4.6"/><rect x="62.0" y="295.6" width="394.8" height="4.6"/><rect x="62.0" y="70.3" width="308.3" height="4.6"/><rect x="62.0" y="110.5" width="404.4" height="4.6"/><rect x="71.6" y="211.1" width="452.5" height="4.6"/><rect x="62.0" y="283.6" width="414.1" height="4.6"/><rect x="62.0" y="255.4" width="442.9" height="4.6"/><rect x="62.0" y="219.2" width="462.1" height="4.6"/><rect x="81.2" y="126.6" width="404.4" height="4.6"/><rect x="62.0" y="66.2" width="298.7" height="4.6"/><rect x="62.0" y="62.2" width="289.1" height="4.6"/><rect x="62.0" y="98.4" width="375.6" height="4.6"/><rect x="90.8" y="142.7" width="29.4" height="4.6"/><rect x="129.3" y="142.7" width="375.6" height="4.6"/><rect x="62.0" y="235.3" width="462.1" height="4.6"/><rect x="62.0" y="174.9" width="462.1" height="4.6"/><rect x="62.0" y="54.2" width="250.6" height="4.6"/><rect x="62.0" y="239.3" width="462.1" height="4.6"/><rect x="62.0" y="94.4" width="375.6" height="4.6"/><rect x="62.0" y="166.9" width="452.5" height="4.6"/><rect x="62.0" y="287.6" width="404.4" height="4.6"/><rect x="100.5" y="134.7" width="394.8" height="4.6"/><rect x="62.0" y="158.8" width="452.5" height="4.6"/><rect x="62.0" y="223.2" width="462.1" height="4.6"/><rect x="71.6" y="203.1" width="452.5" height="4.6"/><rect x="62.0" y="299.7" width="385.2" height="4.6"/><rect x="62.0" y="102.5" width="385.2" height="4.6"/><rect x="62.0" y="114.5" width="404.4" height="4.6"/><rect x="62.0" y="303.7" width="375.6" height="4.6"/><rect x="62.0" y="86.4" width="356.4" height="4.6"/><rect x="62.0" y="275.5" width="423.7" height="4.6"/><rect x="62.0" y="74.3" width="327.5" height="4.6"/><rect x="62.0" y="122.6" width="414.1" height="4.6"/><rect x="62.0" y="315.8" width="346.8" height="4.6"/><rect x="62.0" y="118.6" width="414.1" height="4.6"/><rect x="62.0" y="50.1" width="231.4" height="4.6"/><rect x="71.6" y="199.0" width="452.5" height="4.6"/><rect x="62.0" y="146.7" width="442.9" height="4.6"/><rect x="62.0" y="267.5" width="433.3" height="4.6"/><rect x="62.0" y="227.2" width="462.1" height="4.6"/><rect x="62.0" y="311.7" width="356.4" height="4.6"/><rect x="71.6" y="187.0" width="452.5" height="4.6"/><rect x="62.0" y="90.4" width="366.0" height="4.6"/><rect x="62.0" y="247.3" width="452.5" height="4.6"/><rect x="62.0" y="279.5" width="414.1" height="4.6"/><rect x="62.0" y="150.8" width="442.9" height="4.6"/><rect x="62.0" y="231.2" width="462.1" height="4.6"/><rect x="62.0" y="207.1" width="462.1" height="4.6"/><rect x="62.0" y="251.4" width="452.5" height="4.6"/><rect x="110.1" y="138.7" width="385.2" height="4.6"/><rect x="62.0" y="58.2" width="269.8" height="4.6"/><rect x="62.0" y="243.3" width="452.5" height="4.6"/><rect x="71.6" y="195.0" width="452.5" height="4.6"/><rect x="62.0" y="215.1" width="462.1" height="4.6"/><rect x="62.0" y="106.5" width="394.8" height="4.6"/><rect x="81.2" y="327.8" width="279.4" height="4.6"/><rect x="62.0" y="307.7" width="366.0" height="4.6"/><rect x="62.0" y="271.5" width="423.7" height="4.6"/><rect x="62.0" y="263.4" width="433.3" height="4.6"/><rect x="62.0" y="162.8" width="452.5" height="4.6"/><rect x="62.0" y="259.4" width="442.9" height="4.6"/><rect x="62.0" y="154.8" width="452.5" height="4.6"/><rect x="62.0" y="319.8" width="337.1" height="4.6"/><rect x="100.5" y="331.9" width="241.0" height="4.6"/><rect x="62.0" y="291.6" width="404.4" height="4.6"/><rect x="62.0" y="38.1" width="135.2" height="4.6"/><rect x="119.7" y="335.9" width="192.9" height="4.6"/><rect x="167.8" y="339.9" width="96.8" height="4.6"/>
+  </g>
+
+  <!-- 테이블 면 -->
+  <path stroke="var(--warn)" stroke-width="1.6" stroke-dasharray="5 4"
+        d="M62 251.4 H562"/>
+  <text class="wr" x="558" y="243.4" text-anchor="end"
+        font-size="11.5">테이블 면 z = 0</text>
+
+  <!-- 실용 작업 구간 -->
+  <rect fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="4 3"
+        x="206.2" y="130.6"
+        width="144.2" height="120.7" rx="3"/>
+  <text class="hi" x="278.3" y="122.6" text-anchor="middle"
+        font-size="11.5">실용 작업 구간</text>
+
+  <!-- 베이스 -->
+  <rect class="box" x="59.0" y="227.2" width="14" height="24.1" rx="2"/>
+  <text class="tag" x="78" y="239.3" font-size="11">베이스</text>
+
+  <!-- 최대 도달 -->
+  <path class="ln" stroke="var(--text-faint)" stroke-width="1.2" stroke-dasharray="3 3"
+        d="M523.0 26 V356"/>
+  <text class="lbl" x="515.0" y="44" text-anchor="end"
+        font-size="11.5">최대 48 cm</text>
+
+  <!-- 축 -->
+  <g class="ln" stroke="var(--border)" stroke-width="1"><path d="M62.0 356.0 V361.0"/><text class="sub" x="62.0" y="375.0" text-anchor="middle">0</text><path d="M158.2 356.0 V361.0"/><text class="sub" x="158.2" y="375.0" text-anchor="middle">10</text><path d="M254.3 356.0 V361.0"/><text class="sub" x="254.3" y="375.0" text-anchor="middle">20</text><path d="M350.5 356.0 V361.0"/><text class="sub" x="350.5" y="375.0" text-anchor="middle">30</text><path d="M446.6 356.0 V361.0"/><text class="sub" x="446.6" y="375.0" text-anchor="middle">40</text><path d="M542.8 356.0 V361.0"/><text class="sub" x="542.8" y="375.0" text-anchor="middle">50</text><path d="M57.0 331.9 H62.0"/><text class="sub" x="52.0" y="335.9" text-anchor="end">-20</text><path d="M57.0 251.4 H62.0"/><text class="sub" x="52.0" y="255.4" text-anchor="end">0</text><path d="M57.0 170.9 H62.0"/><text class="sub" x="52.0" y="174.9" text-anchor="end">20</text><path d="M57.0 90.4 H62.0"/><text class="sub" x="52.0" y="94.4" text-anchor="end">40</text></g>
+  <text class="sub" x="312" y="396" text-anchor="middle">
+    베이스 중심에서의 수평 거리 (cm)</text>
+  <text class="sub" x="18" y="191" text-anchor="middle"
+        transform="rotate(-90 18 191)">TCP 높이 z (cm)</text>
+
+  <text class="sub" x="62" y="16">조인트 한계만 고려한 이론 영역 · 자기 충돌과 케이블 간섭은 반영하지 않음</text>
+</svg><figcaption>무작위 자세 40만 개를 계산해 (수평거리, 높이) 평면에 찍은 <strong>실제 도달 영역</strong>입니다. 테이블 면 아래로도 계산상 내려가지만 실제로는 책상에 막힙니다.</figcaption></figure>
+<div class="callout callout-task"><div class="callout-title">실습 3 — 작업영역 그려보기</div><div class="callout-body"><p>시뮬레이터의 <strong>&quot;작업영역 표시&quot;</strong> 체크박스를 켜면, 무작위 샘플링으로 도달 가능한 점 구름이 그려집니다. 앞쪽은 넓지만 <strong>베이스 바로 위와 바로 앞 아주 가까운 곳은 구멍이 뚫려 있는 것</strong>을 확인하세요. 실제 작업물을 배치할 때 이 사각지대를 피해야 합니다.</p></div></div>
+<hr>
+<h2 id="서보-각도와-소프트웨어-단위">서보 각도와 소프트웨어 단위<a class="anchor" href="#서보-각도와-소프트웨어-단위">#</a></h2>
+<p>STS3215 서보는 한 바퀴(360°)를 <strong>0~4095 틱</strong>으로 표현합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">1 틱 = 2π / 4096 = 0.00153398 rad = 0.0879°
+중위(center) = 2047 또는 2048</code></pre></div>
+<figure class="fig" id="fig-tick-scale"><svg viewBox="0 0 600 264" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="서보 틱, 각도, LeRobot 정규화 값의 대응 관계">
+  <!-- 자동 생성 — content/figures/gen_figures.py -->
+  <text class="lbl" x="70.0" y="34" font-size="12.5" font-weight="700">
+    같은 자세를 부르는 세 가지 숫자</text>
+
+  <path class="ln" stroke="var(--border)" stroke-width="1.6" d="M70.0 78.0 H540.0"/>
+  <text class="tag mono" x="60.0" y="82.0" text-anchor="end">틱</text>
+  <path class="ln" stroke="var(--border)" d="M70.0 78.0 V88.0"/><text class="sub mono" x="70.0" y="70.0" text-anchor="middle">0</text><path class="ln" stroke="var(--border)" d="M187.5 78.0 V88.0"/><text class="sub mono" x="187.5" y="70.0" text-anchor="middle">1024</text><path class="ln" stroke="var(--border)" d="M305.1 78.0 V88.0"/><text class="sub mono" x="305.1" y="70.0" text-anchor="middle">2048</text><path class="ln" stroke="var(--border)" d="M422.6 78.0 V88.0"/><text class="sub mono" x="422.6" y="70.0" text-anchor="middle">3072</text><path class="ln" stroke="var(--border)" d="M540.0 78.0 V88.0"/><text class="sub mono" x="540.0" y="70.0" text-anchor="middle">4095</text><text class="sub mono" x="70.0" y="146.0" text-anchor="middle">−180°</text><text class="sub mono" x="187.5" y="146.0" text-anchor="middle">−90°</text><text class="sub mono" x="305.1" y="146.0" text-anchor="middle">0°</text><text class="sub mono" x="422.6" y="146.0" text-anchor="middle">+90°</text><text class="sub mono" x="540.0" y="146.0" text-anchor="middle">+180°</text>
+
+  <!-- 조인트 가동범위 -->
+  <rect fill="var(--accent)" opacity="0.22" x="174.4" y="98.0"
+        width="261.2" height="26" rx="4"/>
+  <text class="hi" x="305.1" y="116.0" text-anchor="middle"
+        font-size="11.5">shoulder_lift 실제 가동범위 910~3186</text>
+  <text class="tag mono" x="60.0" y="116.0" text-anchor="end">각도</text>
+
+  <!-- LeRobot 정규화 -->
+  <path class="ln" stroke="var(--accent)" stroke-width="1.6"
+        d="M174.4 186.0 H435.7"/>
+  <text class="tag mono" x="60.0" y="190.0" text-anchor="end">LeRobot</text>
+  <text class="hi mono" x="174.4" y="206.0" text-anchor="middle">−100</text>
+  <text class="hi mono" x="305.1" y="206.0" text-anchor="middle">0</text>
+  <text class="hi mono" x="435.7" y="206.0" text-anchor="middle">+100</text>
+
+  <text class="sub" x="70.0" y="230.0">
+    LeRobot 은 캘리브레이션으로 잰 <tspan class="hi">실제 가동범위</tspan>를
+    −100~+100 으로 펴서 씁니다. 그래서 로그의 숫자는 각도가 아닙니다.</text>
+  <text class="sub" x="70.0" y="248.0">
+    1 틱 = 2π ÷ 4096 = 0.00153398 rad = 0.0879°  ·  중립 위치 = 2048</text>
+</svg><figcaption>같은 자세를 부르는 세 가지 숫자. LeRobot 로그에 찍히는 값이 각도가 아닌 이유입니다.</figcaption></figure>
+<div class="callout callout-info"><div class="callout-title">이 숫자를 기억해 두세요</div><div class="callout-body"><p>ROS 2 하드웨어 인터페이스에서 RViz 자세와 실물 자세가 어긋날 때 오프셋을 보정하는 공식이 바로 이 값을 씁니다. <code>새 offset = 현재 offset + (RViz에 표시된 오차 rad ÷ 0.00153398)</code> — <a href="../lessons/ch17.html">17장</a>에서 다시 나옵니다.</p></div></div>
+<p>LeRobot은 여기에 한 겹을 더 씌웁니다. 캘리브레이션으로 얻은 각 조인트의 가동범위를 <strong>-100 ~ +100</strong> (그리퍼는 <strong>0 ~ 100</strong>) 으로 정규화해서 다룹니다. 그래서 LeRobot 로그에 찍히는 값은 각도가 아니라 이 정규화 값입니다. 시뮬레이터의 &quot;단위&quot; 토글로 세 가지 표현(도 / 라디안 / LeRobot 정규화)을 나란히 비교할 수 있습니다.</p>
+<hr>
+<h2 id="정리">정리<a class="anchor" href="#정리">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>개념</th><th>한 줄 정의</th><th>확인 방법</th></tr></thead><tbody><tr><td>자유도(DOF)</td><td>독립적으로 움직일 수 있는 관절 수</td><td>시뮬레이터 슬라이더 6개</td></tr><tr><td>링크/조인트</td><td>강체 부품 / 그 사이 관절</td><td>URDF 체인</td></tr><tr><td>FK</td><td>각도 → TCP 위치</td><td>항상 해 1개</td></tr><tr><td>IK</td><td>TCP 위치 → 각도</td><td>해가 0개·1개·여러 개</td></tr><tr><td>TCP</td><td>툴 중심점 = <code>gripper_frame_link</code></td><td>시뮬레이터 좌표 표시</td></tr><tr><td>작업영역</td><td>TCP가 닿는 공간</td><td>시뮬레이터 점 구름</td></tr><tr><td>특이점</td><td>자유도를 잃어 IK가 불안정해지는 자세</td><td>팔을 쭉 폈을 때</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch03.html">3장 하드웨어 완전 해부</a>에서 이 관절들을 실제로 움직이는 STS3215 서보와 드라이버 보드를 살펴봅니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch01.html"><span>이전</span>SO-ARM101이란 무엇인가</a><a class="pager-next" href="ch03.html"><span>다음</span>하드웨어 완전 해부</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#이-장에서-다루는-것">이 장에서 다루는 것</a><a class="toc-l2" href="#링크와-조인트">링크와 조인트</a><a class="toc-l2" href="#조인트-한계-joint-limits">조인트 한계 (Joint Limits)</a><a class="toc-l2" href="#좌표계와-변환">좌표계와 변환</a><a class="toc-l3" href="#urdf의-조인트-정의-읽는-법">URDF의 조인트 정의 읽는 법</a><a class="toc-l3" href="#기준-좌표계">기준 좌표계</a><a class="toc-l2" href="#정기구학-forward-kinematics-fk">정기구학 (Forward Kinematics, FK)</a><a class="toc-l2" href="#역기구학-inverse-kinematics-ik">역기구학 (Inverse Kinematics, IK)</a><a class="toc-l3" href="#이-강좌에서-쓰는-방법-dls">이 강좌에서 쓰는 방법: DLS</a><a class="toc-l2" href="#작업영역-workspace">작업영역 (Workspace)</a><a class="toc-l2" href="#서보-각도와-소프트웨어-단위">서보 각도와 소프트웨어 단위</a><a class="toc-l2" href="#정리">정리</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

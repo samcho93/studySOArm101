@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15. URDF와 로봇 모델 이해 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="so101_new_calib.urdf를 한 줄씩 해부하고, 조인트 한계표와 좌표 변환 체인을 직접 계산합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" class="active" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch15">
+  <div class="lesson-head">
+    <div class="crumbs">PART 5 ROS 2 연동과 시뮬레이션 &middot; 약 35분</div>
+    <h1><span class="lesson-no">15</span>URDF와 로봇 모델 이해</h1>
+    <p class="lede">so101_new_calib.urdf를 한 줄씩 해부하고, 조인트 한계표와 좌표 변환 체인을 직접 계산합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="urdf란">URDF란<a class="anchor" href="#urdf란">#</a></h2>
+<p><strong>URDF(Unified Robot Description Format)</strong> 는 로봇의 구조를 기술하는 XML 파일입니다. ROS 2의 거의 모든 도구(RViz2, MoveIt 2, Gazebo, ros2_control)가 이 파일 하나를 읽고 동작합니다.</p>
+<p>URDF가 담는 정보:</p>
+<div class="table-wrap"><table><thead><tr><th>요소</th><th>내용</th></tr></thead><tbody><tr><td><code>&lt;link&gt;</code></td><td>강체 부품. 시각 형상(visual), 충돌 형상(collision), 관성(inertial)</td></tr><tr><td><code>&lt;joint&gt;</code></td><td>링크 사이 관절. 종류, 축, 원점, 한계</td></tr><tr><td><code>&lt;material&gt;</code></td><td>색상·텍스처</td></tr></tbody></table></div>
+<hr>
+<h2 id="so-arm101의-urdf-구하기">SO-ARM101의 URDF 구하기<a class="anchor" href="#so-arm101의-urdf-구하기">#</a></h2>
+<p>세 가지 경로가 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>출처</th><th>파일</th><th>특징</th></tr></thead><tbody><tr><td><strong>TheRobotStudio/SO-ARM100</strong></td><td><code>Simulation/SO101/so101_new_calib.urdf</code></td><td>공식 CAD에서 생성. 이 강좌의 기준</td></tr><tr><td><strong>LeRobot 저장소</strong></td><td>내부 자산</td><td>LeRobot 시각화용</td></tr><tr><td><strong>URDF Studio</strong></td><td><a href="https://urdf.d-robotics.cc/" target="_blank" rel="noopener">urdf.d-robotics.cc</a></td><td>브라우저에서 URDF를 편집·확인</td></tr></tbody></table></div>
+<p>이 강좌의 저장소에는 원본이 이미 포함되어 있습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">ros2_ws/src/so_arm101_description/urdf/so101_new_calib.urdf</code></pre></div>
+<p>파일 머리에는 생성 도구가 명시되어 있습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!-- Generated using onshape-to-robot --&gt;
+&lt;!-- Onshape https://cad.onshape.com/documents/7715cc284bb430fe6dab4ffd/... --&gt;
+&lt;robot name=&quot;so101_new_calib&quot;&gt;</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">onshape-to-robot</div><div class="callout-body"><p>Onshape CAD 모델에서 URDF를 자동 생성하는 도구입니다. 그래서 원점 값들이 <code>-8.97657e-09</code> 처럼 지저분한 부동소수점으로 나옵니다. 사실상 0인 값들입니다.</p></div></div>
+<hr>
+<h2 id="링크-구조">링크 구조<a class="anchor" href="#링크-구조">#</a></h2>
+<figure class="fig" id="fig-link-chain"><svg viewBox="0 0 600 552" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="SO-ARM101의 링크와 조인트 사슬 구조">
+  <defs>
+    <marker id="lc-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- 링크 상자 -->
+  <g>
+    <rect class="box" x="60" y="20"  width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="96"  width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="172" width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="248" width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="324" width="220" height="36" rx="7"/>
+    <rect class="box" x="60" y="400" width="220" height="36" rx="7"/>
+    <rect class="box" x="16"  y="486" width="176" height="36" rx="7"/>
+    <rect class="box-hi" x="222" y="486" width="220" height="36" rx="7"/>
+  </g>
+
+  <g class="lbl mono" text-anchor="middle" font-size="12.5">
+    <text x="170" y="43">base_link</text>
+    <text x="170" y="119">shoulder_link</text>
+    <text x="170" y="195">upper_arm_link</text>
+    <text x="170" y="271">lower_arm_link</text>
+    <text x="170" y="347">wrist_link</text>
+    <text x="170" y="423">gripper_link</text>
+    <text x="104" y="509" font-size="11">moving_jaw_…_link</text>
+    <text class="hi" x="332" y="509">gripper_frame_link</text>
+  </g>
+
+  <!-- 연결선 -->
+  <g class="ln" stroke-width="1.6">
+    <path d="M170 56  V96"/>
+    <path d="M170 132 V172"/>
+    <path d="M170 208 V248"/>
+    <path d="M170 284 V324"/>
+    <path d="M170 360 V400"/>
+    <path d="M170 436 V462 H104 V486"/>
+    <path d="M170 462 H332 V486"/>
+  </g>
+
+  <!-- 조인트 마커 -->
+  <g>
+    <circle class="box-hi" cx="170" cy="76"  r="10"/>
+    <circle class="box-hi" cx="170" cy="152" r="10"/>
+    <circle class="box-hi" cx="170" cy="228" r="10"/>
+    <circle class="box-hi" cx="170" cy="304" r="10"/>
+    <circle class="box-hi" cx="170" cy="380" r="10"/>
+    <circle class="box-hi" cx="104" cy="474" r="9"/>
+    <rect   class="box"    x="324" y="466" width="16" height="16" rx="3"/>
+  </g>
+
+  <!-- 조인트 이름 · 한계 -->
+  <g>
+    <text class="hi mono" x="300" y="72"  font-size="12.5">shoulder_pan</text>
+    <text class="sub"     x="300" y="88">±110°  ·  서보 1</text>
+
+    <text class="hi mono" x="300" y="148" font-size="12.5">shoulder_lift</text>
+    <text class="sub"     x="300" y="164">±100°  ·  서보 2</text>
+
+    <text class="hi mono" x="300" y="224" font-size="12.5">elbow_flex</text>
+    <text class="sub"     x="300" y="240">±96.8°  ·  서보 3</text>
+
+    <text class="hi mono" x="300" y="300" font-size="12.5">wrist_flex</text>
+    <text class="sub"     x="300" y="316">±95°  ·  서보 4</text>
+
+    <text class="hi mono" x="300" y="376" font-size="12.5">wrist_roll</text>
+    <text class="sub"     x="300" y="392">−157°~163°  ·  서보 5</text>
+
+    <text class="hi mono" x="16" y="458" font-size="12">gripper</text>
+    <text class="sub"     x="16" y="472" font-size="10.5">−10°~100° · 서보 6</text>
+
+    <text class="tag mono" x="352" y="472" font-size="11">fixed</text>
+  </g>
+
+  <!-- 범례 -->
+  <g>
+    <circle class="box-hi" cx="470" cy="34" r="9"/>
+    <text class="sub" x="486" y="38">revolute 조인트</text>
+    <rect class="box" x="461" y="60" width="16" height="16" rx="3"/>
+    <text class="sub" x="486" y="72">fixed 조인트</text>
+    <rect class="box" x="461" y="86" width="16" height="16" rx="3"/>
+    <text class="sub" x="486" y="98">링크(강체)</text>
+  </g>
+
+  <!-- 자유도 표시 -->
+  <g>
+    <path class="ln-hi" stroke-width="1.4" stroke-dasharray="4 4"
+          d="M44 76 V380" marker-start="url(#lc-arrow)" marker-end="url(#lc-arrow)"
+          color="var(--accent)"/>
+    <text class="hi" x="38" y="228" font-size="11.5" text-anchor="end"
+          transform="rotate(-90 38 228)">공간 자세를 정하는 5자유도</text>
+  </g>
+</svg><figcaption>URDF 가 정의하는 사슬. 이 장에서는 이 그림의 각 화살표가 XML 로 어떻게 적혀 있는지를 봅니다.</figcaption></figure>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">base_link
+ └─ shoulder_link
+     └─ upper_arm_link
+         └─ lower_arm_link
+             └─ wrist_link
+                 └─ gripper_link
+                     ├─ moving_jaw_so101_v1_link
+                     └─ gripper_frame_link   (fixed, TCP)</code></pre></div>
+<p>각 링크는 세 가지 형상을 가집니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;link name=&quot;upper_arm_link&quot;&gt;
+  &lt;inertial&gt;
+    &lt;origin xyz=&quot;-0.0898471 -0.00838224 0.0184089&quot; rpy=&quot;0 0 0&quot;/&gt;
+    &lt;mass value=&quot;0.1&quot;/&gt;
+    &lt;inertia ixx=&quot;...&quot; .../&gt;
+  &lt;/inertial&gt;
+  &lt;visual&gt;
+    &lt;origin xyz=&quot;-0.11257 -0.0155 0.0187&quot; rpy=&quot;-3.14159 0 -1.5708&quot;/&gt;
+    &lt;geometry&gt;&lt;mesh filename=&quot;package://so_arm101_description/meshes/upper_arm.stl&quot;/&gt;&lt;/geometry&gt;
+    &lt;material name=&quot;3d_printed&quot;/&gt;
+  &lt;/visual&gt;
+  &lt;collision&gt;
+    &lt;origin xyz=&quot;-0.11257 -0.0155 0.0187&quot; rpy=&quot;-3.14159 0 -1.5708&quot;/&gt;
+    &lt;geometry&gt;&lt;mesh filename=&quot;package://so_arm101_description/meshes/upper_arm.stl&quot;/&gt;&lt;/geometry&gt;
+  &lt;/collision&gt;
+&lt;/link&gt;</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th>요소</th><th>용도</th><th>주의</th></tr></thead><tbody><tr><td><code>visual</code></td><td>RViz·Gazebo에 그려지는 모습</td><td>정밀한 메시 OK</td></tr><tr><td><code>collision</code></td><td>충돌 검사</td><td><strong>단순할수록 좋음.</strong> 메시가 복잡하면 플래닝이 느려짐</td></tr><tr><td><code>inertial</code></td><td>물리 시뮬레이션</td><td>Gazebo에서 필수. 값이 이상하면 로봇이 날아감</td></tr></tbody></table></div>
+<div class="callout callout-tip"><div class="callout-title">충돌 형상 최적화</div><div class="callout-body"><p>MoveIt 2 플래닝이 느리다면 <code>collision</code> 지오메트리를 STL 대신 <strong>박스/실린더 프리미티브</strong>로 바꾸는 것이 가장 효과적입니다. 이 강좌의 <code>so_arm101_description</code> 패키지는 프리미티브 버전을 xacro 옵션으로 제공합니다.</p></div></div>
+<hr>
+<h2 id="조인트-정의-완전-해부">조인트 정의 완전 해부<a class="anchor" href="#조인트-정의-완전-해부">#</a></h2>
+<p>SO-ARM101의 6개 조인트를 URDF 원문 값 그대로 정리했습니다.</p>
+<h3 id="shoulderpan">shoulder_pan<a class="anchor" href="#shoulderpan">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;shoulder_pan&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;0.0388353 -8.97657e-09 0.0624&quot; rpy=&quot;3.14159 4.18253e-17 -3.14159&quot;/&gt;
+  &lt;parent link=&quot;base_link&quot;/&gt;
+  &lt;child  link=&quot;shoulder_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-1.91986&quot; upper=&quot;1.91986&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<h3 id="shoulderlift">shoulder_lift<a class="anchor" href="#shoulderlift">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;shoulder_lift&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;-0.0303992 -0.0182778 -0.0542&quot; rpy=&quot;-1.5708 -1.5708 0&quot;/&gt;
+  &lt;parent link=&quot;shoulder_link&quot;/&gt;
+  &lt;child  link=&quot;upper_arm_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-1.74533&quot; upper=&quot;1.74533&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<h3 id="elbowflex">elbow_flex<a class="anchor" href="#elbowflex">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;elbow_flex&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;-0.11257 -0.028 1.73763e-16&quot; rpy=&quot;0 0 1.5708&quot;/&gt;
+  &lt;parent link=&quot;upper_arm_link&quot;/&gt;
+  &lt;child  link=&quot;lower_arm_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-1.69&quot; upper=&quot;1.69&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<h3 id="wristflex">wrist_flex<a class="anchor" href="#wristflex">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;wrist_flex&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;-0.1349 0.0052 3.62355e-17&quot; rpy=&quot;0 0 -1.5708&quot;/&gt;
+  &lt;parent link=&quot;lower_arm_link&quot;/&gt;
+  &lt;child  link=&quot;wrist_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-1.65806&quot; upper=&quot;1.65806&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<h3 id="wristroll">wrist_roll<a class="anchor" href="#wristroll">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;wrist_roll&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;0 -0.0611 0.0181&quot; rpy=&quot;1.5708 0.0486795 3.14159&quot;/&gt;
+  &lt;parent link=&quot;wrist_link&quot;/&gt;
+  &lt;child  link=&quot;gripper_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-2.74385&quot; upper=&quot;2.84121&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<div class="callout callout-info"><div class="callout-title">`rpy`의 0.0486795가 뭔가요</div><div class="callout-body"><p>약 2.79°의 미세한 틀어짐입니다. CAD 상의 실제 조립 각도가 그대로 반영된 것입니다. 이런 값이 있기 때문에 <strong>URDF를 손으로 다시 쓰지 말고 원본을 그대로 쓰는 것</strong>이 좋습니다.</p></div></div>
+<h3 id="gripper">gripper<a class="anchor" href="#gripper">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;gripper&quot; type=&quot;revolute&quot;&gt;
+  &lt;origin xyz=&quot;0.0202 0.0188 -0.0234&quot; rpy=&quot;1.5708 -5.24284e-08 0&quot;/&gt;
+  &lt;parent link=&quot;gripper_link&quot;/&gt;
+  &lt;child  link=&quot;moving_jaw_so101_v1_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 1&quot;/&gt;
+  &lt;limit effort=&quot;10&quot; velocity=&quot;10&quot; lower=&quot;-0.174533&quot; upper=&quot;1.74533&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<h3 id="gripperframejoint-tcp">gripper_frame_joint (TCP)<a class="anchor" href="#gripperframejoint-tcp">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;joint name=&quot;gripper_frame_joint&quot; type=&quot;fixed&quot;&gt;
+  &lt;origin xyz=&quot;-0.0079 -0.000218121 -0.0981274&quot; rpy=&quot;0 3.14159 0&quot;/&gt;
+  &lt;parent link=&quot;gripper_link&quot;/&gt;
+  &lt;child  link=&quot;gripper_frame_link&quot;/&gt;
+  &lt;axis xyz=&quot;0 0 0&quot;/&gt;
+&lt;/joint&gt;</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">TCP를 기억하세요</div><div class="callout-body"><p>MoveIt 2에서 <strong>엔드 이펙터 링크</strong>로 지정할 것이 바로 <code>gripper_frame_link</code>입니다. IK 목표도 이 프레임을 기준으로 지정합니다.</p></div></div>
+<hr>
+<h2 id="조인트-한계-요약표">조인트 한계 요약표<a class="anchor" href="#조인트-한계-요약표">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>조인트</th><th>타입</th><th>축</th><th>하한(rad)</th><th>상한(rad)</th><th>하한(°)</th><th>상한(°)</th></tr></thead><tbody><tr><td><code>shoulder_pan</code></td><td>revolute</td><td>Z</td><td>-1.91986</td><td>1.91986</td><td>-110.0</td><td>110.0</td></tr><tr><td><code>shoulder_lift</code></td><td>revolute</td><td>Z</td><td>-1.74533</td><td>1.74533</td><td>-100.0</td><td>100.0</td></tr><tr><td><code>elbow_flex</code></td><td>revolute</td><td>Z</td><td>-1.69000</td><td>1.69000</td><td>-96.8</td><td>96.8</td></tr><tr><td><code>wrist_flex</code></td><td>revolute</td><td>Z</td><td>-1.65806</td><td>1.65806</td><td>-95.0</td><td>95.0</td></tr><tr><td><code>wrist_roll</code></td><td>revolute</td><td>Z</td><td>-2.74385</td><td>2.84121</td><td>-157.2</td><td>162.8</td></tr><tr><td><code>gripper</code></td><td>revolute</td><td>Z</td><td>-0.174533</td><td>1.74533</td><td>-10.0</td><td>100.0</td></tr></tbody></table></div>
+<p>모든 조인트의 <code>effort=10</code>, <code>velocity=10</code>입니다. 이 값은 명목상의 것이므로, ros2_control과 MoveIt에서는 별도의 <code>joint_limits.yaml</code>로 실제 운용 한계를 지정합니다. (<a href="../lessons/ch17.html">17장</a>)</p>
+<hr>
+<h2 id="직접-계산해-보기">직접 계산해 보기<a class="anchor" href="#직접-계산해-보기">#</a></h2>
+<p>이 강좌의 시뮬레이터와 파이썬 스크립트는 위 값을 그대로 씁니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/so101_fk_ik.py --fk 0 -30 45 60 0</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">조인트 (deg): pan=0.0  lift=-30.0  elbow=45.0  wrist_flex=60.0  wrist_roll=0.0
+TCP 위치 (m): x=0.2413  y=0.0007  z=0.1702
+TCP 자세 (rpy, deg): roll=-177.2  pitch=-75.0  yaw=0.1</code></pre></div>
+<p>역기구학:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/so101_fk_ik.py --ik 0.24 0.00 0.17</code></pre></div>
+<div class="callout callout-task"><div class="callout-title">실습 — 손으로 검증하기</div><div class="callout-body"><ol><li>위 FK 결과를 메모합니다.</li><li><a href="../sim/index.html">시뮬레이터</a>에서 같은 각도를 슬라이더로 입력합니다.</li><li>TCP 좌표 표시가 같은 값을 보이는지 확인합니다.</li></ol>
+<p>같다면 여러분은 URDF 변환 체인을 제대로 이해한 것입니다.</p></div></div>
+<hr>
+<h2 id="xacro로-확장하기">xacro로 확장하기<a class="anchor" href="#xacro로-확장하기">#</a></h2>
+<p>URDF는 매크로가 없어 반복이 많습니다. ROS 2에서는 <strong>xacro</strong>(XML Macro)로 감싸 쓰는 것이 표준입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">xml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;robot xmlns:xacro=&quot;http://www.ros.org/wiki/xacro&quot; name=&quot;so_arm101&quot;&gt;
+
+  &lt;xacro:arg name=&quot;hardware_type&quot; default=&quot;mock&quot;/&gt;
+  &lt;xacro:arg name=&quot;usb_port&quot;      default=&quot;/dev/ttyACM0&quot;/&gt;
+
+  &lt;!-- 순수 기구 구조 --&gt;
+  &lt;xacro:include filename=&quot;$(find so_arm101_description)/urdf/so101_macro.xacro&quot;/&gt;
+  &lt;xacro:so101_arm prefix=&quot;&quot;/&gt;
+
+  &lt;!-- ros2_control 하드웨어 인터페이스 --&gt;
+  &lt;xacro:include filename=&quot;$(find so_arm101_description)/urdf/so101.ros2_control.xacro&quot;/&gt;
+  &lt;xacro:so101_ros2_control
+      name=&quot;SOArm101System&quot;
+      hardware_type=&quot;$(arg hardware_type)&quot;
+      usb_port=&quot;$(arg usb_port)&quot;/&gt;
+
+&lt;/robot&gt;</code></pre></div>
+<p>xacro를 URDF로 펼쳐 보려면:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 run xacro xacro src/so_arm101_description/urdf/so_arm101.urdf.xacro &gt; /tmp/so101.urdf
+check_urdf /tmp/so101.urdf</code></pre></div>
+<p><code>check_urdf</code>는 링크·조인트 트리가 올바른지 검증하고 구조를 출력합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">urdf_to_graphiz /tmp/so101.urdf   # 트리 다이어그램 PDF 생성</code></pre></div>
+<hr>
+<h2 id="참고-자료-모음">참고 자료 모음<a class="anchor" href="#참고-자료-모음">#</a></h2>
+<p>원문 위키의 &quot;URDF 파일 및 자료 참고&quot; 장이 모아 둔 링크들입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>자료</th><th>주소</th><th>설명</th></tr></thead><tbody><tr><td><strong>URDF Studio</strong></td><td><a href="https://urdf.d-robotics.cc/" target="_blank" rel="noopener">urdf.d-robotics.cc</a></td><td>브라우저에서 URDF를 불러와 조인트를 움직여 보는 도구</td></tr><tr><td><strong>so-arm-moveit-hardware</strong></td><td><a href="https://github.com/holmsslk/so-arm-moveit-hardware" target="_blank" rel="noopener">github.com/holmsslk/so-arm-moveit-hardware</a></td><td>ROS 2 시뮬레이션 제어 구현 예시</td></tr><tr><td><strong>LeLab</strong></td><td><a href="https://github.com/huggingface/leLab" target="_blank" rel="noopener">github.com/huggingface/leLab</a></td><td>LeRobot 전 워크플로(캘리브레이션·텔레오퍼레이션·녹화·학습·재생)를 브라우저 UI로</td></tr><tr><td><strong>휴대폰 텔레오퍼레이션</strong></td><td><a href="https://huggingface.co/docs/lerobot/main/en/phone_teleop" target="_blank" rel="noopener">LeRobot phone_teleop</a></td><td>폰으로 팔로워 제어</td></tr><tr><td><strong>AWS + ROS 2 + Isaac Sim</strong></td><td><a href="https://github.com/ti/ti.github.io/blob/95261efa4f8bdb4c8571920762318a532e58c7fd/%E5%BC%80%E5%8F%91/isaac/aws-ros2-isaac.md" target="_blank" rel="noopener">참고 문서</a></td><td>클라우드 로봇 개발 파이프라인</td></tr><tr><td><strong>웹 서보 설정</strong></td><td><a href="https://bambot.org/feetech.js?lang=zh" target="_blank" rel="noopener">bambot.org/feetech.js</a></td><td>브라우저에서 서보 ID·중위 설정</td></tr><tr><td><strong>SO-ARM_ROS2_URDF</strong></td><td><a href="https://github.com/MuammerBay/SO-ARM_ROS2_URDF" target="_blank" rel="noopener">github.com/MuammerBay/SO-ARM_ROS2_URDF</a></td><td><code>so_arm_description</code> 패키지 형태의 URDF</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch16.html">16장 ROS 2 워크스페이스 구성과 RViz2</a> — 이 URDF를 패키지로 감싸 RViz2에 띄웁니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch14.html"><span>이전</span>모델 추론과 평가</a><a class="pager-next" href="ch16.html"><span>다음</span>ROS 2 워크스페이스 구성과 RViz2</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#urdf란">URDF란</a><a class="toc-l2" href="#so-arm101의-urdf-구하기">SO-ARM101의 URDF 구하기</a><a class="toc-l2" href="#링크-구조">링크 구조</a><a class="toc-l2" href="#조인트-정의-완전-해부">조인트 정의 완전 해부</a><a class="toc-l3" href="#shoulderpan">shoulder_pan</a><a class="toc-l3" href="#shoulderlift">shoulder_lift</a><a class="toc-l3" href="#elbowflex">elbow_flex</a><a class="toc-l3" href="#wristflex">wrist_flex</a><a class="toc-l3" href="#wristroll">wrist_roll</a><a class="toc-l3" href="#gripper">gripper</a><a class="toc-l3" href="#gripperframejoint-tcp">gripper_frame_joint (TCP)</a><a class="toc-l2" href="#조인트-한계-요약표">조인트 한계 요약표</a><a class="toc-l2" href="#직접-계산해-보기">직접 계산해 보기</a><a class="toc-l2" href="#xacro로-확장하기">xacro로 확장하기</a><a class="toc-l2" href="#참고-자료-모음">참고 자료 모음</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

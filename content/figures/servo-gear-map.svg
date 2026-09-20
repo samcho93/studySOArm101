@@ -1,0 +1,70 @@
+<svg viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="관절별 서보 모델과 감속비 배치">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    같은 STS3215라도 감속비가 다른 모델이 섞여 옵니다</text>
+  <text class="sub" x="16" y="42">라벨의 C001 / C044 / C046 / C018 을 보고 자리를 맞추세요</text>
+
+  <!-- 리더 -->
+  <text class="lbl" x="16" y="76" font-size="12.5">리더 암 (7.4V)</text>
+  <g>
+    <rect class="box" x="16"  y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="108" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="200" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="292" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="384" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="476" y="88" width="86" height="58" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="hi mono" x="59"  y="108" font-size="12">C044</text>
+    <text class="hi mono" x="151" y="108" font-size="12">C001</text>
+    <text class="hi mono" x="243" y="108" font-size="12">C044</text>
+    <text class="hi mono" x="335" y="108" font-size="12">C046</text>
+    <text class="hi mono" x="427" y="108" font-size="12">C046</text>
+    <text class="hi mono" x="519" y="108" font-size="12">C046</text>
+
+    <text class="lbl" x="59"  y="126" font-size="12">1:191</text>
+    <text class="lbl" x="151" y="126" font-size="12">1:345</text>
+    <text class="lbl" x="243" y="126" font-size="12">1:191</text>
+    <text class="lbl" x="335" y="126" font-size="12">1:147</text>
+    <text class="lbl" x="427" y="126" font-size="12">1:147</text>
+    <text class="lbl" x="519" y="126" font-size="12">1:147</text>
+
+    <text class="sub" x="59"  y="140" font-size="10">어깨 회전</text>
+    <text class="sub" x="151" y="140" font-size="10">어깨 들기</text>
+    <text class="sub" x="243" y="140" font-size="10">팔꿈치</text>
+    <text class="sub" x="335" y="140" font-size="10">손목 굽힘</text>
+    <text class="sub" x="427" y="140" font-size="10">손목 회전</text>
+    <text class="sub" x="519" y="140" font-size="10">그리퍼</text>
+  </g>
+  <text class="sub" x="16" y="166">
+    2번만 <tspan class="hi">1:345</tspan> — 팔 전체 무게를 드니까.
+    손목 쪽은 <tspan class="hi">1:147</tspan> — 사람이 가볍게 돌려야 하니까.</text>
+
+  <!-- 팔로워 -->
+  <text class="lbl" x="16" y="204" font-size="12.5">팔로워 암 (12V)</text>
+  <g>
+    <rect class="box-hi" x="16"  y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="108" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="200" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="292" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="384" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="476" y="216" width="86" height="44" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="hi mono" x="59"  y="236" font-size="12">C018</text>
+    <text class="hi mono" x="151" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="243" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="335" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="427" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="519" y="236" font-size="12">C018</text>
+    <text class="lbl" x="59"  y="253" font-size="12">1:345</text>
+    <text class="lbl" x="151" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="243" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="335" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="427" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="519" y="253" font-size="12">1:345</text>
+  </g>
+  <text class="sub" x="16" y="278">
+    팔로워는 전부 같습니다 — 어느 관절에 꽂아도 됩니다.
+    <tspan class="dg">리더용 저감속 서보를 팔로워에 끼우면 팔이 처집니다.</tspan></text>
+</svg>

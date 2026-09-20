@@ -1,0 +1,20 @@
+# SO-ARM101 강좌 실습 스크립트 의존성
+#
+# 기구학 계산만 하려면 numpy 하나면 됩니다.
+numpy>=1.24
+
+# 서보 직접 제어 (scan_servos.py)
+# LeRobot 을 설치했다면 이미 포함되어 있습니다.
+feetech-servo-sdk>=1.0 ; python_version >= "3.9"
+
+# 키보드 텔레오퍼레이션 (so101_keyboard_teleop.py)
+pynput>=1.7
+
+# ------------------------------------------------------------------
+# 아래는 pip 로 여기서 설치하지 마세요. 각각 별도 절차를 따릅니다.
+#
+#   lerobot   → 6장 참고. git clone 후 pip install -e ".[feetech]"
+#   rclpy     → ROS 2 설치에 포함. source /opt/ros/humble/setup.bash
+#   cv_bridge → sudo apt install ros-humble-cv-bridge
+#   torch     → lerobot 설치 시 함께 들어옵니다 (CUDA 버전 주의)
+# ------------------------------------------------------------------

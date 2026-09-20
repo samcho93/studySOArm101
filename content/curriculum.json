@@ -1,0 +1,305 @@
+{
+  "title": "SO-ARM101 한국어 실습 강좌",
+  "parts": [
+    {
+      "no": "PART 1",
+      "title": "기초 다지기",
+      "desc": "로봇팔이 무엇인지, SO-ARM101이 어떤 하드웨어인지부터 정확히 이해합니다.",
+      "lessons": [
+        "ch01",
+        "ch02",
+        "ch03",
+        "ch04"
+      ]
+    },
+    {
+      "no": "PART 2",
+      "title": "서보 설정과 환경 구축",
+      "desc": "STS3215 서보를 길들이고 LeRobot 개발 환경을 완성합니다.",
+      "lessons": [
+        "ch05",
+        "ch06",
+        "ch07",
+        "ch08"
+      ]
+    },
+    {
+      "no": "PART 3",
+      "title": "텔레오퍼레이션과 데이터 수집",
+      "desc": "리더 암으로 팔로워를 조종하고, 학습용 데이터셋을 만듭니다.",
+      "lessons": [
+        "ch09",
+        "ch10",
+        "ch11",
+        "ch12"
+      ]
+    },
+    {
+      "no": "PART 4",
+      "title": "정책 학습과 추론",
+      "desc": "ACT / Diffusion / SmolVLA 정책을 학습시키고 실제 로봇에 배포합니다.",
+      "lessons": [
+        "ch13",
+        "ch14"
+      ]
+    },
+    {
+      "no": "PART 5",
+      "title": "ROS 2 연동과 시뮬레이션",
+      "desc": "URDF부터 ros2_control, MoveIt 2, Gazebo까지 산업 표준 스택으로 확장합니다.",
+      "lessons": [
+        "ch15",
+        "ch16",
+        "ch17",
+        "ch18",
+        "ch19",
+        "ch20"
+      ]
+    },
+    {
+      "no": "PART 6",
+      "title": "확장과 마무리",
+      "desc": "듀얼 암·모바일 플랫폼 확장, 문제 해결, 종합 프로젝트.",
+      "lessons": [
+        "ch21",
+        "ch22"
+      ]
+    },
+    {
+      "no": "PART 7",
+      "title": "부록",
+      "desc": "다른 공개 강좌와 응용 프로젝트, 중국어 원문 용어 대조표.",
+      "lessons": [
+        "ch23"
+      ]
+    }
+  ],
+  "lessons": {
+    "ch01": {
+      "no": "01",
+      "title": "SO-ARM101이란 무엇인가",
+      "summary": "LeRobot 생태계와 SO-ARM101의 위치, 이 강좌에서 무엇을 만들게 되는지 로드맵을 잡습니다.",
+      "minutes": 15,
+      "tags": [
+        "개요",
+        "로드맵"
+      ]
+    },
+    "ch02": {
+      "no": "02",
+      "title": "로봇팔 기초 지식",
+      "summary": "자유도·링크·조인트·좌표계와 정기구학/역기구학을 시뮬레이터로 직접 확인하며 익힙니다.",
+      "minutes": 35,
+      "tags": [
+        "기구학",
+        "FK/IK"
+      ]
+    },
+    "ch03": {
+      "no": "03",
+      "title": "하드웨어 완전 해부",
+      "summary": "리더/팔로워 구조, STS3215 버스 서보, 드라이버 보드, 전원과 배선을 스펙 수준까지 뜯어봅니다.",
+      "minutes": 30,
+      "tags": [
+        "하드웨어",
+        "BOM"
+      ]
+    },
+    "ch04": {
+      "no": "04",
+      "title": "3D 프린팅과 조립",
+      "summary": "출력 설정부터 관절 1~6 조립 순서, 조립 중 흔한 실수와 검수 포인트를 정리합니다.",
+      "minutes": 40,
+      "tags": [
+        "조립",
+        "3D프린팅"
+      ]
+    },
+    "ch05": {
+      "no": "05",
+      "title": "STS3215 서보 ID와 보레이트 설정",
+      "summary": "버스 서보의 동작 원리, EEPROM 파라미터, FD 디버그 툴과 lerobot-setup-motors 사용법.",
+      "minutes": 30,
+      "tags": [
+        "서보",
+        "Feetech"
+      ]
+    },
+    "ch06": {
+      "no": "06",
+      "title": "LeRobot 개발 환경 설치",
+      "summary": "conda/uv 환경, PyTorch·ffmpeg·feetech SDK, Windows/WSL/Ubuntu/Jetson별 주의사항.",
+      "minutes": 30,
+      "tags": [
+        "설치",
+        "LeRobot"
+      ]
+    },
+    "ch07": {
+      "no": "07",
+      "title": "시리얼 포트 확인과 권한 설정",
+      "summary": "lerobot-find-port로 리더/팔로워 포트를 구분하고, udev 규칙으로 포트를 고정합니다.",
+      "minutes": 20,
+      "tags": [
+        "시리얼",
+        "udev"
+      ]
+    },
+    "ch08": {
+      "no": "08",
+      "title": "로봇 캘리브레이션",
+      "summary": "왜 캘리브레이션이 정책 전이의 핵심인지 이해하고, 리더·팔로워를 정확히 보정합니다.",
+      "minutes": 30,
+      "tags": [
+        "캘리브레이션"
+      ]
+    },
+    "ch09": {
+      "no": "09",
+      "title": "텔레오퍼레이션 기초",
+      "summary": "리더 암으로 팔로워를 조종합니다. 시뮬레이터의 리더/팔로워 모드로 감을 먼저 잡습니다.",
+      "minutes": 25,
+      "tags": [
+        "텔레오퍼레이션"
+      ]
+    },
+    "ch10": {
+      "no": "10",
+      "title": "카메라 연동과 시각화",
+      "summary": "손목/전역 카메라 구성, OpenCV·RealSense 설정, rerun으로 관측값을 실시간 확인합니다.",
+      "minutes": 30,
+      "tags": [
+        "카메라",
+        "rerun"
+      ]
+    },
+    "ch11": {
+      "no": "11",
+      "title": "실기 데이터셋 수집",
+      "summary": "lerobot-record로 에피소드를 녹화하고, 좋은 데이터셋이 갖춰야 할 조건을 배웁니다.",
+      "minutes": 40,
+      "tags": [
+        "데이터셋",
+        "record"
+      ]
+    },
+    "ch12": {
+      "no": "12",
+      "title": "시뮬레이션 데이터 수집 (LeIsaac)",
+      "summary": "Isaac Lab 기반 LeIsaac으로 가상 환경에서 원격조작 데이터를 모으고 LeRobot 포맷으로 변환합니다.",
+      "minutes": 35,
+      "tags": [
+        "Isaac Lab",
+        "Sim2Real"
+      ]
+    },
+    "ch13": {
+      "no": "13",
+      "title": "정책 모델 학습",
+      "summary": "ACT·Diffusion Policy·SmolVLA·π0의 차이와 lerobot-train 하이퍼파라미터 운용법.",
+      "minutes": 45,
+      "tags": [
+        "ACT",
+        "학습"
+      ]
+    },
+    "ch14": {
+      "no": "14",
+      "title": "모델 추론과 평가",
+      "summary": "lerobot-rollout 전략별 사용법, 성공률 측정, 실패 분석과 데이터 보강 루프.",
+      "minutes": 30,
+      "tags": [
+        "추론",
+        "평가"
+      ]
+    },
+    "ch15": {
+      "no": "15",
+      "title": "URDF와 로봇 모델 이해",
+      "summary": "so101_new_calib.urdf를 한 줄씩 해부하고, 조인트 한계표와 좌표 변환 체인을 직접 계산합니다.",
+      "minutes": 35,
+      "tags": [
+        "URDF",
+        "TF"
+      ]
+    },
+    "ch16": {
+      "no": "16",
+      "title": "ROS 2 워크스페이스 구성과 RViz2",
+      "summary": "so_arm101_description 패키지를 만들고 robot_state_publisher·RViz2로 모델을 띄웁니다.",
+      "minutes": 35,
+      "tags": [
+        "ROS 2",
+        "RViz2"
+      ]
+    },
+    "ch17": {
+      "no": "17",
+      "title": "ros2_control과 실기 하드웨어 인터페이스",
+      "summary": "Feetech 버스를 ros2_control SystemInterface로 감싸 실제 팔을 ROS 2에서 제어합니다.",
+      "minutes": 45,
+      "tags": [
+        "ros2_control"
+      ]
+    },
+    "ch18": {
+      "no": "18",
+      "title": "MoveIt 2 모션 플래닝",
+      "summary": "Setup Assistant로 SRDF를 만들고 OMPL 플래닝, 충돌 회피, Pick&Place를 구현합니다.",
+      "minutes": 45,
+      "tags": [
+        "MoveIt 2",
+        "OMPL"
+      ]
+    },
+    "ch19": {
+      "no": "19",
+      "title": "Gazebo 시뮬레이션과 시각화 툴",
+      "summary": "Gazebo Harmonic에서 물리 시뮬레이션을 돌리고 RViz2·Foxglove·PlotJuggler로 관찰합니다.",
+      "minutes": 40,
+      "tags": [
+        "Gazebo",
+        "Foxglove"
+      ]
+    },
+    "ch20": {
+      "no": "20",
+      "title": "LeRobot ↔ ROS 2 브릿지",
+      "summary": "학습한 정책을 ROS 2 노드로 감싸 joint_states/JointTrajectory 파이프라인에 연결합니다.",
+      "minutes": 35,
+      "tags": [
+        "브릿지",
+        "통합"
+      ]
+    },
+    "ch21": {
+      "no": "21",
+      "title": "확장 — 듀얼 암, 모바일, 손",
+      "summary": "듀얼 팔로워 구성, LeKiwi·XLeRobot 모바일 플랫폼, AmazingHand, 7축 변형까지.",
+      "minutes": 30,
+      "tags": [
+        "확장"
+      ]
+    },
+    "ch22": {
+      "no": "22",
+      "title": "트러블슈팅과 종합 프로젝트",
+      "summary": "현장에서 자주 만나는 30가지 문제의 원인과 해법, 그리고 최종 픽앤플레이스 프로젝트.",
+      "minutes": 45,
+      "tags": [
+        "FAQ",
+        "프로젝트"
+      ]
+    },
+    "ch23": {
+      "no": "23",
+      "title": "더 배우기 — 강좌·프로젝트·용어",
+      "summary": "HF·NVIDIA 공식 강좌, Seeed 벤더 위키, 한국어 자료, 응용 프로젝트, 중↔한 용어 대조표.",
+      "minutes": 25,
+      "tags": [
+        "참고자료",
+        "용어"
+      ]
+    }
+  }
+}

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03. 하드웨어 완전 해부 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="리더/팔로워 구조, STS3215 버스 서보, 드라이버 보드, 전원과 배선을 스펙 수준까지 뜯어봅니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" class="active" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch03">
+  <div class="lesson-head">
+    <div class="crumbs">PART 1 기초 다지기 &middot; 약 30분</div>
+    <h1><span class="lesson-no">03</span>하드웨어 완전 해부</h1>
+    <p class="lede">리더/팔로워 구조, STS3215 버스 서보, 드라이버 보드, 전원과 배선을 스펙 수준까지 뜯어봅니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="제품-개요">제품 개요<a class="anchor" href="#제품-개요">#</a></h2>
+<p>SO-ARM101은 Hugging Face 산하 LeRobot 팀이 幻尔科技(Hiwonder) 등과 함께 만든 <strong>저비용 완전 오픈소스 6자유도 로봇팔</strong>입니다. 교육 입문, 연구 검증, 경량 산업 프로토타입 개발을 겨냥합니다.</p>
+<figure class="fig" id="fig-arm-anatomy"><svg viewBox="0 0 470 348" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="SO-ARM101 측면 구조와 부품 이름">
+  <!-- 자동 생성 — content/figures/gen_figures.py · 자세: ready 프리셋 -->
+  <path stroke="var(--border)" stroke-width="1.4" d="M20 296 H454"/>
+  <text class="sub" x="452" y="313" text-anchor="end"
+        font-size="11">테이블 면</text>
+
+  <rect class="box" x="86" y="272" width="64" height="24" rx="4"/>
+  <text class="tag" x="118" y="288" text-anchor="middle" font-size="10">클램프</text>
+
+  <path stroke="var(--accent)" stroke-width="16" stroke-linecap="round" opacity="0.32" d="M118.0 296.0 L156.8 233.6"/><path stroke="var(--accent)" stroke-width="16" stroke-linecap="round" opacity="0.32" d="M156.8 233.6 L187.2 179.4"/><path stroke="var(--accent)" stroke-width="16" stroke-linecap="round" opacity="0.32" d="M187.2 179.4 L180.7 63.6"/><path stroke="var(--accent)" stroke-width="16" stroke-linecap="round" opacity="0.32" d="M180.7 63.6 L312.7 91.9"/><path stroke="var(--accent)" stroke-width="16" stroke-linecap="round" opacity="0.32" d="M312.7 91.9 L334.9 148.9"/><path stroke="var(--accent)" stroke-width="16" stroke-linecap="round" opacity="0.32" d="M334.9 148.9 L363.0 243.2"/>
+  <circle class="box-hi" cx="118.0" cy="296.0" r="7"/><circle class="box-hi" cx="156.8" cy="233.6" r="7"/><circle class="box-hi" cx="187.2" cy="179.4" r="7"/><circle class="box-hi" cx="180.7" cy="63.6" r="7"/><circle class="box-hi" cx="312.7" cy="91.9" r="7"/><circle class="box-hi" cx="334.9" cy="148.9" r="7"/><circle class="box-hi" cx="363.0" cy="243.2" r="7"/>
+  <text class="lbl" x="102.0" y="316.0" text-anchor="end" font-size="13">베이스</text><text class="lbl" x="140.8" y="221.6" text-anchor="end" font-size="13">어깨</text><text class="sub mono" x="140.8" y="234.6" text-anchor="end" font-size="10">shoulder_pan</text><text class="lbl" x="177.2" y="163.4" text-anchor="end" font-size="13">상완</text><text class="sub mono" x="177.2" y="176.4" text-anchor="end" font-size="10">shoulder_lift</text><text class="lbl" x="192.7" y="47.6" text-anchor="start" font-size="13">전완</text><text class="sub mono" x="192.7" y="60.6" text-anchor="start" font-size="10">elbow_flex</text><text class="lbl" x="328.7" y="85.9" text-anchor="start" font-size="13">손목</text><text class="sub mono" x="328.7" y="98.9" text-anchor="start" font-size="10">wrist_flex</text><text class="lbl" x="352.9" y="162.9" text-anchor="start" font-size="13">그리퍼</text><text class="sub mono" x="352.9" y="175.9" text-anchor="start" font-size="10">wrist_roll</text><text class="lbl" x="377.0" y="273.2" text-anchor="start" font-size="13">TCP</text><text class="sub mono" x="377.0" y="286.2" text-anchor="start" font-size="10">gripper</text>
+
+  <path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="3 3"
+        d="M118 326 H363.0"/>
+  <path stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="2 3"
+        d="M363.0 243.2 V326"/>
+  <text class="sub" x="240.5" y="341" text-anchor="middle"
+        font-size="11">이 자세의 수평 도달 25 cm</text>
+</svg><figcaption><code>ready</code> 프리셋 자세를 URDF 기구학으로 계산해 옆에서 본 구조. 굵은 선이 링크, 원이 조인트입니다.</figcaption></figure>
+<h3 id="하드웨어-설계-고성능-모듈화-조립-커스터마이즈-용이">하드웨어 설계 — 고성능 모듈화, 조립·커스터마이즈 용이<a class="anchor" href="#하드웨어-설계-고성능-모듈화-조립-커스터마이즈-용이">#</a></h3>
+<ul><li><strong>구조 재질</strong>: 3D 프린팅 부품 + 보강 하중 부품 조합. 배선과 관절 설계를 최적화해 운동 간섭을 피하고, 경량성과 내구성을 동시에 확보했습니다. 사용자가 직접 출력해 교체하거나 구조물을 확장할 수 있습니다.</li><li><strong>구동</strong>: 팔로워 암에 <strong>6개의 고토크 자기 엔코더 서보</strong>를 탑재. 360° 자기 엔코더 피드백 + PID 제어로 떨림 없이 부드럽게 움직이고 반복 정밀도가 높습니다.</li><li><strong>비전</strong>: 손목(end-effector) 카메라로 근접 파지 디테일을, 전역(global) 카메라로 작업 환경 전체를 포착합니다. 두 영상을 융합해 모방학습에 풍부한 데이터를 제공합니다.</li><li><strong>연결</strong>: 서보 드라이버 보드를 통해 <strong>USB-C로 PC나 라즈베리파이에 직결</strong>. 플러그 앤 플레이입니다.</li></ul>
+<h3 id="소프트웨어-생태계-lerobot-깊은-통합">소프트웨어 생태계 — LeRobot 깊은 통합<a class="anchor" href="#소프트웨어-생태계-lerobot-깊은-통합">#</a></h3>
+<ul><li><strong>프레임워크 호환</strong>: Hugging Face LeRobot(PyTorch 기반)에 깊이 적응. 사전학습 모델, 다양한 시나리오 데이터셋, 시뮬레이션 환경이 내장되어 있고 Stanford ALOHA 등 유명 오픈 데이터셋과 호환됩니다.</li><li><strong>저지연 통신</strong>: DORA 분산 데이터플로 엔진을 사용해 하드웨어-알고리즘 간 저지연 상호작용을 구현합니다. 코드 핫 리로드를 지원해 재시작 없이 실시간으로 정책을 조정할 수 있습니다. (원문 위키는 &quot;파이썬 실행 성능이 ROS 2보다 17배 빠르다&quot;고 소개하지만, 이는 <strong>제조사 측 주장</strong>이며 측정 조건이 공개되어 있지 않습니다. 참고만 하세요.)</li><li><strong>전 스택 오픈소스</strong>: 하드웨어 3D 프린팅 파일, 제어 코드, AI 학습 스크립트, 튜토리얼 전체가 공개되어 자유롭게 수정·2차 개발할 수 있습니다.</li></ul>
+<h3 id="제품-장점">제품 장점<a class="anchor" href="#제품-장점">#</a></h3>
+<ul><li><strong>가격</strong>: 부품가 약 <strong>$122</strong>(팔로워 1대) / <strong>$230</strong>(리더+팔로워 2대 세트). 원문 위키는 &quot;기본 버전 약 100달러부터&quot;라고 적고 있으며, 위 금액은 TheRobotStudio 저장소의 현재 BOM 기준입니다. 국내에서 완제품 키트를 사면 <strong>50만 원대</strong>가 일반적입니다.</li><li><strong>전 과정 오픈소스</strong>: 기술 장벽 없이 자유롭게 커스터마이즈·기능 확장 가능.</li><li><strong>AI 개발 친화</strong>: LeRobot 생태계에 기대어 사전학습 모델·데이터셋을 한 번에 호출, 데이터 수집부터 학습·배포까지 단순화.</li></ul>
+<h3 id="핵심-응용-시나리오">핵심 응용 시나리오<a class="anchor" href="#핵심-응용-시나리오">#</a></h3>
+<ol><li><strong>로봇 교육 입문</strong> — 조립부터 기초 프로그래밍, AI 정책 배포까지 전 과정 튜토리얼과 시각화 인터페이스 제공.</li><li><strong>연구 알고리즘 검증</strong> — 모방학습·강화학습 연구. 예: 15초짜리 조작 영상 50개로 2시간 학습해 옷 개기, 열쇠 꽂기, 부품 분류 습득.</li><li><strong>경량 산업 프로토타입</strong> — 자재 운반, 정밀 조립, 부품 분류를 백만 원 이하 비용으로 검증.</li></ol>
+<hr>
+<h2 id="리더-암과-팔로워-암">리더 암과 팔로워 암<a class="anchor" href="#리더-암과-팔로워-암">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>구분</th><th>리더 암 (Leader / 主动臂)</th><th>팔로워 암 (Follower / 从动臂)</th></tr></thead><tbody><tr><td>역할</td><td>사람이 잡고 움직이는 입력 장치</td><td>실제로 작업을 수행하는 로봇</td></tr><tr><td>말단</td><td>손잡이(handle) + 트리거</td><td>그리퍼(집게)</td></tr><tr><td>서보</td><td>감속비 낮음 → 손으로 쉽게 움직임</td><td>감속비 높음 → 토크 강함</td></tr><tr><td>LeRobot 타입</td><td><code>so101_leader</code> (teleoperator)</td><td><code>so101_follower</code> (robot)</td></tr><tr><td>전원</td><td>5V 6A 30W 어댑터 (검정)</td><td>12V 5A 60W 어댑터 (흰색)</td></tr></tbody></table></div>
+<figure class="fig" id="fig-leader-follower"><svg viewBox="0 0 600 316" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="리더 암과 팔로워 암의 역할 비교">
+  <defs>
+    <marker id="lf-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- 리더 -->
+  <rect class="box" x="12" y="40" width="250" height="236" rx="9"/>
+  <text class="lbl" x="28" y="66" font-size="13" font-weight="700">리더 암 (Leader / 主动臂)</text>
+  <text class="sub" x="28" y="83">사람이 손으로 잡고 움직입니다</text>
+
+  <!-- 리더 스케치 -->
+  <g stroke="var(--text-dim)" stroke-width="9" stroke-linecap="round" fill="none" opacity="0.5">
+    <path d="M62 250 V214"/>
+    <path d="M62 214 L112 176"/>
+    <path d="M112 176 L162 196"/>
+  </g>
+  <rect class="box" x="44" y="250" width="36" height="14" rx="3"/>
+  <path stroke="var(--text-dim)" stroke-width="4" fill="none" d="M162 196 l16 8 M170 200 l-4 12"/>
+  <text class="tag" x="186" y="200" font-size="10.5">손잡이·트리거</text>
+
+  <g class="sub">
+    <text x="28" y="112">전원 <tspan class="lbl">5V 6A</tspan>  ·  검정 팔</text>
+    <text x="28" y="130">서보 감속비 <tspan class="lbl">1:191 / 1:345 / 1:147</tspan></text>
+    <text x="28" y="148">손으로 <tspan class="hi">가볍게</tspan> 움직여야 하므로</text>
+    <text x="28" y="164">관절마다 필요한 만큼만 감속</text>
+    <text class="tag mono" x="28" y="186">so101_leader  (teleoperator)</text>
+  </g>
+
+  <!-- 팔로워 -->
+  <rect class="box-hi" x="338" y="40" width="250" height="236" rx="9"/>
+  <text class="hi" x="354" y="66" font-size="13" font-weight="700">팔로워 암 (Follower / 从动臂)</text>
+  <text class="sub" x="354" y="83">실제로 물건을 집습니다</text>
+
+  <g stroke="var(--accent)" stroke-width="11" stroke-linecap="round" fill="none" opacity="0.55">
+    <path d="M388 250 V214"/>
+    <path d="M388 214 L438 176"/>
+    <path d="M438 176 L488 196"/>
+  </g>
+  <rect class="box" x="370" y="250" width="36" height="14" rx="3"/>
+  <path stroke="var(--accent)" stroke-width="4" fill="none" d="M488 196 l18 -6 M488 196 l18 10"/>
+  <text class="tag" x="512" y="200" font-size="10.5">그리퍼</text>
+
+  <g class="sub">
+    <text x="354" y="112">전원 <tspan class="wr">12V 5A</tspan>  ·  흰색 팔</text>
+    <text x="354" y="130">서보 감속비 <tspan class="lbl">6개 모두 1:345</tspan></text>
+    <text x="354" y="148">자기 무게와 부하를 버텨야 하므로</text>
+    <text x="354" y="164">전 관절 고토크</text>
+    <text class="tag mono" x="354" y="186">so101_follower  (robot)</text>
+  </g>
+
+  <!-- 관계 -->
+  <path class="ln-hi" stroke-width="2" d="M268 158 H332" marker-end="url(#lf-a)"
+        color="var(--accent)"/>
+  <text class="hi" x="300" y="146" text-anchor="middle" font-size="11.5">관절 각도</text>
+  <text class="sub" x="300" y="176" text-anchor="middle" font-size="10.5">30~60 Hz</text>
+
+  <text class="dg" x="300" y="22" text-anchor="middle" font-size="12" font-weight="700">
+    어댑터를 바꿔 끼우면 서보가 탑니다</text>
+
+  <text class="sub" x="300" y="302" text-anchor="middle">
+    리더에서 읽은 각도가 데이터셋의 <tspan class="mono">action</tspan>,
+    팔로워가 읽은 각도가 <tspan class="mono">observation.state</tspan> 가 됩니다</text>
+</svg><figcaption>두 팔은 생김새가 거의 같지만 <strong>역할도, 서보도, 전원도 다릅니다.</strong></figcaption></figure>
+<div class="callout callout-warn"><div class="callout-title">전원 어댑터를 절대 바꿔 끼우지 마세요</div><div class="callout-body"><p>리더의 7.4V 서보에 12V를 넣으면 서보가 타버립니다. 원문 튜토리얼도 이 부분을 반복해서 강조합니다. <strong>검정 팔 = 5V 6A, 흰색 팔 = 12V 5A</strong>로 외워 두세요.</p></div></div>
+<p>두 팔의 구조는 거의 동일합니다. 조립 기준으로 <strong>12단계까지는 완전히 같고</strong>, 이후 말단부(그리퍼 vs 손잡이)만 달라집니다.</p>
+<hr>
+<h2 id="sts3215-버스-서보">STS3215 버스 서보<a class="anchor" href="#sts3215-버스-서보">#</a></h2>
+<p>SO-ARM101의 모든 관절은 <strong>Feetech STS3215</strong> 직렬 버스 서보입니다. 일반 RC 서보와 다른 점이 핵심입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>일반 RC 서보</th><th>STS3215 버스 서보</th></tr></thead><tbody><tr><td>신호</td><td>PWM 펄스폭</td><td><strong>시리얼 패킷(SCS 프로토콜)</strong></td></tr><tr><td>배선</td><td>서보마다 개별 신호선</td><td><strong>데이지체인 1줄로 6개 연결</strong></td></tr><tr><td>피드백</td><td>없음 (열린 루프)</td><td><strong>현재 위치·속도·부하·전압·온도 읽기 가능</strong></td></tr><tr><td>위치 분해능</td><td>—</td><td><strong>0~4095 (12비트, 360°)</strong></td></tr><tr><td>식별</td><td>—</td><td><strong>ID(1~253)로 개별 지정</strong></td></tr></tbody></table></div>
+<p>이 &quot;현재 위치를 읽을 수 있다&quot;는 점이 모방학습의 전제입니다. 사람이 리더 암을 끌면 그 각도를 읽어 데이터셋의 <code>action</code>으로 기록하고, 동시에 팔로워에게 명령으로 보냅니다.</p>
+<h3 id="핵심-사양">핵심 사양<a class="anchor" href="#핵심-사양">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>7.4V 버전</th><th>12V 버전</th></tr></thead><tbody><tr><td>스톨 토크</td><td>16.5 kg·cm @ 6V</td><td><strong>30 kg·cm</strong></td></tr><tr><td>위치 분해능</td><td>4096 스텝 / 360°</td><td>동일</td></tr><tr><td>기본 보레이트</td><td>1,000,000 bps</td><td>동일</td></tr><tr><td>기본 ID</td><td>1 (공장 출하 시)</td><td>동일</td></tr><tr><td>통신</td><td>반이중 TTL 시리얼 (SCS 프로토콜)</td><td>동일</td></tr><tr><td>중위(center) 값</td><td><strong>2047 / 2048</strong></td><td>동일</td></tr></tbody></table></div>
+<h3 id="감속비별-서보-구분-매우-중요">감속비별 서보 구분 — 매우 중요<a class="anchor" href="#감속비별-서보-구분-매우-중요">#</a></h3>
+<p>같은 STS3215라도 <strong>감속비가 다른 4가지 모델</strong>이 섞여 옵니다. 잘못 끼우면 팔이 처지거나 리더가 너무 뻑뻑해집니다.</p>
+<div class="table-wrap"><table><thead><tr><th>모델</th><th>전압</th><th>감속비</th><th>사용 위치</th><th>수량</th></tr></thead><tbody><tr><td>ST-3215-<strong>C001</strong></td><td>7.4V</td><td><strong>1:345</strong></td><td>리더 2번 관절 (shoulder_lift)</td><td>1</td></tr><tr><td>ST-3215-<strong>C044</strong></td><td>7.4V</td><td><strong>1:191</strong></td><td>리더 1·3번 관절 (shoulder_pan, elbow_flex)</td><td>2</td></tr><tr><td>ST-3215-<strong>C046</strong></td><td>7.4V</td><td><strong>1:147</strong></td><td>리더 4·5·6번 관절 (wrist_flex, wrist_roll, gripper)</td><td>3</td></tr><tr><td>ST-3215-<strong>C018 / C047</strong></td><td><strong>12V</strong></td><td>1:345</td><td><strong>팔로워 전체 관절 1~6</strong></td><td>6</td></tr></tbody></table></div>
+<figure class="fig" id="fig-servo-gear-map"><svg viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="관절별 서보 모델과 감속비 배치">
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    같은 STS3215라도 감속비가 다른 모델이 섞여 옵니다</text>
+  <text class="sub" x="16" y="42">라벨의 C001 / C044 / C046 / C018 을 보고 자리를 맞추세요</text>
+
+  <!-- 리더 -->
+  <text class="lbl" x="16" y="76" font-size="12.5">리더 암 (7.4V)</text>
+  <g>
+    <rect class="box" x="16"  y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="108" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="200" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="292" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="384" y="88" width="86" height="58" rx="6"/>
+    <rect class="box" x="476" y="88" width="86" height="58" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="hi mono" x="59"  y="108" font-size="12">C044</text>
+    <text class="hi mono" x="151" y="108" font-size="12">C001</text>
+    <text class="hi mono" x="243" y="108" font-size="12">C044</text>
+    <text class="hi mono" x="335" y="108" font-size="12">C046</text>
+    <text class="hi mono" x="427" y="108" font-size="12">C046</text>
+    <text class="hi mono" x="519" y="108" font-size="12">C046</text>
+
+    <text class="lbl" x="59"  y="126" font-size="12">1:191</text>
+    <text class="lbl" x="151" y="126" font-size="12">1:345</text>
+    <text class="lbl" x="243" y="126" font-size="12">1:191</text>
+    <text class="lbl" x="335" y="126" font-size="12">1:147</text>
+    <text class="lbl" x="427" y="126" font-size="12">1:147</text>
+    <text class="lbl" x="519" y="126" font-size="12">1:147</text>
+
+    <text class="sub" x="59"  y="140" font-size="10">어깨 회전</text>
+    <text class="sub" x="151" y="140" font-size="10">어깨 들기</text>
+    <text class="sub" x="243" y="140" font-size="10">팔꿈치</text>
+    <text class="sub" x="335" y="140" font-size="10">손목 굽힘</text>
+    <text class="sub" x="427" y="140" font-size="10">손목 회전</text>
+    <text class="sub" x="519" y="140" font-size="10">그리퍼</text>
+  </g>
+  <text class="sub" x="16" y="166">
+    2번만 <tspan class="hi">1:345</tspan> — 팔 전체 무게를 드니까.
+    손목 쪽은 <tspan class="hi">1:147</tspan> — 사람이 가볍게 돌려야 하니까.</text>
+
+  <!-- 팔로워 -->
+  <text class="lbl" x="16" y="204" font-size="12.5">팔로워 암 (12V)</text>
+  <g>
+    <rect class="box-hi" x="16"  y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="108" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="200" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="292" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="384" y="216" width="86" height="44" rx="6"/>
+    <rect class="box-hi" x="476" y="216" width="86" height="44" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="hi mono" x="59"  y="236" font-size="12">C018</text>
+    <text class="hi mono" x="151" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="243" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="335" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="427" y="236" font-size="12">C018</text>
+    <text class="hi mono" x="519" y="236" font-size="12">C018</text>
+    <text class="lbl" x="59"  y="253" font-size="12">1:345</text>
+    <text class="lbl" x="151" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="243" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="335" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="427" y="253" font-size="12">1:345</text>
+    <text class="lbl" x="519" y="253" font-size="12">1:345</text>
+  </g>
+  <text class="sub" x="16" y="278">
+    팔로워는 전부 같습니다 — 어느 관절에 꽂아도 됩니다.
+    <tspan class="dg">리더용 저감속 서보를 팔로워에 끼우면 팔이 처집니다.</tspan></text>
+</svg><figcaption>어느 자리에 어떤 라벨의 서보가 들어가는지. 리더만 섞여 있고 팔로워는 전부 같습니다.</figcaption></figure>
+<div class="callout callout-info"><div class="callout-title">감속비가 무슨 뜻인가</div><div class="callout-body"><p>&quot;모터 회전수 : 출력축 회전수&quot;의 비입니다. <strong>1:345</strong>면 모터가 345바퀴 돌아야 출력축이 1바퀴 돕니다.</p>
+<ul><li>감속비가 크면 → 기어가 토크를 증폭해 <strong>무거운 부하를 든다</strong>. 대신 <strong>느리고, 손으로 끌면 매우 뻑뻑하다</strong>.</li><li>그래서 <strong>팔로워는 전 관절 고감속(1:345)</strong>, <strong>리더는 관절마다 필요한 만큼만</strong> 배분합니다. 리더 2번(어깨 들기)은 팔 전체 무게를 드니까 1:345, 손목 쪽은 사람이 가볍게 돌려야 하니 1:147입니다.</li></ul></div></div>
+<p>LeRobot 공식 문서 기준 리더 암 배치도 함께 확인하세요.</p>
+<div class="table-wrap"><table><thead><tr><th>리더 관절</th><th>모터 번호</th><th>감속비</th></tr></thead><tbody><tr><td>Base / Shoulder Pan</td><td>1</td><td>1 / 191</td></tr><tr><td>Shoulder Lift</td><td>2</td><td>1 / 345</td></tr><tr><td>Elbow Flex</td><td>3</td><td>1 / 191</td></tr><tr><td>Wrist Flex</td><td>4</td><td>1 / 147</td></tr><tr><td>Wrist Roll</td><td>5</td><td>1 / 147</td></tr><tr><td>Gripper</td><td>6</td><td>1 / 147</td></tr></tbody></table></div>
+<p>팔로워는 <strong>6개 모두 1/345</strong>입니다.</p>
+<hr>
+<h2 id="서보-드라이버-보드">서보 드라이버 보드<a class="anchor" href="#서보-드라이버-보드">#</a></h2>
+<p>USB-C ↔ 서보 버스를 중계하는 작은 보드입니다. 대개 <strong>Waveshare Serial Bus Servo Driver Board</strong> 또는 그 호환 보드입니다.</p>
+<ul><li>PC에서는 CH340 / CP210x 계열 USB-시리얼로 인식됩니다.<ul><li>Linux: <code>/dev/ttyACM0</code>, <code>/dev/ttyUSB0</code></li><li>macOS: <code>/dev/tty.usbmodem*</code> 또는 <code>/dev/tty.wchusbserial*</code></li><li>Windows: <code>COM3</code>, <code>COM4</code> …</li></ul></li><li>서보 3핀 커넥터가 여러 개 있고, 어느 포트에 꽂아도 같은 버스입니다.</li><li><strong>외부 전원 입력</strong>이 따로 있습니다. USB만 꽂으면 통신은 되지만 서보가 움직이지 않습니다.</li></ul>
+<div class="callout callout-warn"><div class="callout-title">Waveshare 보드의 점퍼</div><div class="callout-body"><p>Waveshare 컨트롤러 보드를 쓴다면 **두 개의 점퍼가 모두 <code>B</code> 채널(USB)** 쪽에 꽂혀 있어야 합니다. <code>A</code> 쪽에 있으면 PC에서 서보가 전혀 검색되지 않습니다.</p></div></div>
+<p>보드는 4개의 <strong>M2.5 황동 스탠드오프(서포터)</strong> 를 먼저 세우고 <strong>M2.5×8 나사 4개</strong>로 고정한 뒤, 팔 베이스에 장착합니다.</p>
+<hr>
+<h2 id="전체-부품-목록-bom">전체 부품 목록 (BOM)<a class="anchor" href="#전체-부품-목록-bom">#</a></h2>
+<h3 id="팔로워-1대-구성-약-122">팔로워 1대 구성 — 약 $122<a class="anchor" href="#팔로워-1대-구성-약-122">#</a></h3>
+<ul><li>STS3215 서보 × 6 (모두 1/345)</li><li>서보 드라이버 보드 × 1</li><li>USB-C 케이블 × 1</li><li>전원 어댑터 × 1</li><li>테이블 클램프 × 2</li><li>3D 프린팅 부품 일체</li><li>나사류: M2×6, M3×6, M2.5×8</li></ul>
+<h3 id="리더-팔로워-2대-세트-약-230">리더 + 팔로워 2대 세트 — 약 $230<a class="anchor" href="#리더-팔로워-2대-세트-약-230">#</a></h3>
+<p>위 구성 두 벌에, 리더용 서보는 감속비별로 C001×1 / C044×2 / C046×3 구성입니다.</p>
+<div class="callout callout-tip"><div class="callout-title">국내 구매</div><div class="callout-body"><p>TheRobotStudio 저장소는 지역별 키트 벤더를 정리해 두고 있으며, 그중 <strong>RoboSEasy</strong>가 한국 벤더로 등재되어 있습니다. 이 밖에 Seeed Studio, WowRobo, PartaBot, ForgeMotion Labs 등이 조립 완제품 또는 부품 키트를 판매합니다. 해외 직구 시 3D 프린팅 부품만 따로 받고 서보는 국내에서 구하는 조합도 흔합니다.</p></div></div>
+<hr>
+<h2 id="카메라-구성">카메라 구성<a class="anchor" href="#카메라-구성">#</a></h2>
+<p>모방학습의 성능은 <strong>카메라 배치가 절반</strong>입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>위치</th><th>역할</th><th>권장 사양</th></tr></thead><tbody><tr><td><strong>손목(wrist)</strong></td><td>파지 직전의 정밀한 상대 위치</td><td>USB 웹캠 640×480 @30fps, 광각</td></tr><tr><td><strong>전역(top/front)</strong></td><td>작업 공간 전체와 물체 위치</td><td>USB 웹캠 640×480~1920×1080 @30fps</td></tr><tr><td>(선택) <strong>깊이 카메라</strong></td><td>RealSense D405/D435i 등</td><td>정밀 파지 연구용</td></tr></tbody></table></div>
+<p>원문 위키에는 <strong>팔 장착형 브래킷 + 환경 카메라 키트</strong>(臂载支架和环境相机套件), <strong>상단 카메라 마운트</strong>(顶置摄像头安装座), <strong>평행 지(指) 그리퍼</strong>(平行指夹爪) 등의 별도 장착 튜토리얼도 있습니다. 카메라는 한 번 고정하면 <strong>데이터 수집 내내 절대 움직이지 말아야</strong> 합니다. (<a href="../lessons/ch10.html">10장</a>)</p>
+<hr>
+<h2 id="배선-순서">배선 순서<a class="anchor" href="#배선-순서">#</a></h2>
+<ol><li>서보들을 3핀 케이블로 <strong>데이지체인</strong> 연결합니다. (1번 → 2번 → … → 6번)</li><li>첫 번째 서보(ID=1, shoulder_pan)를 <strong>드라이버 보드</strong>에 연결합니다.</li><li>드라이버 보드에 <strong>전원 어댑터</strong>를 연결합니다. (리더=5V 6A, 팔로워=12V 5A)</li><li>드라이버 보드를 <strong>USB-C 케이블</strong>로 PC에 연결합니다.</li><li>포트를 확실히 구분하려면 <strong>팔로워를 먼저 꽂고, 그다음 리더를 꽂습니다.</strong> → 보통 팔로워가 <code>/dev/ttyACM0</code>, 리더가 <code>/dev/ttyACM1</code>이 됩니다. (<a href="../lessons/ch07.html">7장</a>)</li></ol>
+<figure class="fig" id="fig-wiring"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="PC에서 서보까지의 배선 구조">
+  <defs>
+    <marker id="wr-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- PC -->
+  <rect class="box" x="16" y="96" width="96" height="56" rx="7"/>
+  <text class="lbl" x="64" y="122" text-anchor="middle" font-size="12.5">PC</text>
+  <text class="sub" x="64" y="139" text-anchor="middle">또는 라즈베리파이</text>
+
+  <!-- USB -->
+  <path class="ln" stroke="var(--border)" stroke-width="2" d="M112 124 H176"
+        marker-end="url(#wr-a)" color="var(--border)"/>
+  <text class="sub" x="144" y="114" text-anchor="middle">USB-C</text>
+  <text class="tag mono" x="144" y="142" text-anchor="middle" font-size="10">/dev/ttyACM0</text>
+
+  <!-- 드라이버 보드 -->
+  <rect class="box-hi" x="180" y="88" width="112" height="72" rx="7"/>
+  <text class="hi" x="236" y="112" text-anchor="middle" font-size="12.5">서보 드라이버 보드</text>
+  <text class="sub" x="236" y="129" text-anchor="middle">USB ↔ TTL 시리얼</text>
+  <text class="tag" x="236" y="146" text-anchor="middle" font-size="10.5">점퍼는 B 채널(USB)</text>
+
+  <!-- 전원 -->
+  <rect class="box" x="180" y="210" width="112" height="46" rx="7"/>
+  <text class="wr" x="236" y="230" text-anchor="middle" font-size="12">전원 어댑터</text>
+  <text class="sub" x="236" y="246" text-anchor="middle">팔로워 12V 5A / 리더 5V 6A</text>
+  <path stroke="var(--warn)" stroke-width="2" stroke-dasharray="5 3" d="M236 210 V160"/>
+  <text class="wr" x="246" y="186" font-size="10.5">없으면 통신만 되고</text>
+  <text class="wr" x="246" y="199" font-size="10.5">서보는 안 움직입니다</text>
+
+  <!-- 3핀 데이지체인 -->
+  <path class="ln-hi" stroke-width="2" d="M292 124 H332" marker-end="url(#wr-a)"
+        color="var(--accent)"/>
+
+  <g>
+    <rect class="box" x="336" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="380" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="424" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="468" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="512" y="100" width="40" height="48" rx="5"/>
+    <rect class="box" x="556" y="100" width="40" height="48" rx="5"/>
+  </g>
+  <g class="hi mono" text-anchor="middle" font-size="14">
+    <text x="356" y="130">1</text><text x="400" y="130">2</text>
+    <text x="444" y="130">3</text><text x="488" y="130">4</text>
+    <text x="532" y="130">5</text><text x="576" y="130">6</text>
+  </g>
+  <g class="ln-hi" stroke-width="2">
+    <path d="M376 124 H380"/><path d="M420 124 H424"/><path d="M464 124 H468"/>
+    <path d="M508 124 H512"/><path d="M552 124 H556"/>
+  </g>
+  <g class="sub" text-anchor="middle" font-size="10">
+    <text x="356" y="166">어깨</text><text x="400" y="166">어깨</text>
+    <text x="444" y="166">팔꿈치</text><text x="488" y="166">손목</text>
+    <text x="532" y="166">손목</text><text x="576" y="166">그리퍼</text>
+    <text x="356" y="178">회전</text><text x="400" y="178">들기</text>
+    <text x="532" y="178">회전</text>
+  </g>
+
+  <text class="lbl" x="466" y="74" text-anchor="middle" font-size="12.5">
+    STS3215 버스 서보 × 6 — 3핀 데이지체인</text>
+  <text class="sub" x="466" y="212" text-anchor="middle">
+    선 한 줄에 6개가 모두 매달립니다. 그래서 <tspan class="hi">ID가 겹치면 안 됩니다</tspan>.</text>
+  <text class="sub" x="466" y="230" text-anchor="middle">
+    보레이트 1,000,000 bps · 반이중 TTL · SCS 프로토콜</text>
+
+  <text class="sub" x="16" y="30">
+    포트를 확실히 구분하려면 <tspan class="lbl">팔로워를 먼저 꽂고 리더를 나중에</tspan> 꽂습니다.</text>
+  <text class="sub" x="16" y="48">
+    보통 팔로워가 ttyACM0, 리더가 ttyACM1 이 됩니다.</text>
+</svg><figcaption>PC에서 서보까지의 전체 배선. 선 한 줄에 서보 6개가 매달리는 <strong>버스</strong> 구조입니다.</figcaption></figure>
+<div class="callout callout-danger"><div class="callout-title">전원 인가 전 체크리스트</div><div class="callout-body"><ul><li>서보 ID가 1~6으로 <strong>중복 없이</strong> 설정되었는가? (<a href="../lessons/ch05.html">5장</a>)</li><li>어댑터 전압이 팔 종류와 맞는가? (5V ↔ 12V)</li><li>3핀 케이블이 <strong>역방향으로 꽂히지 않았는가</strong>? (커넥터 방향 확인)</li><li>팔 주변에 사람·물건이 없는가?</li></ul></div></div>
+<hr>
+<h2 id="제품-파라미터-요약">제품 파라미터 요약<a class="anchor" href="#제품-파라미터-요약">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>자유도</td><td>5 + 그리퍼 1 (총 6 조인트)</td></tr><tr><td>서보</td><td>Feetech STS3215 ×6 (팔로워) / ×6 (리더)</td></tr><tr><td>위치 분해능</td><td>4096 스텝 / 360° (0.088°)</td></tr><tr><td>통신</td><td>반이중 TTL 시리얼, 1 Mbps, SCS 프로토콜</td></tr><tr><td>인터페이스</td><td>USB-C</td></tr><tr><td>최대 도달 반경</td><td>TCP 기준 수평 약 48 cm (실용 작업 반경 15~30 cm)</td></tr><tr><td>전원</td><td>팔로워 12V 5A / 리더 5V 6A</td></tr><tr><td>구조</td><td>PLA+ 3D 프린팅 + 금속 보강</td></tr><tr><td>제어 SW</td><td>LeRobot(Python), ROS 2 (ros2_control / MoveIt 2)</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch04.html">4장 3D 프린팅과 조립</a>에서 출력 설정과 관절별 조립 순서를 따라갑니다. <strong>조립 전에 반드시 <a href="../lessons/ch05.html">5장 서보 ID 설정</a>을 먼저 읽으세요.</strong> ID 설정은 조립 <em>전에</em> 해야 훨씬 편합니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch02.html"><span>이전</span>로봇팔 기초 지식</a><a class="pager-next" href="ch04.html"><span>다음</span>3D 프린팅과 조립</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#제품-개요">제품 개요</a><a class="toc-l3" href="#하드웨어-설계-고성능-모듈화-조립-커스터마이즈-용이">하드웨어 설계 — 고성능 모듈화, 조립·커스터마이즈 용이</a><a class="toc-l3" href="#소프트웨어-생태계-lerobot-깊은-통합">소프트웨어 생태계 — LeRobot 깊은 통합</a><a class="toc-l3" href="#제품-장점">제품 장점</a><a class="toc-l3" href="#핵심-응용-시나리오">핵심 응용 시나리오</a><a class="toc-l2" href="#리더-암과-팔로워-암">리더 암과 팔로워 암</a><a class="toc-l2" href="#sts3215-버스-서보">STS3215 버스 서보</a><a class="toc-l3" href="#핵심-사양">핵심 사양</a><a class="toc-l3" href="#감속비별-서보-구분-매우-중요">감속비별 서보 구분 — 매우 중요</a><a class="toc-l2" href="#서보-드라이버-보드">서보 드라이버 보드</a><a class="toc-l2" href="#전체-부품-목록-bom">전체 부품 목록 (BOM)</a><a class="toc-l3" href="#팔로워-1대-구성-약-122">팔로워 1대 구성 — 약 $122</a><a class="toc-l3" href="#리더-팔로워-2대-세트-약-230">리더 + 팔로워 2대 세트 — 약 $230</a><a class="toc-l2" href="#카메라-구성">카메라 구성</a><a class="toc-l2" href="#배선-순서">배선 순서</a><a class="toc-l2" href="#제품-파라미터-요약">제품 파라미터 요약</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

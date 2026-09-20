@@ -1,0 +1,63 @@
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="서보 ID를 6번부터 1번까지 역순으로 설정하는 절차">
+  <defs>
+    <marker id="si-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    ID 는 6 → 1 역순으로 설정됩니다</text>
+  <text class="sub" x="16" y="42">
+    한 번에 <tspan class="hi">서보 하나만</tspan> 보드에 연결한 상태여야 합니다 —
+    공장 출하 ID 가 전부 1이라 겹치면 통신이 깨집니다</text>
+
+  <!-- 보드 -->
+  <rect class="box-hi" x="16" y="70" width="96" height="60" rx="7"/>
+  <text class="hi" x="64" y="94" text-anchor="middle" font-size="12">드라이버 보드</text>
+  <text class="sub" x="64" y="112" text-anchor="middle" font-size="10.5">+ 전원</text>
+
+  <!-- 한 번에 하나 -->
+  <path class="ln-hi" stroke-width="2" d="M112 100 H154" marker-end="url(#si-a)"
+        color="var(--accent)"/>
+  <rect class="box" x="158" y="76" width="54" height="48" rx="5"/>
+  <text class="lbl" x="185" y="104" text-anchor="middle" font-size="13">?</text>
+  <text class="sub" x="185" y="142" text-anchor="middle" font-size="10.5">이 서보 하나만</text>
+
+  <!-- 순서 -->
+  <g>
+    <rect class="box" x="250" y="70" width="52" height="34" rx="5"/>
+    <rect class="box" x="306" y="70" width="52" height="34" rx="5"/>
+    <rect class="box" x="362" y="70" width="52" height="34" rx="5"/>
+    <rect class="box" x="418" y="70" width="52" height="34" rx="5"/>
+    <rect class="box" x="474" y="70" width="52" height="34" rx="5"/>
+    <rect class="box" x="530" y="70" width="52" height="34" rx="5"/>
+  </g>
+  <g class="hi mono" text-anchor="middle" font-size="14">
+    <text x="276" y="93">6</text><text x="332" y="93">5</text><text x="388" y="93">4</text>
+    <text x="444" y="93">3</text><text x="500" y="93">2</text><text x="556" y="93">1</text>
+  </g>
+  <g class="sub" text-anchor="middle" font-size="9.5">
+    <text x="276" y="118">gripper</text>
+    <text x="332" y="118">wrist_roll</text>
+    <text x="388" y="118">wrist_flex</text>
+    <text x="444" y="118">elbow_flex</text>
+    <text x="500" y="118">shoulder</text>
+    <text x="500" y="129">_lift</text>
+    <text x="556" y="118">shoulder</text>
+    <text x="556" y="129">_pan</text>
+  </g>
+  <path class="ln" stroke="var(--border)" stroke-width="1.6" stroke-dasharray="4 3"
+        d="M250 58 H582" marker-start="url(#si-a)" color="var(--border)"/>
+  <text class="sub" x="416" y="52" text-anchor="middle" font-size="10.5">설정 순서</text>
+
+  <!-- 이후 -->
+  <rect class="box" x="16" y="166" width="568" height="80" rx="8"/>
+  <text class="lbl" x="32" y="188" font-size="12">6개를 다 마치면</text>
+  <g class="sub" font-size="11">
+    <text x="32" y="210">서보들을 3핀 케이블로 데이지체인 연결 → 1번(shoulder_pan) 케이블을 보드에 연결 → 보드를 베이스에 장착</text>
+    <text x="32" y="232">EEPROM 에 저장되므로 <tspan class="hi">한 번만</tspan> 하면 됩니다.
+      다른 로봇에서 떼어 온 서보를 재활용할 때만 다시 합니다.</text>
+  </g>
+</svg>

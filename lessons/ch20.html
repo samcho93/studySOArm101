@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>20. LeRobot ↔ ROS 2 브릿지 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="학습한 정책을 ROS 2 노드로 감싸 joint_states/JointTrajectory 파이프라인에 연결합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" class="active" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch20">
+  <div class="lesson-head">
+    <div class="crumbs">PART 5 ROS 2 연동과 시뮬레이션 &middot; 약 35분</div>
+    <h1><span class="lesson-no">20</span>LeRobot ↔ ROS 2 브릿지</h1>
+    <p class="lede">학습한 정책을 ROS 2 노드로 감싸 joint_states/JointTrajectory 파이프라인에 연결합니다.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<h2 id="왜-둘을-잇는가">왜 둘을 잇는가<a class="anchor" href="#왜-둘을-잇는가">#</a></h2>
+<p>두 생태계는 잘하는 것이 다릅니다.</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>LeRobot</th><th>ROS 2</th></tr></thead><tbody><tr><td>강점</td><td>모방학습, 데이터셋, VLA 정책</td><td>모션 플래닝, 충돌 회피, 센서 통합, 다중 로봇</td></tr><tr><td>통신</td><td>DORA 데이터플로 (코드 핫 리로드)</td><td>DDS 기반 pub/sub, 산업 표준</td></tr><tr><td>시뮬레이션</td><td>gym 환경, Isaac Lab</td><td>Gazebo, MoveIt</td></tr><tr><td>생태계</td><td>AI/ML 중심</td><td>로보틱스 전반</td></tr></tbody></table></div>
+<p><strong>학습한 정책으로 물체를 집되, 이동 경로는 MoveIt이 충돌 없이 계획</strong>하게 하고 싶다면 둘을 이어야 합니다.</p>
+<div class="callout callout-info"><div class="callout-title">원문 위키의 언급</div><div class="callout-body"><p>LeRobot 생태계의 DORA 분산 데이터플로 엔진은 코드 핫 리로드로 재시작 없이 정책을 조정할 수 있습니다. 원문 위키는 여기에 더해 &quot;파이썬 실행 성능이 ROS 2보다 17배 빠르다&quot;고 소개하지만, <strong>제조사 측 주장이고 측정 조건이 공개되어 있지 않으므로</strong> 설계 근거로 삼지는 마세요. 반대로 표준 모션 플래닝과 도구 생태계는 ROS 2가 압도적입니다. 둘은 대체재가 아니라 보완재입니다.</p></div></div>
+<hr>
+<h2 id="세-가지-통합-방식">세 가지 통합 방식<a class="anchor" href="#세-가지-통합-방식">#</a></h2>
+<figure class="fig" id="fig-bridge-modes"><svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="LeRobot과 ROS 2를 잇는 세 가지 방식">
+  <defs>
+    <marker id="bm-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <text class="lbl" x="16" y="24" font-size="13" font-weight="700">
+    둘을 잇는 세 가지 방식</text>
+  <text class="dg" x="16" y="42" font-size="11.5">
+    시리얼 포트는 하나입니다 — LeRobot 과 ROS 2 하드웨어가 동시에 열 수 없습니다</text>
+
+  <!-- 방식 1 -->
+  <rect class="box-hi" x="16" y="58" width="568" height="78" rx="8"/>
+  <text class="hi" x="32" y="78" font-size="12.5">방식 1 — 정책을 ROS 2 노드로 감싸기 (권장)</text>
+  <g>
+    <rect class="box" x="32"  y="88" width="104" height="34" rx="5"/>
+    <rect class="box" x="168" y="88" width="120" height="34" rx="5"/>
+    <rect class="box" x="320" y="88" width="120" height="34" rx="5"/>
+    <rect class="box" x="472" y="88" width="96" height="34" rx="5"/>
+  </g>
+  <g text-anchor="middle" class="sub" font-size="10.5">
+    <text x="84"  y="109">카메라 · /joint_states</text>
+    <text x="228" y="109" class="lbl">LeRobot 정책</text>
+    <text x="380" y="109" class="mono">JointTrajectory</text>
+    <text x="520" y="109" class="lbl">ros2_control</text>
+  </g>
+  <g class="ln-hi" stroke-width="1.8" color="var(--accent)">
+    <path d="M136 105 H162" marker-end="url(#bm-a)"/>
+    <path d="M288 105 H314" marker-end="url(#bm-a)"/>
+    <path d="M440 105 H466" marker-end="url(#bm-a)"/>
+  </g>
+
+  <!-- 방식 2 -->
+  <rect class="box" x="16" y="148" width="568" height="78" rx="8"/>
+  <text class="lbl" x="32" y="168" font-size="12.5">방식 2 — LeRobot 이 주도, ROS 2 는 관측만</text>
+  <g>
+    <rect class="box" x="32"  y="178" width="140" height="34" rx="5"/>
+    <rect class="box" x="216" y="178" width="120" height="34" rx="5"/>
+    <rect class="box" x="380" y="178" width="188" height="34" rx="5"/>
+  </g>
+  <g text-anchor="middle" class="sub" font-size="10.5">
+    <text x="102" y="199" class="lbl">LeRobot (시리얼 직접)</text>
+    <text x="276" y="199">서보</text>
+    <text x="474" y="199" class="mono">/joint_states → RViz · rosbag</text>
+  </g>
+  <g class="ln" stroke="var(--border)" stroke-width="1.8">
+    <path d="M172 195 H210" marker-end="url(#bm-a)" color="var(--border)"/>
+    <path d="M336 195 H374" marker-end="url(#bm-a)" color="var(--border)"/>
+  </g>
+  <text class="sub" x="32" y="222" font-size="10.5">MoveIt 충돌 회피를 쓸 수 없습니다</text>
+
+  <!-- 방식 3 -->
+  <rect class="box" x="16" y="238" width="568" height="86" rx="8"/>
+  <text class="lbl" x="32" y="258" font-size="12.5">방식 3 — 작업 단계별로 제어권을 넘기기</text>
+  <g>
+    <rect class="box" x="32"  y="268" width="150" height="38" rx="5"/>
+    <rect class="box-hi" x="214" y="268" width="150" height="38" rx="5"/>
+    <rect class="box" x="396" y="268" width="172" height="38" rx="5"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="lbl" x="107" y="286" font-size="11.5">접근</text>
+    <text class="sub" x="107" y="300" font-size="10">MoveIt — 충돌 회피</text>
+    <text class="hi"  x="289" y="286" font-size="11.5">파지</text>
+    <text class="sub" x="289" y="300" font-size="10">LeRobot 정책 — 정밀</text>
+    <text class="lbl" x="482" y="286" font-size="11.5">운반 · 배치</text>
+    <text class="sub" x="482" y="300" font-size="10">MoveIt — 직선 경로</text>
+  </g>
+  <g class="ln" stroke="var(--border)" stroke-width="1.8">
+    <path d="M182 287 H208" marker-end="url(#bm-a)" color="var(--border)"/>
+    <path d="M364 287 H390" marker-end="url(#bm-a)" color="var(--border)"/>
+  </g>
+</svg><figcaption>세 가지 통합 방식. 무엇을 포기하고 무엇을 얻는지가 다릅니다.</figcaption></figure>
+<h3 id="방식-1-정책을-ros-2-노드로-감싸기-권장">방식 1 — 정책을 ROS 2 노드로 감싸기 (권장)<a class="anchor" href="#방식-1-정책을-ros-2-노드로-감싸기-권장">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">카메라 토픽 ──┐
+              ├─→ [정책 노드] ─→ /joint_trajectory_controller/joint_trajectory
+/joint_states ┘        ↑
+                  LeRobot 정책 (PyTorch)</code></pre></div>
+<ul><li><strong>장점</strong>: ROS 2의 컨트롤러·안전장치·시각화를 모두 활용</li><li><strong>단점</strong>: 추론 지연이 제어 주기에 직접 영향</li></ul>
+<h3 id="방식-2-lerobot이-주도하고-ros-2는-관측만">방식 2 — LeRobot이 주도하고 ROS 2는 관측만<a class="anchor" href="#방식-2-lerobot이-주도하고-ros-2는-관측만">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">LeRobot (시리얼 직접 제어) ─→ 서보
+        └─→ [상태 발행 노드] ─→ /joint_states (RViz·기록용)</code></pre></div>
+<ul><li><strong>장점</strong>: LeRobot의 성능과 동작을 그대로 유지</li><li><strong>단점</strong>: MoveIt 충돌 회피를 쓸 수 없음</li></ul>
+<h3 id="방식-3-작업-단계별로-번갈아-쓰기">방식 3 — 작업 단계별로 번갈아 쓰기<a class="anchor" href="#방식-3-작업-단계별로-번갈아-쓰기">#</a></h3>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">[접근] MoveIt으로 물체 위 10cm까지 충돌 없이 이동
+   ↓  (하드웨어 제어권 인계)
+[파지] LeRobot 정책으로 세밀한 파지 수행
+   ↓
+[운반] MoveIt으로 목표 지점까지</code></pre></div>
+<ul><li><strong>장점</strong>: 각자의 강점만 사용</li><li><strong>단점</strong>: 제어권 전환 로직이 필요</li></ul>
+<div class="callout callout-warn"><div class="callout-title">시리얼 포트는 하나입니다</div><div class="callout-body"><p>방식 2·3에서 <strong>LeRobot과 ROS 2 하드웨어 인터페이스가 동시에 같은 시리얼 포트를 열 수 없습니다.</strong> 반드시 한쪽이 포트를 닫은 뒤 다른 쪽이 열어야 합니다.</p></div></div>
+<hr>
+<h2 id="구현-1-정책-노드">구현 1 — 정책 노드<a class="anchor" href="#구현-1-정책-노드">#</a></h2>
+<p><code>scripts/lerobot_ros2_bridge.py</code>의 핵심 구조입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">#!/usr/bin/env python3
+&quot;&quot;&quot;LeRobot 정책을 ROS 2 노드로 감싸는 브릿지.&quot;&quot;&quot;
+
+import numpy as np
+import rclpy
+import torch
+from cv_bridge import CvBridge
+from rclpy.node import Node
+from sensor_msgs.msg import Image, JointState
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+
+from lerobot.policies.act.modeling_act import ACTPolicy
+
+JOINTS = [&quot;shoulder_pan&quot;, &quot;shoulder_lift&quot;, &quot;elbow_flex&quot;,
+          &quot;wrist_flex&quot;, &quot;wrist_roll&quot;, &quot;gripper&quot;]
+
+
+class LeRobotPolicyNode(Node):
+    def __init__(self):
+        super().__init__(&quot;lerobot_policy_node&quot;)
+
+        self.declare_parameter(&quot;policy_path&quot;, &quot;outputs/train/act_so101/checkpoints/last/pretrained_model&quot;)
+        self.declare_parameter(&quot;rate_hz&quot;, 30.0)
+        self.declare_parameter(&quot;task&quot;, &quot;Grab the black cube&quot;)
+
+        path = self.get_parameter(&quot;policy_path&quot;).value
+        self.task = self.get_parameter(&quot;task&quot;).value
+        rate = self.get_parameter(&quot;rate_hz&quot;).value
+
+        self.get_logger().info(f&quot;정책 로드: {path}&quot;)
+        self.device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;
+        self.policy = ACTPolicy.from_pretrained(path).to(self.device).eval()
+
+        self.bridge = CvBridge()
+        self.latest_state = None
+        self.latest_images = {}
+
+        self.create_subscription(JointState, &quot;/joint_states&quot;, self.on_state, 10)
+        self.create_subscription(Image, &quot;/camera/front/image_raw&quot;,
+                                 lambda m: self.on_image(&quot;front&quot;, m), 10)
+        self.create_subscription(Image, &quot;/camera/wrist/image_raw&quot;,
+                                 lambda m: self.on_image(&quot;wrist&quot;, m), 10)
+
+        self.pub = self.create_publisher(
+            JointTrajectory, &quot;/joint_trajectory_controller/joint_trajectory&quot;, 10)
+
+        self.create_timer(1.0 / rate, self.step)
+        self.get_logger().info(&quot;브릿지 준비 완료&quot;)
+
+    # ---- 구독 콜백 --------------------------------------------------
+    def on_state(self, msg: JointState):
+        # /joint_states 의 순서는 보장되지 않으므로 이름으로 매핑한다
+        index = {name: i for i, name in enumerate(msg.name)}
+        try:
+            self.latest_state = np.array(
+                [msg.position[index[j]] for j in JOINTS], dtype=np.float32)
+        except KeyError:
+            pass   # 아직 모든 조인트가 발행되지 않음
+
+    def on_image(self, key: str, msg: Image):
+        self.latest_images[key] = self.bridge.imgmsg_to_cv2(msg, &quot;rgb8&quot;)
+
+    # ---- 제어 루프 --------------------------------------------------
+    def step(self):
+        if self.latest_state is None or len(self.latest_images) &lt; 1:
+            return
+
+        observation = {
+            &quot;observation.state&quot;: torch.from_numpy(self.latest_state)
+                                      .unsqueeze(0).to(self.device),
+            &quot;task&quot;: [self.task],
+        }
+        for key, image in self.latest_images.items():
+            tensor = torch.from_numpy(image).permute(2, 0, 1).float() / 255.0
+            observation[f&quot;observation.images.{key}&quot;] = tensor.unsqueeze(0).to(self.device)
+
+        with torch.inference_mode():
+            action = self.policy.select_action(observation)
+
+        self.publish(action.squeeze(0).cpu().numpy())
+
+    def publish(self, positions: np.ndarray):
+        traj = JointTrajectory()
+        traj.joint_names = JOINTS
+        point = JointTrajectoryPoint()
+        point.positions = [float(v) for v in positions]
+        point.time_from_start.sec = 0
+        point.time_from_start.nanosec = 50_000_000   # 50 ms
+        traj.points = [point]
+        self.pub.publish(traj)
+
+
+def main():
+    rclpy.init()
+    node = LeRobotPolicyNode()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre></div>
+<p>실행:</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 run so_arm_utils lerobot_policy_node \
+  --ros-args \
+  -p policy_path:=outputs/train/act_so101_pick/checkpoints/last/pretrained_model \
+  -p task:=&quot;Grab the black cube&quot; \
+  -p rate_hz:=30.0</code></pre></div>
+<div class="callout callout-danger"><div class="callout-title">단위를 반드시 확인하세요</div><div class="callout-body"><p>LeRobot 정책의 출력은 <strong>캘리브레이션 기반 정규화 값(-100~100, 그리퍼 0~100)</strong> 일 수 있고, ROS 2 <code>JointTrajectory</code>는 <strong>라디안</strong>을 기대합니다.</p>
+<p>정책 설정의 <code>output_features</code>와 데이터셋의 <code>stats.json</code>을 확인해 <strong>정규화 해제(unnormalize)</strong> 가 어디서 이뤄지는지 파악하세요. 잘못하면 팔이 한계까지 급격히 튑니다. 첫 실행은 <strong>반드시 Mock 모드나 Gazebo에서</strong> 하세요.</p></div></div>
+<hr>
+<h2 id="구현-2-카메라-토픽-발행">구현 2 — 카메라 토픽 발행<a class="anchor" href="#구현-2-카메라-토픽-발행">#</a></h2>
+<p>정책 노드가 영상을 받으려면 카메라가 ROS 2 토픽으로 나와야 합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install ros-humble-usb-cam</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">yaml</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-yaml"># config/usb_cam_front.yaml
+usb_cam:
+  ros__parameters:
+    video_device: &quot;/dev/video0&quot;
+    image_width: 640
+    image_height: 480
+    framerate: 30.0
+    pixel_format: &quot;mjpeg2rgb&quot;
+    camera_frame_id: &quot;camera_front&quot;</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ros2 run usb_cam usb_cam_node_exe --ros-args \
+  --params-file config/usb_cam_front.yaml \
+  -r __ns:=/camera/front</code></pre></div>
+<div class="callout callout-warn"><div class="callout-title">카메라 이름이 학습 때와 같아야 합니다</div><div class="callout-body"><p>데이터셋에 <code>observation.images.front</code>로 기록했다면 브릿지에서도 키가 <code>front</code>여야 합니다. <a href="../lessons/ch10.html">10장</a>에서 강조한 것과 같은 이유입니다.</p></div></div>
+<hr>
+<h2 id="구현-3-제어권-전환-방식-3">구현 3 — 제어권 전환 (방식 3)<a class="anchor" href="#구현-3-제어권-전환-방식-3">#</a></h2>
+<p>MoveIt과 정책이 번갈아 팔을 제어하게 만드는 상태 머신입니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">python</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-python">class PickPlaceOrchestrator(Node):
+    &quot;&quot;&quot;MoveIt(이동) + LeRobot 정책(파지) 하이브리드.&quot;&quot;&quot;
+
+    def run(self):
+        # 1) MoveIt: 홈 → pre-grasp (충돌 회피)
+        self.moveit_goto_named(&quot;rest&quot;)
+        self.moveit_goto_pose(x=0.22, y=0.0, z=0.15)
+
+        # 2) 정책 노드 활성화 → 파지 수행
+        self.set_policy_active(True)
+        self.wait_until_grasped(timeout=15.0)
+        self.set_policy_active(False)
+
+        # 3) MoveIt: 직선 상승 후 목표 지점으로
+        self.moveit_cartesian_relative(dz=+0.10)
+        self.moveit_goto_pose(x=0.10, y=0.20, z=0.18)
+
+        # 4) 그리퍼 열기
+        self.command_gripper(open_=True)
+
+        # 5) 홈 복귀
+        self.moveit_goto_named(&quot;rest&quot;)</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">전환 시 주의</div><div class="callout-body"><p>정책 노드와 MoveIt이 <strong>동시에 같은 컨트롤러에 명령을 쓰면</strong> 궤적이 충돌합니다. 한쪽이 명령을 멈춘 것을 확인한 뒤 다른 쪽을 시작하세요. <code>set_policy_active(False)</code> 후 최소 한 제어 주기는 기다리는 것이 안전합니다.</p></div></div>
+<hr>
+<h2 id="데이터-흐름-검증">데이터 흐름 검증<a class="anchor" href="#데이터-흐름-검증">#</a></h2>
+<p>브릿지가 제대로 동작하는지 단계별로 확인합니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 1) 카메라 토픽이 나오는가
+ros2 topic hz /camera/front/image_raw
+
+# 2) 관절 상태가 나오는가
+ros2 topic echo /joint_states --once
+
+# 3) 정책이 명령을 내는가
+ros2 topic hz /joint_trajectory_controller/joint_trajectory
+
+# 4) 명령 값이 상식적인가 (한계 범위 안?)
+ros2 topic echo /joint_trajectory_controller/joint_trajectory --once
+
+# 5) 전체 노드 그래프
+rqt_graph</code></pre></div>
+<div class="callout callout-task"><div class="callout-title">실습 — Mock에서 안전하게 검증</div><div class="callout-body"><ol><li><code>controllers_bringup.launch.py</code>를 <strong>mock 모드</strong>로 실행합니다.</li><li>브릿지 노드를 실행합니다.</li><li>RViz2에서 팔이 정책 출력대로 움직이는지 봅니다.</li><li>PlotJuggler로 명령 값이 조인트 한계 안에 있는지 확인합니다.</li></ol>
+<p>여기서 이상이 없으면 Gazebo로, 그다음 실기로 올라가세요.</p></div></div>
+<hr>
+<h2 id="반대-방향-ros-2-데이터를-lerobot-데이터셋으로">반대 방향 — ROS 2 데이터를 LeRobot 데이터셋으로<a class="anchor" href="#반대-방향-ros-2-데이터를-lerobot-데이터셋으로">#</a></h2>
+<p>ROS 2 bag으로 수집한 데이터를 LeRobot 포맷으로 바꿀 수도 있습니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash"># 텔레오퍼레이션을 하면서 bag 기록
+ros2 bag record /joint_states /camera/front/image_raw /camera/wrist/image_raw
+
+# 변환
+python scripts/rosbag_to_lerobot.py \
+  --bag ./rosbag2_2026_09_21-14_30_00 \
+  --repo-id myname/so101_from_rosbag \
+  --root ./datasets/so101_from_rosbag \
+  --fps 30</code></pre></div>
+<div class="callout callout-tip"><div class="callout-title">이 경로가 유용한 경우</div><div class="callout-body"><p>이미 ROS 2 기반 시스템(예: Gazebo, 다른 로봇)에서 시연 데이터를 모으고 있다면, 이를 LeRobot 포맷으로 바꿔 <strong>ACT나 SmolVLA 학습</strong>에 바로 쓸 수 있습니다.</p></div></div>
+<hr>
+<h2 id="문제-해결">문제 해결<a class="anchor" href="#문제-해결">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>정책이 아무 명령도 안 냄</td><td>관측 미수신</td><td><code>ros2 topic hz</code>로 각 입력 확인</td></tr><tr><td>팔이 한계까지 튐</td><td>단위/정규화 불일치</td><td><code>stats.json</code> 확인, Mock에서 먼저 검증</td></tr><tr><td>동작이 끊김</td><td>추론이 제어 주기보다 느림</td><td><code>rate_hz</code> 낮춤, RTC 추론 사용</td></tr><tr><td><code>/joint_states</code> 순서가 다름</td><td>발행 순서 미보장</td><td><strong>이름으로 매핑</strong> (위 코드 참고)</td></tr><tr><td>시리얼 포트 충돌</td><td>LeRobot과 ROS 2 동시 실행</td><td>한쪽만 실행</td></tr><tr><td>영상 지연이 큼</td><td>압축 미사용</td><td><code>image_transport</code> compressed 사용</td></tr><tr><td>GPU 메모리 부족</td><td>정책 + 다른 프로세스</td><td>다른 GPU 작업 종료</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch21.html">21장 확장 — 듀얼 암, 모바일, 손</a> — 팔 하나로는 부족해질 때의 선택지들입니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch19.html"><span>이전</span>Gazebo 시뮬레이션과 시각화 툴</a><a class="pager-next" href="ch21.html"><span>다음</span>확장 — 듀얼 암, 모바일, 손</a></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#왜-둘을-잇는가">왜 둘을 잇는가</a><a class="toc-l2" href="#세-가지-통합-방식">세 가지 통합 방식</a><a class="toc-l3" href="#방식-1-정책을-ros-2-노드로-감싸기-권장">방식 1 — 정책을 ROS 2 노드로 감싸기 (권장)</a><a class="toc-l3" href="#방식-2-lerobot이-주도하고-ros-2는-관측만">방식 2 — LeRobot이 주도하고 ROS 2는 관측만</a><a class="toc-l3" href="#방식-3-작업-단계별로-번갈아-쓰기">방식 3 — 작업 단계별로 번갈아 쓰기</a><a class="toc-l2" href="#구현-1-정책-노드">구현 1 — 정책 노드</a><a class="toc-l2" href="#구현-2-카메라-토픽-발행">구현 2 — 카메라 토픽 발행</a><a class="toc-l2" href="#구현-3-제어권-전환-방식-3">구현 3 — 제어권 전환 (방식 3)</a><a class="toc-l2" href="#데이터-흐름-검증">데이터 흐름 검증</a><a class="toc-l2" href="#반대-방향-ros-2-데이터를-lerobot-데이터셋으로">반대 방향 — ROS 2 데이터를 LeRobot 데이터셋으로</a><a class="toc-l2" href="#문제-해결">문제 해결</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

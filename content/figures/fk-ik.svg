@@ -1,0 +1,54 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="정기구학과 역기구학의 방향 비교">
+  <defs>
+    <marker id="fi-a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- FK -->
+  <g>
+    <rect class="box-hi" x="16" y="20" width="568" height="112" rx="9"/>
+    <text class="hi" x="32" y="44" font-size="13" font-weight="700">정기구학 FK — 쉽다</text>
+
+    <rect class="box" x="36" y="60" width="150" height="50" rx="7"/>
+    <text class="lbl" x="111" y="80" text-anchor="middle" font-size="12.5">조인트 각도</text>
+    <text class="sub mono" x="111" y="97" text-anchor="middle">q₁ … q₅</text>
+
+    <path class="ln-hi" stroke-width="2" d="M196 85 H288" marker-end="url(#fi-a)"
+          color="var(--accent)"/>
+    <text class="sub" x="242" y="76" text-anchor="middle">행렬 곱</text>
+
+    <rect class="box" x="300" y="60" width="150" height="50" rx="7"/>
+    <text class="lbl" x="375" y="80" text-anchor="middle" font-size="12.5">TCP 위치·자세</text>
+    <text class="sub mono" x="375" y="97" text-anchor="middle">x y z · rpy</text>
+
+    <text class="hi" x="470" y="80" font-size="12.5">해가 항상 1개</text>
+    <text class="sub" x="470" y="97">계산 즉시 끝</text>
+  </g>
+
+  <!-- IK -->
+  <g>
+    <rect class="box" x="16" y="152" width="568" height="132" rx="9"/>
+    <text class="wr" x="32" y="176" font-size="13" font-weight="700">역기구학 IK — 어렵다</text>
+
+    <rect class="box" x="300" y="192" width="150" height="50" rx="7"/>
+    <text class="lbl" x="375" y="212" text-anchor="middle" font-size="12.5">조인트 각도</text>
+    <text class="sub mono" x="375" y="229" text-anchor="middle">q₁ … q₅</text>
+
+    <path class="ln" stroke="var(--warn)" stroke-width="2" d="M288 217 H196"
+          marker-end="url(#fi-a)" color="var(--warn)"/>
+    <text class="sub" x="242" y="208" text-anchor="middle">반복 수치해</text>
+
+    <rect class="box" x="36" y="192" width="150" height="50" rx="7"/>
+    <text class="lbl" x="111" y="212" text-anchor="middle" font-size="12.5">원하는 TCP</text>
+    <text class="sub mono" x="111" y="229" text-anchor="middle">x y z</text>
+
+    <text class="wr" x="470" y="200" font-size="12">해가 0개 · 1개 · 여러 개</text>
+    <text class="sub" x="470" y="217">작업영역 밖이면 없음</text>
+    <text class="sub" x="470" y="233">특이점에서 불안정</text>
+
+    <text class="sub" x="32" y="268">이 강좌는 감쇠 최소자승(DLS)으로 풉니다 — 오차를 보고 조금씩 각도를 고쳐 나가는 반복법</text>
+  </g>
+</svg>

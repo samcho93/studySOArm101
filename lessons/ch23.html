@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>23. 더 배우기 — 강좌·프로젝트·용어 · SO-ARM101 한국어 강좌</title>
+<meta name="description" content="HF·NVIDIA 공식 강좌, Seeed 벤더 위키, 한국어 자료, 응용 프로젝트, 중↔한 용어 대조표.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="lesson-page">
+<button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
+<aside class="sidebar" id="sidebar">
+<nav class="sidebar-nav">
+<a class="brand" href="../index.html"><span class="brand-mark">SO</span><span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>
+<div class="side-tools"><a class="side-tool" href="../sim/index.html">3D 시뮬레이터</a><a class="side-tool" href="../tools/cli-builder.html">명령어 생성기</a></div>
+<div class="nav-part"><span class="nav-part-no">PART 1</span>기초 다지기</div>
+<ul>
+<li><a href="../lessons/ch01.html" data-slug="ch01"><span class="nav-no">01</span>SO-ARM101이란 무엇인가</a></li>
+<li><a href="../lessons/ch02.html" data-slug="ch02"><span class="nav-no">02</span>로봇팔 기초 지식</a></li>
+<li><a href="../lessons/ch03.html" data-slug="ch03"><span class="nav-no">03</span>하드웨어 완전 해부</a></li>
+<li><a href="../lessons/ch04.html" data-slug="ch04"><span class="nav-no">04</span>3D 프린팅과 조립</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 2</span>서보 설정과 환경 구축</div>
+<ul>
+<li><a href="../lessons/ch05.html" data-slug="ch05"><span class="nav-no">05</span>STS3215 서보 ID와 보레이트 설정</a></li>
+<li><a href="../lessons/ch06.html" data-slug="ch06"><span class="nav-no">06</span>LeRobot 개발 환경 설치</a></li>
+<li><a href="../lessons/ch07.html" data-slug="ch07"><span class="nav-no">07</span>시리얼 포트 확인과 권한 설정</a></li>
+<li><a href="../lessons/ch08.html" data-slug="ch08"><span class="nav-no">08</span>로봇 캘리브레이션</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 3</span>텔레오퍼레이션과 데이터 수집</div>
+<ul>
+<li><a href="../lessons/ch09.html" data-slug="ch09"><span class="nav-no">09</span>텔레오퍼레이션 기초</a></li>
+<li><a href="../lessons/ch10.html" data-slug="ch10"><span class="nav-no">10</span>카메라 연동과 시각화</a></li>
+<li><a href="../lessons/ch11.html" data-slug="ch11"><span class="nav-no">11</span>실기 데이터셋 수집</a></li>
+<li><a href="../lessons/ch12.html" data-slug="ch12"><span class="nav-no">12</span>시뮬레이션 데이터 수집 (LeIsaac)</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 4</span>정책 학습과 추론</div>
+<ul>
+<li><a href="../lessons/ch13.html" data-slug="ch13"><span class="nav-no">13</span>정책 모델 학습</a></li>
+<li><a href="../lessons/ch14.html" data-slug="ch14"><span class="nav-no">14</span>모델 추론과 평가</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 5</span>ROS 2 연동과 시뮬레이션</div>
+<ul>
+<li><a href="../lessons/ch15.html" data-slug="ch15"><span class="nav-no">15</span>URDF와 로봇 모델 이해</a></li>
+<li><a href="../lessons/ch16.html" data-slug="ch16"><span class="nav-no">16</span>ROS 2 워크스페이스 구성과 RViz2</a></li>
+<li><a href="../lessons/ch17.html" data-slug="ch17"><span class="nav-no">17</span>ros2_control과 실기 하드웨어 인터페이스</a></li>
+<li><a href="../lessons/ch18.html" data-slug="ch18"><span class="nav-no">18</span>MoveIt 2 모션 플래닝</a></li>
+<li><a href="../lessons/ch19.html" data-slug="ch19"><span class="nav-no">19</span>Gazebo 시뮬레이션과 시각화 툴</a></li>
+<li><a href="../lessons/ch20.html" data-slug="ch20"><span class="nav-no">20</span>LeRobot ↔ ROS 2 브릿지</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 6</span>확장과 마무리</div>
+<ul>
+<li><a href="../lessons/ch21.html" data-slug="ch21"><span class="nav-no">21</span>확장 — 듀얼 암, 모바일, 손</a></li>
+<li><a href="../lessons/ch22.html" data-slug="ch22"><span class="nav-no">22</span>트러블슈팅과 종합 프로젝트</a></li>
+</ul>
+<div class="nav-part"><span class="nav-part-no">PART 7</span>부록</div>
+<ul>
+<li><a href="../lessons/ch23.html" class="active" data-slug="ch23"><span class="nav-no">23</span>더 배우기 — 강좌·프로젝트·용어</a></li>
+</ul>
+</nav>
+</aside>
+<div class="sidebar-scrim" id="scrim"></div>
+<main class="main">
+
+<article class="lesson" data-slug="ch23">
+  <div class="lesson-head">
+    <div class="crumbs">PART 7 부록 &middot; 약 25분</div>
+    <h1><span class="lesson-no">23</span>더 배우기 — 강좌·프로젝트·용어</h1>
+    <p class="lede">HF·NVIDIA 공식 강좌, Seeed 벤더 위키, 한국어 자료, 응용 프로젝트, 중↔한 용어 대조표.</p>
+    <div class="lesson-actions">
+      <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
+      <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
+    </div>
+  </div>
+  <div class="lesson-grid">
+    <div class="lesson-body">
+<p>이 강좌를 끝냈다면 다음은 <strong>다른 사람이 만든 것을 읽고, 내 것에 이식하는 단계</strong>입니다. 아래는 SO-ARM101을 다루는 공개 자료를 종류별로 정리한 것입니다.</p>
+<div class="callout callout-info"><div class="callout-title">링크 확인 시점</div><div class="callout-body"><p>2026년 9월 기준으로 접근을 확인한 링크입니다. 로봇 생태계는 변화가 빨라 경로가 바뀔 수 있으니, 끊긴 링크는 저장소 이름으로 검색해 보세요.</p></div></div>
+<hr>
+<h2 id="무료-공식-강좌">무료 공식 강좌<a class="anchor" href="#무료-공식-강좌">#</a></h2>
+<h3 id="hugging-face-robotics-course">Hugging Face Robotics Course<a class="anchor" href="#hugging-face-robotics-course">#</a></h3>
+<ul><li><a href="https://huggingface.co/learn/robotics-course/en/unit0/1" target="_blank" rel="noopener">huggingface.co/learn/robotics-course</a></li><li>LeRobot을 만든 팀이 직접 만든 <strong>무료 자기주도 강좌</strong>입니다.</li><li><strong>실물 로봇이 없어도 됩니다.</strong> 시뮬레이션 환경과 공개 데이터셋으로 전 과정을 따라갈 수 있습니다.</li><li>구성: Unit 0 소개 → Unit 1 로봇 학습과 LeRobot 생태계 → Unit 2 고전 로보틱스 →</li></ul>
+<p>(준비 중) Unit 5 강화학습 · Unit 6 모방학습 · Unit 7 파운데이션 모델</p>
+<ul><li>선수 지식: 기초 파이썬, 선형대수·미적분 맛보기 정도</li></ul>
+<div class="callout callout-tip"><div class="callout-title">이 강좌와의 관계</div><div class="callout-body"><p>HF 강좌는 <strong>이론과 알고리즘</strong>에 무게가 있고, 이 강좌는 <strong>SO-ARM101 실물과 ROS 2</strong>에 무게가 있습니다. 13~14장을 더 깊이 파고 싶다면 HF 강좌 Unit 6을 이어서 보세요.</p></div></div>
+<h3 id="nvidia-train-an-so-101-robot-from-sim-to-real-with-nvidia-isaac">NVIDIA — Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac<a class="anchor" href="#nvidia-train-an-so-101-robot-from-sim-to-real-with-nvidia-isaac">#</a></h3>
+<ul><li><a href="https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/" target="_blank" rel="noopener">docs.nvidia.com/learning/physical-ai/sim-to-real-so-101</a></li><li><strong>SO-101을 명시적으로 다루는 NVIDIA 공식 학습 경로</strong>입니다.</li><li>목표 과제: 원심분리기 바이알을 랙에 꽂는 <strong>비정형 픽앤플레이스</strong>를 시뮬레이션에서</li></ul>
+<p>학습해 실기로 옮기기</p>
+<ul><li>16개 모듈 / 5개 묶음: 개요(4) → 로봇 랩 구축(4) → 데이터 수집·학습·평가(4) →</li></ul>
+<p>데이터셋 증강(2) → 구동 격차 측정(2)</p>
+<ul><li>사용 스택: <strong>Isaac Sim</strong>, <strong>GR00T</strong>(VLA), <strong>SAGE+GapONet</strong>(액추에이터 격차 추정), <strong>LeRobot</strong></li><li>도메인 랜덤화를 포함한 <strong>네 가지 Sim2Real 전략</strong>을 비교합니다.</li></ul>
+<div class="callout callout-tip"><div class="callout-title">12장의 확장판입니다</div><div class="callout-body"><p>이 강좌 <a href="../lessons/ch12.html">12장</a>에서 다룬 LeIsaac이 &quot;시뮬레이션에서 데이터를 모으는 법&quot;이라면, NVIDIA 과정은 <strong>&quot;시뮬레이션과 실물의 차이를 어떻게 측정하고 좁히는가&quot;</strong> 를 정면으로 다룹니다.</p></div></div>
+<h3 id="lerobot-공식-문서">LeRobot 공식 문서<a class="anchor" href="#lerobot-공식-문서">#</a></h3>
+<ul><li><a href="https://huggingface.co/docs/lerobot" target="_blank" rel="noopener">huggingface.co/docs/lerobot</a> — CLI·API 레퍼런스</li><li><a href="https://huggingface.co/docs/lerobot/so101" target="_blank" rel="noopener">huggingface.co/docs/lerobot/so101</a> — SO-101 조립과 캘리브레이션 원문</li><li>CLI는 버전마다 바뀝니다. <strong>이 강좌의 명령이 동작하지 않으면 항상 여기를 먼저 확인</strong>하세요.</li></ul>
+<hr>
+<h2 id="벤더-튜토리얼">벤더 튜토리얼<a class="anchor" href="#벤더-튜토리얼">#</a></h2>
+<h3 id="seeed-studio-wiki-so-arm10x-시리즈">Seeed Studio Wiki — SO-ARM10x 시리즈<a class="anchor" href="#seeed-studio-wiki-so-arm10x-시리즈">#</a></h3>
+<p>키트 판매사가 운영하는 위키로, 주제별로 잘 쪼개져 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>주제</th><th>링크</th></tr></thead><tbody><tr><td>SO-100/SO-101 퀵스타트</td><td><a href="https://wiki.seeedstudio.com/lerobot_so100m_new/" target="_blank" rel="noopener">lerobot_so100m_new</a></td></tr><tr><td>서보 디버깅 툴 (ID·방향·영점·통신)</td><td><a href="https://wiki.seeedstudio.com/lerobot_steering_gear_debugging_tool/" target="_blank" rel="noopener">lerobot_steering_gear_debugging_tool</a></td></tr><tr><td>듀얼 암 학습 전 과정</td><td><a href="https://wiki.seeedstudio.com/lerobot_double_arm_so_arm_training/" target="_blank" rel="noopener">lerobot_double_arm_so_arm_training</a></td></tr><tr><td>GR00T N1.5 파인튜닝 + Jetson Thor 배포</td><td><a href="https://wiki.seeedstudio.com/fine_tune_gr00t_n1.5_for_lerobot_so_arm_and_deploy_on_jetson_thor/" target="_blank" rel="noopener">fine_tune_gr00t_n1.5…</a></td></tr><tr><td>LeIsaac 시뮬레이션</td><td><a href="https://wiki.seeedstudio.com/simulate_soarm101_by_leisaac/" target="_blank" rel="noopener">simulate_soarm101_by_leisaac</a></td></tr><tr><td>Isaac Lab 강화학습 (보상 설계 포함)</td><td><a href="https://wiki.seeedstudio.com/training_soarm101_policy_with_isaacLab/" target="_blank" rel="noopener">training_soarm101_policy_with_isaacLab</a></td></tr><tr><td>AmazingHand 다지 손 텔레오퍼레이션</td><td><a href="https://wiki.seeedstudio.com/soarm_amazinghand_teleop/" target="_blank" rel="noopener">soarm_amazinghand_teleop</a></td></tr><tr><td>RynnBot 개발자 키트</td><td><a href="https://wiki.seeedstudio.com/lerobot_soarm101_Rynnbot_Developer_Kit/" target="_blank" rel="noopener">lerobot_soarm101_Rynnbot_Developer_Kit</a></td></tr></tbody></table></div>
+<div class="callout callout-info"><div class="callout-title">SO-100 → SO-101 차이 (Seeed 위키 기준)</div><div class="callout-body"><ul><li>SO-101은 배선이 개선되어 <strong>3번 관절에서 선이 빠지던 문제</strong>가 해결되었습니다.</li><li><strong>리더 암의 1~3번 관절 감속비가 SO-100과 다릅니다.</strong> 구형 자료를 볼 때</li></ul>
+<p>감속비 표를 그대로 따라 하면 안 됩니다. (<a href="../lessons/ch03.html">3장 표</a> 확인)</p></div></div>
+<h3 id="원문-위키-juxi-tech">원문 위키 — 钜犀科技(Juxi Tech)<a class="anchor" href="#원문-위키-juxi-tech">#</a></h3>
+<ul><li><a href="https://juxitech.feishu.cn/wiki/NOWXw9NOJiDTs2kRr7RcdIrKnvg" target="_blank" rel="noopener">SO-ARM101机械臂教程</a> (중국어)</li><li>이 강좌의 목차 원본입니다. 조립·서보 툴·ROS 2 제어 문서는 텍스트가 충실하고,</li></ul>
+<p>텔레오퍼레이션 이후 단계는 <strong>영상 중심</strong>이라 텍스트가 거의 없습니다.</p>
+<ul><li><code>Juxi_ServoController.zip</code>, <code>SO-ARM101_ROS2.zip</code> 등 <strong>첨부 파일을 받으려면 로그인</strong>이 필요합니다.</li></ul>
+<h3 id="hiwonder-기타-제조사">Hiwonder / 기타 제조사<a class="anchor" href="#hiwonder-기타-제조사">#</a></h3>
+<ul><li><a href="https://www.hiwonder.com/products/lerobot-so-101" target="_blank" rel="noopener">Hiwonder SO-ARM101 제품 페이지</a> — 완제품 키트 사양</li><li><a href="https://github.com/TheRobotStudio/SO-ARM100" target="_blank" rel="noopener">TheRobotStudio/SO-ARM100</a> — <strong>하드웨어 원본 저장소</strong>.</li></ul>
+<p>BOM, STL, 지역별 판매처, 액세서리(촉각 센서, TPU 그리퍼, 카메라 마운트)</p>
+<hr>
+<h2 id="한국어-자료">한국어 자료<a class="anchor" href="#한국어-자료">#</a></h2>
+<h3 id="roboseasy-docs">RoboSEasy Docs<a class="anchor" href="#roboseasy-docs">#</a></h3>
+<ul><li><a href="https://roboseasy.github.io/docs/physical-ai/lerobot/so-arm/" target="_blank" rel="noopener">roboseasy.github.io — SO ARM 시작하기</a></li><li>한국 키트 판매사가 운영하는 <strong>한국어 문서</strong>입니다. 구성:<ul><li>소프트웨어 준비 / 하드웨어 조립 / USB·카메라 포트 설정</li><li><strong>원터치 셋업 스크립트</strong>, 모터 제어 GUI</li><li>캘리브레이션 · 텔레오퍼레이션 · 녹화/재생</li><li>정책: ACT, SmolVLA, GR00T N1.5</li></ul></li><li>조립 가이드가 <strong>&quot;조립 전에 모터 설정을 먼저 하라&quot;</strong> 는 점을 이 강좌 <a href="../lessons/ch04.html">4장</a>과</li></ul>
+<p>동일하게 강조합니다.</p>
+<ul><li>국내 구매 기준 가격 정보(리더+팔로워 약 50만 원대, 카메라 홀더 포함 키트 55만 원대)가</li></ul>
+<p>정리되어 있습니다.</p>
+<h3 id="soarm101-console-한국어-프로젝트">soarm101-console (한국어 프로젝트)<a class="anchor" href="#soarm101-console-한국어-프로젝트">#</a></h3>
+<ul><li><a href="https://github.com/sesepark/soarm101-console" target="_blank" rel="noopener">github.com/sesepark/soarm101-console</a></li><li><strong>문서가 한국어</strong>인 국내 개발 오픈소스입니다. 브라우저 하나로 진단·캘리브레이션·</li></ul>
+<p>텔레오퍼레이션·데이터 수집·학습·정책 실행을 묶었습니다.</p>
+<ul><li>눈여겨볼 설계:<ul><li><strong>물리 리더 암 없이도</strong> 브라우저 3D 가상 리더로 팔로워를 조종</li><li>워치독·페일세이프가 붙은 <strong>안전 게이트 텔레오퍼레이션</strong></li><li>파일 락으로 <strong>장치 단독 점유</strong>를 강제 (시리얼 포트 충돌 방지 — <a href="../lessons/ch17.html">17장</a> 참고)</li><li>정책 실행 시 <strong>소프트 스타트</strong>로 팔이 튀는 것을 방지</li><li>DGX Spark 원격 학습 연동, 하드웨어 없이 도는 테스트 300여 개</li></ul></li><li>스택: Python 3.12, FastAPI, LeRobot, three.js, OpenCV</li></ul>
+<div class="callout callout-tip"><div class="callout-title">이 강좌의 시뮬레이터와 비슷한 발상</div><div class="callout-body"><p>이 강좌의 <a href="../sim/index.html">3D 시뮬레이터</a>도 &quot;물리 리더 없이 팔로워를 조종해 본다&quot;는 같은 문제의식에서 출발했습니다. 한 걸음 더 나아가 <strong>실제 하드웨어까지 연결</strong>하고 싶다면 이 프로젝트가 좋은 참고가 됩니다.</p></div></div>
+<hr>
+<h2 id="응용-프로젝트">응용 프로젝트<a class="anchor" href="#응용-프로젝트">#</a></h2>
+<h3 id="하드웨어-확장">하드웨어 확장<a class="anchor" href="#하드웨어-확장">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>프로젝트</th><th>내용</th></tr></thead><tbody><tr><td><a href="https://github.com/Vector-Wangel/XLeRobot" target="_blank" rel="noopener">XLeRobot</a></td><td><strong>약 $660 듀얼 암 모바일 가정용 로봇.</strong> LeKiwi + SO-101 팔 + IKEA RÅSKOG 카트 + Anker 배터리. 조립 4시간 이내</td></tr><tr><td>LeKiwi</td><td>3륜 옴니휠 모바일 베이스. 단순 픽앤플레이스·이동+조작 실험에 적합</td></tr><tr><td><a href="https://wiki.seeedstudio.com/soarm_amazinghand_teleop/" target="_blank" rel="noopener">AmazingHand</a></td><td>손목에 다는 오픈소스 다지 손</td></tr></tbody></table></div>
+<div class="callout callout-info"><div class="callout-title">LeKiwi vs XLeRobot 선택 기준</div><div class="callout-body"><p>이동하며 하는 <strong>단순 집기·가져오기</strong>라면 LeKiwi, <strong>양손이 필요한 가정 내 상호작용</strong>이 핵심이면 XLeRobot이 권장됩니다.</p></div></div>
+<h3 id="소프트웨어-텔레오퍼레이션">소프트웨어 · 텔레오퍼레이션<a class="anchor" href="#소프트웨어-텔레오퍼레이션">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>프로젝트</th><th>내용</th></tr></thead><tbody><tr><td><a href="https://github.com/huggingface/leLab" target="_blank" rel="noopener">LeLab</a></td><td>LeRobot 전 워크플로(캘리브레이션→학습→재생)를 브라우저 UI로</td></tr><tr><td><a href="https://docs.phospho.ai/basic-usage/teleop" target="_blank" rel="noopener">phosphobot</a></td><td>웹 대시보드에서 키보드 방향키로 팔 제어</td></tr><tr><td><a href="https://bambot.org/feetech.js?lang=zh" target="_blank" rel="noopener">Bambot / feetech.js</a></td><td>설치 없이 브라우저에서 서보 ID·중위 설정 (<a href="../lessons/ch05.html">5장</a>)</td></tr><tr><td>VR 텔레오퍼레이션 키트</td><td>WebXR(Meta Quest)로 SO-101을 조종하고 ACT 학습용 시연을 녹화</td></tr><tr><td>SpaceMouse 플러그인</td><td>6자유도 마우스로 데카르트 제어. URDF 기반 IK 포함</td></tr><tr><td><a href="https://juxitech.feishu.cn/wiki/NOWXw9NOJiDTs2kRr7RcdIrKnvg" target="_blank" rel="noopener">ESP32-S3 무선 텔레오퍼레이션</a></td><td>케이블 없는 리더 암 (원문 위키 항목)</td></tr></tbody></table></div>
+<h3 id="ros-2-연동">ROS 2 연동<a class="anchor" href="#ros-2-연동">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>프로젝트</th><th>내용</th></tr></thead><tbody><tr><td><a href="https://github.com/ycheng517/lerobot-ros" target="_blank" rel="noopener">lerobot-ros</a></td><td>ROS 기반 팔을 LeRobot으로 제어하는 경량 인터페이스. <a href="../lessons/ch20.html">20장</a> 브릿지의 대안</td></tr><tr><td><a href="https://github.com/holmsslk/so-arm-moveit-hardware" target="_blank" rel="noopener">so-arm-moveit-hardware</a></td><td>MoveIt용 ros2_control 하드웨어 인터페이스 구현 (<a href="../lessons/ch17.html">17장</a>에서 비워 둔 부분)</td></tr><tr><td><a href="https://github.com/MuammerBay/SO-ARM_ROS2_URDF" target="_blank" rel="noopener">SO-ARM_ROS2_URDF</a></td><td><code>so_arm_description</code> 형태의 URDF 패키지</td></tr><tr><td>so101_ros2</td><td>플러그앤플레이 ROS 2 셋업. <code>elbow_rotate</code> 조인트를 추가해 6자유도 데카르트 계획을 가능하게 한 변형도 있습니다 (<a href="../lessons/ch21.html">21장</a> 7축 참고)</td></tr></tbody></table></div>
+<h3 id="학습-운용-사례">학습 · 운용 사례<a class="anchor" href="#학습-운용-사례">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>프로젝트</th><th>내용</th></tr></thead><tbody><tr><td><a href="https://github.com/andymai/so-arm101" target="_blank" rel="noopener">andymai/so-arm101</a></td><td>실제 조립에서 겪은 <strong>네 가지 함정</strong>(모터 ID 되돌림 버그, 브라운아웃 등)을 재사용 가능한 CLI로 묶은 셋업·수리 런북</td></tr><tr><td>ACT 모방학습 예제 저장소들</td><td>시연 에피소드로 ACT를 학습시키거나 <code>lerobot/smolvla_base</code>를 파인튜닝한 실제 프로젝트들. GitHub 토픽 [<code>so-101</code>](https://github.com/topics/so-101) · [<code>soarm-101</code>](https://github.com/topics/soarm-101) 에서 찾을 수 있습니다</td></tr><tr><td><a href="https://github.com/LightwheelAI/leisaac" target="_blank" rel="noopener">LeIsaac</a></td><td>Isaac Lab 원격조작·데이터 생성·GR00T 파인튜닝 (<a href="../lessons/ch12.html">12장</a>)</td></tr></tbody></table></div>
+<div class="callout callout-warn"><div class="callout-title">남의 저장소를 쓸 때</div><div class="callout-body"><p>캘리브레이션 파일과 데이터셋은 <strong>그 사람의 로봇 개체</strong>에 맞춰져 있습니다. 정책 가중치는 전이될 수 있어도 캘리브레이션 JSON은 그대로 쓰면 안 됩니다. (<a href="../lessons/ch08.html">8장</a>)</p></div></div>
+<hr>
+<h2 id="알고리즘-원-논문">알고리즘 원 논문<a class="anchor" href="#알고리즘-원-논문">#</a></h2>
+<p>13장에서 이름만 나온 정책들의 출처입니다. 구현을 이해하려면 읽어 볼 만합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>정책</th><th>논문 / 출처</th></tr></thead><tbody><tr><td><strong>ACT</strong></td><td><em>Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware</em> (ALOHA, Zhao et al.) — action chunking + temporal ensembling</td></tr><tr><td><strong>Diffusion Policy</strong></td><td><em>Diffusion Policy: Visuomotor Policy Learning via Action Diffusion</em> (Chi et al.)</td></tr><tr><td><strong>π0 / π0.5</strong></td><td>Physical Intelligence 의 플로 매칭 기반 VLA</td></tr><tr><td><strong>SmolVLA</strong></td><td>Hugging Face 의 소형 VLA. 소비자 GPU에서 돌아가는 것을 목표</td></tr><tr><td><strong>GR00T N1.x</strong></td><td>NVIDIA 의 휴머노이드·조작 파운데이션 모델. SO-101 파인튜닝 사례 다수</td></tr><tr><td><strong>LeRobot</strong></td><td><em>LeRobot: An Open-Source Library for End-to-End Robot Learning</em> (<a href="https://arxiv.org/abs/2602.22818" target="_blank" rel="noopener">arXiv</a>)</td></tr></tbody></table></div>
+<hr>
+<h2 id="커뮤니티">커뮤니티<a class="anchor" href="#커뮤니티">#</a></h2>
+<ul><li><strong>LeRobot Discord</strong> — <a href="https://discord.com/invite/s3KuuzsPFb" target="_blank" rel="noopener">discord.gg/s3KuuzsPFb</a>.</li></ul>
+<p>조립·캘리브레이션 문제는 여기가 가장 빠릅니다.</p>
+<ul><li><strong>Hugging Face Hub</strong> — <a href="https://huggingface.co/datasets?other=LeRobot" target="_blank" rel="noopener">LeRobot 태그 데이터셋</a>.</li></ul>
+<p>남이 모은 데이터셋으로 먼저 학습을 돌려 보면 파이프라인 점검에 좋습니다.</p>
+<ul><li><strong>데이터셋 뷰어</strong> — <a href="https://huggingface.co/spaces/lerobot/visualize_dataset" target="_blank" rel="noopener">lerobot/visualize_dataset</a></li><li><strong>GitHub 토픽</strong> — [<code>so-101</code>](https://github.com/topics/so-101), [<code>soarm-101</code>](https://github.com/topics/soarm-101)</li></ul>
+<hr>
+<h2 id="부록-중국어-원문-용어-대조표">부록 — 중국어 원문 용어 대조표<a class="anchor" href="#부록-중국어-원문-용어-대조표">#</a></h2>
+<p>원문 위키나 중국어 자료를 직접 볼 때 참고하세요. 이 강좌에서 쓴 번역어를 기준으로 정리했습니다.</p>
+<h3 id="하드웨어">하드웨어<a class="anchor" href="#하드웨어">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>중국어</th><th>영어</th><th>이 강좌의 표기</th></tr></thead><tbody><tr><td>机械臂</td><td>robot arm</td><td>로봇팔</td></tr><tr><td>主动臂</td><td>leader arm</td><td><strong>리더 암</strong> (주동팔)</td></tr><tr><td>从动臂</td><td>follower arm</td><td><strong>팔로워 암</strong> (종동팔)</td></tr><tr><td>舵机</td><td>servo</td><td>서보(모터)</td></tr><tr><td>舵盘</td><td>servo horn</td><td>서보 혼</td></tr><tr><td>舵机驱动板</td><td>servo driver board</td><td>서보 드라이버 보드</td></tr><tr><td>减速比</td><td>gear ratio</td><td>감속비</td></tr><tr><td>扭矩</td><td>torque</td><td>토크</td></tr><tr><td>夹爪</td><td>gripper</td><td>그리퍼</td></tr><tr><td>扳机</td><td>trigger</td><td>트리거</td></tr><tr><td>手柄</td><td>handle</td><td>손잡이</td></tr><tr><td>铜柱</td><td>standoff</td><td>황동 스탠드오프</td></tr><tr><td>电源适配器</td><td>power adapter</td><td>전원 어댑터</td></tr><tr><td>散件</td><td>parts kit</td><td>부품 키트</td></tr><tr><td>支架</td><td>bracket / mount</td><td>브래킷·마운트</td></tr><tr><td>云台</td><td>gimbal</td><td>짐벌</td></tr><tr><td>灵巧手</td><td>dexterous hand</td><td>다지 손</td></tr></tbody></table></div>
+<h3 id="소프트웨어-절차">소프트웨어 · 절차<a class="anchor" href="#소프트웨어-절차">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>중국어</th><th>영어</th><th>이 강좌의 표기</th></tr></thead><tbody><tr><td>具身智能</td><td>embodied AI</td><td><strong>체화된 지능</strong></td></tr><tr><td>模仿学习</td><td>imitation learning</td><td>모방학습</td></tr><tr><td>遥操作</td><td>teleoperation</td><td>텔레오퍼레이션 / 원격조작</td></tr><tr><td>数据集</td><td>dataset</td><td>데이터셋</td></tr><tr><td>采集数据集</td><td>collect dataset</td><td>데이터셋 수집</td></tr><tr><td>训练模型</td><td>train model</td><td>모델 학습</td></tr><tr><td>模型推理</td><td>inference</td><td>모델 추론</td></tr><tr><td>部署</td><td>deploy</td><td>배포</td></tr><tr><td>仿真</td><td>simulation</td><td>시뮬레이션</td></tr><tr><td>校准 / 标定</td><td>calibration</td><td>캘리브레이션</td></tr><tr><td>中位校准</td><td>center calibration</td><td>중위 캘리브레이션 (= 중립 위치 보정)</td></tr><tr><td>失能电机</td><td>disable torque</td><td>모터 토크 해제</td></tr><tr><td>使能</td><td>enable</td><td>활성화</td></tr><tr><td>上位机</td><td>host software</td><td>PC 설정 프로그램</td></tr><tr><td>波特率</td><td>baud rate</td><td>보레이트</td></tr><tr><td>串口</td><td>serial port</td><td>시리얼 포트</td></tr><tr><td>端口号</td><td>port number</td><td>포트 번호</td></tr><tr><td>权限</td><td>permission</td><td>권한</td></tr><tr><td>虚拟环境</td><td>virtual environment</td><td>가상환경</td></tr><tr><td>换源</td><td>change mirror</td><td>미러 변경</td></tr><tr><td>教程</td><td>tutorial</td><td>튜토리얼 · 강좌</td></tr><tr><td>目录</td><td>table of contents</td><td>목차</td></tr><tr><td>常见问题</td><td>FAQ</td><td>자주 묻는 질문</td></tr><tr><td>排错</td><td>troubleshooting</td><td>문제 해결</td></tr><tr><td>注意事项</td><td>precautions</td><td>주의 사항</td></tr><tr><td>快速开始</td><td>quick start</td><td>빠른 시작</td></tr></tbody></table></div>
+<h3 id="회사-제품-이름">회사 · 제품 이름<a class="anchor" href="#회사-제품-이름">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>원문</th><th>읽기</th><th>설명</th></tr></thead><tbody><tr><td>钜犀科技</td><td>Juxi Tech (쥐시테크)</td><td>원문 위키 운영사</td></tr><tr><td>幻尔科技</td><td>Hiwonder (환얼커지)</td><td>SO-ARM101 공동 제작</td></tr><tr><td>光轮智能</td><td>LightwheelAI (라이트휠)</td><td>LeIsaac 개발사</td></tr><tr><td>飞特</td><td>FEETECH (페이터)</td><td>STS3215 서보 제조사</td></tr><tr><td>松灵</td><td>AgileX (쑹링)</td><td>Piper 로봇팔</td></tr><tr><td>宇树</td><td>Unitree (위수)</td><td>G1 휴머노이드</td></tr><tr><td>华馨京</td><td>StarAI</td><td>로봇팔</td></tr></tbody></table></div>
+<div class="callout callout-check"><div class="callout-title">여기까지 오셨다면</div><div class="callout-body"><p>강좌의 모든 장을 마쳤습니다. 이제 필요한 것은 더 많은 문서가 아니라 <strong>여러분의 로봇과 여러분의 데이터셋</strong>입니다.</p>
+<p>만든 데이터셋과 정책을 Hugging Face Hub에 올려 주세요. 누군가는 그것으로 시작할 겁니다.</p></div></div>
+      <nav class="pager"><a class="pager-prev" href="ch22.html"><span>이전</span>트러블슈팅과 종합 프로젝트</a><span class="pager-next disabled"></span></nav>
+    </div>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#무료-공식-강좌">무료 공식 강좌</a><a class="toc-l3" href="#hugging-face-robotics-course">Hugging Face Robotics Course</a><a class="toc-l3" href="#nvidia-train-an-so-101-robot-from-sim-to-real-with-nvidia-isaac">NVIDIA — Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac</a><a class="toc-l3" href="#lerobot-공식-문서">LeRobot 공식 문서</a><a class="toc-l2" href="#벤더-튜토리얼">벤더 튜토리얼</a><a class="toc-l3" href="#seeed-studio-wiki-so-arm10x-시리즈">Seeed Studio Wiki — SO-ARM10x 시리즈</a><a class="toc-l3" href="#원문-위키-juxi-tech">원문 위키 — 钜犀科技(Juxi Tech)</a><a class="toc-l3" href="#hiwonder-기타-제조사">Hiwonder / 기타 제조사</a><a class="toc-l2" href="#한국어-자료">한국어 자료</a><a class="toc-l3" href="#roboseasy-docs">RoboSEasy Docs</a><a class="toc-l3" href="#soarm101-console-한국어-프로젝트">soarm101-console (한국어 프로젝트)</a><a class="toc-l2" href="#응용-프로젝트">응용 프로젝트</a><a class="toc-l3" href="#하드웨어-확장">하드웨어 확장</a><a class="toc-l3" href="#소프트웨어-텔레오퍼레이션">소프트웨어 · 텔레오퍼레이션</a><a class="toc-l3" href="#ros-2-연동">ROS 2 연동</a><a class="toc-l3" href="#학습-운용-사례">학습 · 운용 사례</a><a class="toc-l2" href="#알고리즘-원-논문">알고리즘 원 논문</a><a class="toc-l2" href="#커뮤니티">커뮤니티</a><a class="toc-l2" href="#부록-중국어-원문-용어-대조표">부록 — 중국어 원문 용어 대조표</a><a class="toc-l3" href="#하드웨어">하드웨어</a><a class="toc-l3" href="#소프트웨어-절차">소프트웨어 · 절차</a><a class="toc-l3" href="#회사-제품-이름">회사 · 제품 이름</a></div></aside>
+  </div>
+</article>
+
+</main>
+<script src="../assets/js/site.js"></script>
+
+</body>
+</html>

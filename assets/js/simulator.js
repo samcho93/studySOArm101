@@ -27,6 +27,7 @@
     cameras: false,
     cubeHeld: false,
     cubePos: [0.22, 0.00, 0.020],
+    serial: { bus: null, mapper: null, timer: null, busy: false, ticks: [] },
     recording: false,
     frames: [],
     recFps: 30,
@@ -242,6 +243,176 @@
     el('jointSliders').querySelectorAll('.joint-row').forEach(function (row) {
       var i = parseInt(row.dataset.index, 10);
       row.classList.toggle('over', over.indexOf(K.JOINTS[i].name) >= 0);
+    });
+  }
+
+  // =====================================================================
+  //  실기 리더 암 연결 (Web Serial)
+  // =====================================================================
+
+  function buildServoRows() {
+    var tbody = el('servoRows');
+    tbody.innerHTML = '';
+    K.JOINTS.forEach(function (j, i) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + j.ko + '</td>' +
+        '<td>' + j.motorId + '</td>' +
+        '<td class="tick">-</td>' +
+        '<td class="deg">-</td>' +
+        '<td><input type="checkbox"></td>';
+      tr.querySelector('input').addEventListener('change', function (e) {
+        if (state.serial.mapper) state.serial.mapper.invert[i] = e.target.checked;
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  function updateServoRows(ticks) {
+    var rows = el('servoRows').children;
+    for (var i = 0; i < rows.length && i < K.JOINTS.length; i++) {
+      var t = ticks[i];
+      var cells = rows[i].children;
+      rows[i].classList.toggle('stale', t == null);
+      cells[2].textContent = (t == null) ? '응답 없음' : String(t);
+      cells[2].classList.toggle('live', t != null);
+      cells[3].textContent = K.deg(state.qLeader[i]).toFixed(1) + '\u00B0';
+    }
+  }
+
+  function setSerialUi(connected) {
+    el('btnSerial').textContent = connected ? '연결 해제' : '리더 암 연결';
+    el('btnSerial').classList.toggle('primary', !connected);
+    el('btnZeroCapture').disabled = !connected;
+    el('serialBaud').disabled = connected;
+    // 실기가 붙어 있는 동안에는 리더 슬라이더를 잠근다
+    el('leaderSliders').querySelectorAll('input').forEach(function (inp) {
+      inp.disabled = connected;
+    });
+  }
+
+  async function serialTick() {
+    var S = state.serial;
+    if (!S.bus || !S.bus.isConnected() || S.busy) return;
+    S.busy = true;
+    try {
+      var ids = K.JOINTS.map(function (j) { return j.motorId; });
+      var ticks = await S.bus.readPositions(ids);
+      S.ticks = ticks;
+      state.qLeader = S.mapper.toRadians(ticks, state.qLeader);
+      syncSliders();
+      updateServoRows(ticks);
+
+      var st = S.bus.stats;
+      el('serialRate').textContent =
+        st.lastHz.toFixed(0) + ' Hz  ' +
+        (S.bus.useSyncRead ? 'sync' : '개별') +
+        (st.timeouts ? '  · 타임아웃 ' + st.timeouts : '');
+    } catch (err) {
+      console.warn('시리얼 읽기 실패', err);
+    } finally {
+      S.busy = false;
+    }
+  }
+
+  async function connectSerial() {
+    var S = state.serial;
+
+    if (S.bus && S.bus.isConnected()) {
+      clearInterval(S.timer);
+      S.timer = null;
+      await S.bus.disconnect();
+      S.bus = null;
+      setSerialUi(false);
+      el('serialState').textContent = '미연결';
+      el('serialRate').textContent = '-';
+      setStatus('리더 암 연결을 해제했습니다');
+      return;
+    }
+
+    var bus = new window.Feetech.FeetechBus();
+    try {
+      el('serialState').textContent = '포트 선택 중…';
+      await bus.connect(parseInt(el('serialBaud').value, 10));
+    } catch (err) {
+      el('serialState').textContent = '연결 실패';
+      setStatus('연결 실패 — ' + ((err && err.message) ? err.message : err), 'error');
+      return;
+    }
+
+    S.bus = bus;
+    S.mapper = S.mapper || new window.Feetech.LeaderMapper(K.JOINTS);
+    setSerialUi(true);
+    el('serialState').textContent =
+      '연결됨 · ' + (S.mapper.mode === 'calib' ? '캘리브레이션 매핑' : '원시 매핑');
+
+    // 실기가 붙으면 텔레오퍼레이션을 자동으로 켠다
+    if (!state.teleop) {
+      el('teleopOn').checked = true;
+      state.teleop = true;
+      leaderBuffer.length = 0;
+    }
+
+    var hz = Math.max(5, Math.min(120, parseInt(el('serialHz').value, 10) || 50));
+    S.timer = setInterval(serialTick, 1000 / hz);
+    setStatus('리더 암 연결됨 — 팔을 움직여 보세요');
+  }
+
+  function captureZero() {
+    var S = state.serial;
+    if (!S.mapper || !S.ticks.length) return;
+    S.mapper.useRaw();
+    S.mapper.captureZero(S.ticks);
+    el('serialState').textContent = '연결됨 · 원시 매핑';
+    setStatus('현재 자세를 영점으로 잡았습니다');
+  }
+
+  function loadCalibFile(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var json = JSON.parse(String(reader.result));
+        state.serial.mapper = state.serial.mapper
+          || new window.Feetech.LeaderMapper(K.JOINTS);
+        var n = state.serial.mapper.loadCalibration(json);
+        el('serialState').textContent =
+          (state.serial.bus ? '연결됨 · ' : '미연결 · ') + '캘리브레이션 매핑';
+        setStatus('캘리브레이션 적용 — 조인트 ' + n + '개');
+      } catch (err) {
+        setStatus('캘리브레이션 읽기 실패 — ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function initSerialUi() {
+    buildServoRows();
+    var box = el('serialUnsupported');
+    var F = window.Feetech && window.Feetech.FeetechBus;
+
+    if (!F || !F.isSupported()) {
+      box.hidden = false;
+      box.innerHTML = '이 브라우저는 <b>Web Serial</b> 을 지원하지 않습니다. ' +
+        'Chrome · Edge 등 크로미움 계열 브라우저에서 열면 실기 리더 암을 연결할 수 있습니다.';
+      el('btnSerial').disabled = true;
+    } else if (!F.isSecure()) {
+      box.hidden = false;
+      box.innerHTML = 'Web Serial 은 <b>https</b> 또는 <b>localhost</b> 에서만 동작합니다. ' +
+        '<code>python build.py --serve</code> 로 로컬 서버를 띄워 여세요.';
+      el('btnSerial').disabled = true;
+    }
+
+    el('btnSerial').addEventListener('click', connectSerial);
+    el('btnZeroCapture').addEventListener('click', captureZero);
+    el('calibFile').addEventListener('change', function (e) {
+      if (e.target.files && e.target.files[0]) loadCalibFile(e.target.files[0]);
+      e.target.value = '';
+    });
+
+    window.addEventListener('beforeunload', function () {
+      if (state.serial.bus) {
+        try { state.serial.bus.disconnect(); } catch (e) { /* noop */ }
+      }
     });
   }
 
@@ -931,6 +1102,9 @@
     // 텔레오퍼레이션 탭
     el('teleopOn').addEventListener('change', function () {
       state.teleop = el('teleopOn').checked;
+      if (!state.teleop && state.serial.bus && state.serial.bus.isConnected()) {
+        setStatus('실기 연결 중에는 추종을 끄면 시뮬 팔이 멈춥니다', 'warn');
+      }
       leaderBuffer.length = 0;
       if (state.teleop) state.qLeader = state.q.slice();
       else el('limitWarn').hidden = true;
@@ -982,6 +1156,9 @@
     el('exportModal').addEventListener('click', function (e) {
       if (e.target === el('exportModal')) el('exportModal').hidden = true;
     });
+
+    // 실기 리더 암
+    initSerialUi();
 
     // 도움말
     el('btnHelp').addEventListener('click', function () { el('helpModal').hidden = false; });

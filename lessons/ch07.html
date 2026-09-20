@@ -86,18 +86,6 @@
 <p>USB를 꽂기 <strong>전후로 두 번</strong> 실행해 새로 생긴 장치를 확인하는 것이 가장 확실합니다.</p>
 <div class="callout callout-tip"><div class="callout-title">꽂는 순서를 정해 두세요</div><div class="callout-body"><p>원문 튜토리얼의 권장 순서는 <strong>팔로워(Follower)를 먼저 꽂고, 그다음 리더(Leader)를 꽂는</strong> 것입니다. 이러면 일반적으로 이렇게 잡힙니다.</p>
 <ul><li><code>/dev/ttyACM0</code> → <strong>팔로워(종동팔)</strong></li><li><code>/dev/ttyACM1</code> → <strong>리더(주동팔)</strong></li></ul></div></div>
-<h3 id="macos">macOS<a class="anchor" href="#macos">#</a></h3>
-<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ls /dev/tty.*
-ls /dev/cu.*</code></pre></div>
-<p>macOS에서는 같은 장치가 두 이름으로 보입니다.</p>
-<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">팔로워:
-  /dev/tty.usbmodem5AAF2193061
-  /dev/tty.wchusbserial5AAF2193061
-리더:
-  /dev/tty.usbmodem5AAF2194741
-  /dev/tty.wchusbserial5AAF2194741</code></pre></div>
-<p><strong>둘 중 어느 쪽을 써도 동작합니다.</strong> 끝의 시리얼 번호가 같으면 같은 장치입니다.</p>
-<div class="callout callout-info"><div class="callout-title">tty vs cu</div><div class="callout-body"><p><code>/dev/tty.*</code>는 블로킹(캐리어 신호를 기다림), <code>/dev/cu.*</code>는 논블로킹입니다. 일부 도구에서는 <code>cu</code> 쪽이 더 안정적입니다.</p></div></div>
 <h3 id="windows">Windows<a class="anchor" href="#windows">#</a></h3>
 <p><strong>장치 관리자 → 포트(COM &amp; LPT)</strong> 에서 <code>COM3</code>, <code>COM4</code> 같은 번호를 확인합니다. USB를 뺐다 꽂으며 어느 번호가 사라졌다 나타나는지 보면 구분됩니다.</p>
 <hr>
@@ -112,11 +100,6 @@ Remove the usb cable from your MotorsBus and press Enter when done.
 
 The port of this MotorsBus is /dev/ttyACM1
 Reconnect the USB cable.</code></pre></div>
-<p>macOS 예시 출력:</p>
-<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">Finding all available ports for the MotorBus.
-[&#x27;/dev/tty.usbmodem575E0032081&#x27;, &#x27;/dev/tty.usbmodem575E0031751&#x27;]
-Remove the USB cable from your MotorsBus and press Enter when done.
-The port of this MotorsBus is /dev/tty.usbmodem575E0032081</code></pre></div>
 <div class="callout callout-warn"><div class="callout-title">반드시 USB를 실제로 뽑아야 합니다</div><div class="callout-body"><p>케이블을 뽑지 않으면 포트가 감지되지 않습니다. 전원 어댑터가 아니라 <strong>USB 커넥터</strong>를 뽑아야 합니다.</p></div></div>
 <p><strong>리더와 팔로워 각각 한 번씩, 총 두 번</strong> 실행하세요.</p>
 <hr>
@@ -132,8 +115,6 @@ The port of this MotorsBus is /dev/tty.usbmodem575E0032081</code></pre></div>
 sudo chmod 666 /dev/ttyACM1</code></pre></div>
 <p>한 번에:</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo chmod 666 /dev/ttyACM*</code></pre></div>
-<p>macOS:</p>
-<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">chmod 666 /dev/tty.*</code></pre></div>
 <h3 id="영구-dialout-그룹-권장">영구 — dialout 그룹 (권장)<a class="anchor" href="#영구-dialout-그룹-권장">#</a></h3>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo usermod -a -G dialout $USER</code></pre></div>
 <div class="callout callout-warn"><div class="callout-title">로그아웃 후 다시 로그인해야 적용됩니다</div><div class="callout-body"><p>그룹 변경은 새 로그인 세션부터 반영됩니다. <code>groups</code> 명령으로 <code>dialout</code>이 보이면 성공입니다.</p></div></div>
@@ -185,7 +166,7 @@ sudo udevadm trigger</code></pre></div>
 <div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch08.html">8장 로봇 캘리브레이션</a> — 리더와 팔로워가 같은 물리 자세에서 같은 숫자를 내도록 맞춥니다.</p></div></div>
       <nav class="pager"><a class="pager-prev" href="ch06.html"><span>이전</span>LeRobot 개발 환경 설치</a><a class="pager-next" href="ch08.html"><span>다음</span>로봇 캘리브레이션</a></nav>
     </div>
-    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#왜-헷갈리는가">왜 헷갈리는가</a><a class="toc-l2" href="#방법-1-os-명령으로-직접-보기">방법 1 — OS 명령으로 직접 보기</a><a class="toc-l3" href="#linux-ubuntu">Linux (Ubuntu)</a><a class="toc-l3" href="#macos">macOS</a><a class="toc-l3" href="#windows">Windows</a><a class="toc-l2" href="#방법-2-lerobot-공식-도구-권장">방법 2 — LeRobot 공식 도구 (권장)</a><a class="toc-l2" href="#내-포트-기록해-두기">내 포트 기록해 두기</a><a class="toc-l2" href="#포트-권한-설정">포트 권한 설정</a><a class="toc-l3" href="#임시-재부팅하면-초기화됨">임시 — 재부팅하면 초기화됨</a><a class="toc-l3" href="#영구-dialout-그룹-권장">영구 — dialout 그룹 (권장)</a><a class="toc-l3" href="#권한-오류-증상">권한 오류 증상</a><a class="toc-l2" href="#udev-규칙으로-포트-고정-강력-추천">udev 규칙으로 포트 고정 (강력 추천)</a><a class="toc-l3" href="#1-장치-정보-확인">1. 장치 정보 확인</a><a class="toc-l3" href="#2-규칙-파일-작성">2. 규칙 파일 작성</a><a class="toc-l3" href="#3-적용">3. 적용</a><a class="toc-l2" href="#연결-검증">연결 검증</a></div></aside>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#왜-헷갈리는가">왜 헷갈리는가</a><a class="toc-l2" href="#방법-1-os-명령으로-직접-보기">방법 1 — OS 명령으로 직접 보기</a><a class="toc-l3" href="#linux-ubuntu">Linux (Ubuntu)</a><a class="toc-l3" href="#windows">Windows</a><a class="toc-l2" href="#방법-2-lerobot-공식-도구-권장">방법 2 — LeRobot 공식 도구 (권장)</a><a class="toc-l2" href="#내-포트-기록해-두기">내 포트 기록해 두기</a><a class="toc-l2" href="#포트-권한-설정">포트 권한 설정</a><a class="toc-l3" href="#임시-재부팅하면-초기화됨">임시 — 재부팅하면 초기화됨</a><a class="toc-l3" href="#영구-dialout-그룹-권장">영구 — dialout 그룹 (권장)</a><a class="toc-l3" href="#권한-오류-증상">권한 오류 증상</a><a class="toc-l2" href="#udev-규칙으로-포트-고정-강력-추천">udev 규칙으로 포트 고정 (강력 추천)</a><a class="toc-l3" href="#1-장치-정보-확인">1. 장치 정보 확인</a><a class="toc-l3" href="#2-규칙-파일-작성">2. 규칙 파일 작성</a><a class="toc-l3" href="#3-적용">3. 적용</a><a class="toc-l2" href="#연결-검증">연결 검증</a></div></aside>
   </div>
 </article>
 

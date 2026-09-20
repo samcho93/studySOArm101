@@ -159,7 +159,7 @@
   --wandb.enable=false \
   --policy.push_to_hub=false</code></pre></div>
 <h3 id="인자-설명">인자 설명<a class="anchor" href="#인자-설명">#</a></h3>
-<div class="table-wrap"><table><thead><tr><th>인자</th><th>의미</th></tr></thead><tbody><tr><td><code>--dataset.repo_id</code></td><td>데이터셋 식별자. 로컬이면 <code>--dataset.root</code>와 함께</td></tr><tr><td><code>--policy.type=act</code></td><td>정책 종류. 데이터셋의 관절 수·카메라 수에 <strong>자동으로 맞춰집니다</strong></td></tr><tr><td><code>--policy.device</code></td><td><code>cuda</code> (NVIDIA), <code>mps</code> (Apple Silicon), <code>cpu</code></td></tr><tr><td><code>--steps</code></td><td>학습 스텝 수. ACT는 보통 <strong>60,000~100,000</strong></td></tr><tr><td><code>--output_dir</code></td><td>체크포인트 저장 경로</td></tr><tr><td><code>--wandb.enable</code></td><td>Weights &amp; Biases 로깅. 쓰려면 <code>wandb login</code> 먼저</td></tr><tr><td><code>--policy.push_to_hub</code></td><td>학습 후 Hub 업로드 여부</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>인자</th><th>의미</th></tr></thead><tbody><tr><td><code>--dataset.repo_id</code></td><td>데이터셋 식별자. 로컬이면 <code>--dataset.root</code>와 함께</td></tr><tr><td><code>--policy.type=act</code></td><td>정책 종류. 데이터셋의 관절 수·카메라 수에 <strong>자동으로 맞춰집니다</strong></td></tr><tr><td><code>--policy.device</code></td><td><code>cuda</code> (NVIDIA GPU), <code>cpu</code></td></tr><tr><td><code>--steps</code></td><td>학습 스텝 수. ACT는 보통 <strong>60,000~100,000</strong></td></tr><tr><td><code>--output_dir</code></td><td>체크포인트 저장 경로</td></tr><tr><td><code>--wandb.enable</code></td><td>Weights &amp; Biases 로깅. 쓰려면 <code>wandb login</code> 먼저</td></tr><tr><td><code>--policy.push_to_hub</code></td><td>학습 후 Hub 업로드 여부</td></tr></tbody></table></div>
 <div class="callout callout-warn"><div class="callout-title">`--output_dir` 이 이미 존재하면</div><div class="callout-body"><p><code>FileExistsError</code>가 납니다. <strong>새 디렉터리를 쓰거나</strong> <code>--resume=true</code>로 이어서 학습하세요.</p></div></div>
 <hr>
 <h2 id="학습-재개">학습 재개<a class="anchor" href="#학습-재개">#</a></h2>
@@ -242,7 +242,7 @@ hf upload ${HF_USER}/act_so101_pick${CKPT} \
 <div class="callout callout-warn"><div class="callout-title">대형 VLA의 현실</div><div class="callout-body"><p>π0 계열은 VRAM 24GB 이상을 요구하며, 추론 속도도 느려 <strong>RTC(real-time chunking) 추론</strong>과 함께 써야 합니다. SO-ARM101 단일 작업이라면 ACT가 훨씬 실용적입니다.</p></div></div>
 <hr>
 <h2 id="학습-시간-참고">학습 시간 참고<a class="anchor" href="#학습-시간-참고">#</a></h2>
-<div class="table-wrap"><table><thead><tr><th>환경</th><th>ACT 60k 스텝 예상 시간</th></tr></thead><tbody><tr><td>RTX 4090</td><td>약 2~3시간</td></tr><tr><td>RTX 3060</td><td>약 6~8시간</td></tr><tr><td>Apple M2 Pro (mps)</td><td>약 12시간+</td></tr><tr><td>HF Jobs a10g-small</td><td>약 4~5시간</td></tr><tr><td>CPU만</td><td>비현실적</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>환경</th><th>ACT 60k 스텝 예상 시간</th></tr></thead><tbody><tr><td>RTX 4090</td><td>약 2~3시간</td></tr><tr><td>RTX 3060</td><td>약 6~8시간</td></tr><tr><td>HF Jobs a10g-small</td><td>약 4~5시간</td></tr><tr><td>CPU만</td><td>비현실적</td></tr></tbody></table></div>
 <p>원문 위키가 인용하는 사례로는 <strong>15초짜리 조작 영상 50개로 2시간 학습</strong>해 옷 개기·열쇠 꽂기·부품 분류를 습득한 예가 있습니다.</p>
 <div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch14.html">14장 모델 추론과 평가</a> — 학습한 정책을 실제 로봇에서 돌리고 성공률을 측정합니다.</p></div></div>
       <nav class="pager"><a class="pager-prev" href="ch12.html"><span>이전</span>시뮬레이션 데이터 수집 (LeIsaac)</a><a class="pager-next" href="ch14.html"><span>다음</span>모델 추론과 평가</a></nav>

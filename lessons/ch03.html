@@ -267,7 +267,7 @@
 <hr>
 <h2 id="서보-드라이버-보드">서보 드라이버 보드<a class="anchor" href="#서보-드라이버-보드">#</a></h2>
 <p>USB-C ↔ 서보 버스를 중계하는 작은 보드입니다. 대개 <strong>Waveshare Serial Bus Servo Driver Board</strong> 또는 그 호환 보드입니다.</p>
-<ul><li>PC에서는 CH340 / CP210x 계열 USB-시리얼로 인식됩니다.<ul><li>Linux: <code>/dev/ttyACM0</code>, <code>/dev/ttyUSB0</code></li><li>macOS: <code>/dev/tty.usbmodem*</code> 또는 <code>/dev/tty.wchusbserial*</code></li><li>Windows: <code>COM3</code>, <code>COM4</code> …</li></ul></li><li>서보 3핀 커넥터가 여러 개 있고, 어느 포트에 꽂아도 같은 버스입니다.</li><li><strong>외부 전원 입력</strong>이 따로 있습니다. USB만 꽂으면 통신은 되지만 서보가 움직이지 않습니다.</li></ul>
+<ul><li>PC에서는 CH340 / CP210x 계열 USB-시리얼로 인식됩니다.<ul><li>Linux: <code>/dev/ttyACM0</code>, <code>/dev/ttyUSB0</code></li><li>Windows: <code>COM3</code>, <code>COM4</code> …</li></ul></li><li>서보 3핀 커넥터가 여러 개 있고, 어느 포트에 꽂아도 같은 버스입니다.</li><li><strong>외부 전원 입력</strong>이 따로 있습니다. USB만 꽂으면 통신은 되지만 서보가 움직이지 않습니다.</li></ul>
 <div class="callout callout-warn"><div class="callout-title">Waveshare 보드의 점퍼</div><div class="callout-body"><p>Waveshare 컨트롤러 보드를 쓴다면 **두 개의 점퍼가 모두 <code>B</code> 채널(USB)** 쪽에 꽂혀 있어야 합니다. <code>A</code> 쪽에 있으면 PC에서 서보가 전혀 검색되지 않습니다.</p></div></div>
 <p>보드는 4개의 <strong>M2.5 황동 스탠드오프(서포터)</strong> 를 먼저 세우고 <strong>M2.5×8 나사 4개</strong>로 고정한 뒤, 팔 베이스에 장착합니다.</p>
 <hr>

@@ -146,7 +146,38 @@
 <h2 id="먼저-시뮬레이터에서-체험하기">먼저 시뮬레이터에서 체험하기<a class="anchor" href="#먼저-시뮬레이터에서-체험하기">#</a></h2>
 <p>실물을 켜기 전에 감을 잡아 두면 사고를 줄일 수 있습니다.</p>
 <div class="callout callout-task"><div class="callout-title">실습 — 시뮬레이터 텔레오퍼레이션</div><div class="callout-body"><p><a href="../sim/index.html">3D 시뮬레이터</a>를 열고 <strong>&quot;텔레오퍼레이션&quot; 탭</strong>을 선택하세요.</p>
-<ol><li>화면에 <strong>반투명한 리더 암</strong>과 <strong>불투명한 팔로워 암</strong>이 함께 나타납니다.</li><li>슬라이더나 IK 타깃으로 <strong>리더</strong>를 움직이면 팔로워가 약간의 지연을 두고 따라옵니다.</li><li><strong>&quot;추종 지연(lag)&quot; 슬라이더</strong>를 올려 보세요. 실제 시리얼 통신 지연과 서보 응답 지연을 모사한 것입니다. 지연이 크면 빠른 동작에서 팔로워가 뒤처지는 것을 볼 수 있습니다.</li><li><strong>&quot;조인트 한계 초과 경고&quot;</strong> 를 켜 두면, 리더가 팔로워의 물리적 한계를 넘는 자세를 만들 때 해당 관절이 빨갛게 표시됩니다. 실물에서 이 상황이 바로 서보 과부하입니다.</li></ol></div></div>
+<ol><li>화면에 <strong>반투명한 리더 암</strong>과 <strong>불투명한 팔로워 암</strong>이 함께 나타납니다.</li><li>슬라이더나 IK 타깃으로 <strong>리더</strong>를 움직이면 팔로워가 약간의 지연을 두고 따라옵니다.</li><li><strong>&quot;추종 지연(lag)&quot; 슬라이더</strong>를 올려 보세요. 실제 시리얼 통신 지연과 서보 응답 지연을 모사한 것입니다. 지연이 크면 빠른 동작에서 팔로워가 뒤처지는 것을 볼 수 있습니다.</li><li><strong>&quot;조인트 한계 초과 경고&quot;</strong> 를 켜 두면, 리더가 팔로워의 물리적 한계를 넘는 자세를 만들 때 해당 관절이 빨갛게 표시됩니다. 실물에서 이 상황이 바로 서보 과부하입니다.</li></ol>
+<p>리더 암 실물이 이미 있다면 슬라이더 대신 <strong>진짜 리더를 꽂아</strong> 움직일 수 있습니다. 바로 아래 절을 보세요.</p></div></div>
+<hr>
+<hr>
+<h2 id="실기-리더-암을-시뮬레이터에-연결하기">실기 리더 암을 시뮬레이터에 연결하기<a class="anchor" href="#실기-리더-암을-시뮬레이터에-연결하기">#</a></h2>
+<p>팔로워가 아직 없거나, 조립 전에 리더만 먼저 왔다면 — <strong>리더 암을 브라우저에 직접 꽂아 시뮬레이터의 팔을 움직일 수 있습니다.</strong> 리더를 손으로 움직이면 화면 속 팔로워가 똑같이 따라옵니다.</p>
+<div class="callout callout-info"><div class="callout-title">어떻게 동작하나</div><div class="callout-body"><p><a href="../sim/index.html">3D 시뮬레이터</a>가 <strong>Web Serial API</strong> 로 드라이버 보드에 직접 접속해, STS3215 서보 6개의 <strong>현재 위치 레지스터(주소 56)</strong> 를 초당 수십 번 읽습니다. 읽은 틱 값을 라디안으로 바꿔 시뮬레이터의 리더 자세로 넣으면, 나머지는 위에서 본 텔레오퍼레이션 루프와 완전히 같습니다.</p>
+<p>프로토콜은 <code>scservo_sdk</code> 의 <code>PacketHandler(0)</code> 과 같은 <strong>Feetech SMS/STS</strong> 규격이고, 16비트 값은 리틀엔디언입니다. LeRobot 이 파이썬으로 하는 일을 브라우저가 그대로 합니다.</p></div></div>
+<div class="callout callout-tip"><div class="callout-title">서보에 아무것도 쓰지 않습니다</div><div class="callout-body"><p>이 연결은 <strong>읽기 전용</strong>입니다. 토크를 켜거나 목표 위치를 보내는 명령을 일절 보내지 않으므로 서보 설정이 바뀌거나 팔이 갑자기 움직일 일이 없습니다. 리더 암은 원래 사람이 손으로 움직이는 입력 장치이므로 읽기만으로 충분합니다.</p></div></div>
+<h3 id="준비물">준비물<a class="anchor" href="#준비물">#</a></h3>
+<ul><li>리더 암 + 드라이버 보드 + <strong>5V 6A 전원 어댑터</strong></li><li>USB-C 케이블</li><li><strong>Chrome 또는 Edge</strong> (크로미움 계열). Firefox·Safari 는 Web Serial 미지원입니다.</li><li>페이지를 **<code>https://</code> 또는 <code>localhost</code>** 로 열 것</li></ul>
+<div class="callout callout-warn"><div class="callout-title">로컬에서 열 때</div><div class="callout-body"><p><code>file://</code> 로 직접 연 페이지에서는 Web Serial 이 차단됩니다. 반드시 로컬 서버로 여세요.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python build.py --serve</code></pre></div></div></div>
+<h3 id="연결-순서">연결 순서<a class="anchor" href="#연결-순서">#</a></h3>
+<ol><li>리더 암에 <strong>전원과 USB</strong> 를 연결합니다.</li><li>시뮬레이터를 열고 <strong>텔레오퍼 탭 → 실기 리더 암 연결</strong> 로 갑니다.</li><li>보레이트가 <strong>1,000,000</strong> 인지 확인하고 <strong>[리더 암 연결]</strong> 을 누릅니다.</li><li>브라우저가 띄우는 포트 목록에서 드라이버 보드를 고릅니다. (보통 <code>CH340</code> 또는 <code>USB Serial Device</code> 로 보입니다)</li><li>연결되면 아래 표에 <strong>서보 6개의 틱 값이 실시간으로</strong> 찍히기 시작합니다.</li></ol>
+<div class="callout callout-warn"><div class="callout-title">LeRobot 과 동시에 쓸 수 없습니다</div><div class="callout-body"><p>시리얼 포트는 한 번에 한 프로그램만 열 수 있습니다. <code>lerobot-teleoperate</code> 가 돌고 있으면 브라우저가 포트를 못 엽니다. 반대도 마찬가지입니다. 한쪽을 끄고 다른 쪽을 여세요. (<a href="../lessons/ch17.html">17장</a>에서 같은 이야기가 나옵니다)</p></div></div>
+<h3 id="방향과-영점-맞추기">방향과 영점 맞추기<a class="anchor" href="#방향과-영점-맞추기">#</a></h3>
+<p>연결 직후에는 리더의 틱 값과 시뮬레이터 조인트가 어떻게 대응하는지 모릅니다. 맞추는 방법이 두 가지입니다.</p>
+<p><strong>방법 A — 캘리브레이션 JSON 불러오기 (권장)</strong></p>
+<p><a href="../lessons/ch08.html">8장</a>에서 <code>lerobot-calibrate</code> 를 이미 돌렸다면, 그 결과 파일을 그대로 쓰면 됩니다.</p>
+<div class="code-block"><div class="code-head"><span class="code-lang">text</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-text">~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/&lt;내 id&gt;.json</code></pre></div>
+<p><strong>[캘리브레이션 JSON]</strong> 버튼으로 이 파일을 고르면, 각 조인트의 <code>range_min</code> ~ <code>range_max</code> 를 URDF 조인트 한계에 선형 대응시킵니다. <code>drive_mode</code> 까지 읽으므로 <strong>방향도 자동으로 맞습니다.</strong></p>
+<p><strong>방법 B — 영점 캡처</strong></p>
+<p>캘리브레이션 파일이 없다면, 리더를 <strong>각 관절이 가동범위 한가운데</strong> 오도록 세운 뒤 <strong>[영점 캡처]</strong> 를 누릅니다. 그 자세가 시뮬레이터의 중립 자세가 됩니다. 그다음 관절을 하나씩 움직여 보고, 화면이 <strong>반대로 움직이는 관절만</strong> 표의 <code>반전</code> 체크박스를 켜면 됩니다.</p>
+<h3 id="읽기-속도">읽기 속도<a class="anchor" href="#읽기-속도">#</a></h3>
+<p>표 위의 <strong>읽기 속도</strong>에 실제 달성 주파수가 표시됩니다.</p>
+<div class="table-wrap"><table><thead><tr><th>표시</th><th>의미</th></tr></thead><tbody><tr><td><code>sync</code></td><td>SYNC READ — 한 번의 요청으로 6개를 모두 읽습니다. 빠릅니다</td></tr><tr><td><code>개별</code></td><td>서보를 하나씩 읽습니다. SYNC READ 가 3번 실패하면 자동 전환됩니다</td></tr><tr><td><code>타임아웃 N</code></td><td>응답이 없던 횟수. 계속 늘어나면 배선이나 보레이트를 의심하세요</td></tr></tbody></table></div>
+<p>50 Hz 정도면 손으로 움직이는 속도를 충분히 따라옵니다. 값이 너무 낮으면 <strong>읽기 주기(Hz)</strong> 를 내려 보세요 — 무리하게 올리면 오히려 타임아웃이 늘어납니다.</p>
+<div class="callout callout-task"><div class="callout-title">실습 — 실기 리더로 시뮬레이터 움직이기</div><div class="callout-body"><ol><li>리더 암만 연결하고 시뮬레이터를 엽니다. (팔로워는 아직 없어도 됩니다)</li><li>연결한 뒤 리더를 천천히 움직이며 <strong>반투명한 리더 암</strong>이 따라오는지 봅니다.</li><li><strong>추종 지연</strong>을 0 ms 와 300 ms 로 바꿔 가며 불투명한 팔로워가 어떻게 뒤처지는지 관찰합니다.</li><li><strong>녹화 탭</strong>에서 궤적을 기록해 보세요. 실기 리더로 만든 진짜 궤적입니다.</li></ol>
+<p>이 상태에서 조인트 한계를 넘기면 해당 관절이 빨갛게 표시됩니다. <strong>실기 팔로워를 연결하기 전에 리더의 가동 습관을 교정할 좋은 기회입니다.</strong></p></div></div>
+<h3 id="문제-해결">문제 해결<a class="anchor" href="#문제-해결">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead><tbody><tr><td>[리더 암 연결] 버튼이 비활성</td><td>Firefox·Safari 또는 <code>file://</code></td><td>Chrome/Edge + <code>localhost</code> 로 열기</td></tr><tr><td>포트 목록에 아무것도 없음</td><td>드라이버 미설치 / USB 미연결</td><td>장치 관리자에서 CH340 인식 확인</td></tr><tr><td>연결은 되는데 전부 &quot;응답 없음&quot;</td><td>전원 미연결 · 보레이트 불일치 · 점퍼 A 채널</td><td><a href="../lessons/ch03.html">3장</a> 배선 확인</td></tr><tr><td>일부 서보만 응답 없음</td><td>3핀 케이블 접촉 · ID 미설정</td><td><a href="../lessons/ch05.html">5장</a> 재확인</td></tr><tr><td>움직임이 반대</td><td>방향 미보정</td><td>표의 <code>반전</code> 체크 또는 캘리브레이션 JSON 사용</td></tr><tr><td>포트를 못 엶</td><td>LeRobot 이 점유 중</td><td><code>lerobot-*</code> 프로세스 종료</td></tr></tbody></table></div>
 <hr>
 <h2 id="실물-텔레오퍼레이션-실행">실물 텔레오퍼레이션 실행<a class="anchor" href="#실물-텔레오퍼레이션-실행">#</a></h2>
 <h3 id="기본-명령">기본 명령<a class="anchor" href="#기본-명령">#</a></h3>
@@ -157,14 +188,6 @@
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm</code></pre></div>
-<p>macOS 예시 (<code>/dev/tty.usbmodem*</code> 또는 <code>/dev/tty.wchusbserial*</code> 둘 다 동작):</p>
-<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">lerobot-teleoperate \
-    --robot.type=so101_follower \
-    --robot.port=/dev/tty.usbmodem5AAF2193061 \
-    --robot.id=my_follower_arm \
-    --teleop.type=so101_leader \
-    --teleop.port=/dev/tty.usbmodem5AAF2194741 \
-    --teleop.id=my_leader_arm</code></pre></div>
 <div class="callout callout-tip"><div class="callout-title">포트 이름은 명령어 생성기로</div><div class="callout-body"><p><a href="../tools/cli-builder.html">명령어 생성기</a>에 포트와 id를 입력해 두면 위 명령이 자동 완성됩니다.</p></div></div>
 <h3 id="이-명령이-하는-일">이 명령이 하는 일<a class="anchor" href="#이-명령이-하는-일">#</a></h3>
 <ol><li>캘리브레이션 파일이 있는지 확인하고, 없으면 <strong>캘리브레이션 절차를 먼저 시작</strong>합니다.</li><li>리더와 팔로워를 연결합니다.</li><li>텔레오퍼레이션 루프를 시작합니다.</li></ol>
@@ -216,7 +239,7 @@ while True:
 <h2 id="대안-리더-암-없이-조종하기">대안 — 리더 암 없이 조종하기<a class="anchor" href="#대안-리더-암-없이-조종하기">#</a></h2>
 <p>리더 암이 아직 없거나 고장 났다면 다른 입력 장치를 쓸 수 있습니다.</p>
 <div class="table-wrap"><table><thead><tr><th>방식</th><th>설명</th></tr></thead><tbody><tr><td><strong>키보드</strong></td><td><code>--teleop.type=keyboard</code>. 관절을 키로 증감. 정밀하지 않지만 테스트에 유용</td></tr><tr><td><strong>게임패드</strong></td><td><code>--teleop.type=gamepad</code>. 아날로그 스틱으로 관절 제어</td></tr><tr><td><strong>휴대폰</strong></td><td>LeRobot의 <a href="https://huggingface.co/docs/lerobot/main/en/phone_teleop" target="_blank" rel="noopener">phone_teleop</a> — 폰 자세로 팔로워를 제어</td></tr><tr><td><strong>LeLab 웹 UI</strong></td><td><a href="https://github.com/huggingface/leLab" target="_blank" rel="noopener">github.com/huggingface/leLab</a> — 캘리브레이션·텔레오퍼레이션·녹화·학습·재생을 브라우저 하나로</td></tr><tr><td><strong>ESP32-S3 무선</strong></td><td>원문 위키의 무선 텔레오퍼레이션 프로젝트</td></tr></tbody></table></div>
-<div class="callout callout-info"><div class="callout-title">키보드 텔레오퍼레이션 제약</div><div class="callout-body"><p>키보드 텔레오퍼레이션은 <strong>전역 키 입력 백엔드</strong>가 필요합니다. X11 세션, Windows 데스크톱, 또는 손쉬운 사용 권한이 부여된 macOS에서만 동작하며 <strong>Wayland나 헤드리스 환경에서는 불가</strong>합니다.</p>
+<div class="callout callout-info"><div class="callout-title">키보드 텔레오퍼레이션 제약</div><div class="callout-body"><p>키보드 텔레오퍼레이션은 <strong>전역 키 입력 백엔드</strong>가 필요합니다. X11 세션이나 Windows 데스크톱에서만 동작하며 <strong>Wayland나 헤드리스 환경에서는 불가</strong>합니다.</p>
 <p>(녹화 중 에피소드 제어 키 <code>n</code>/<code>r</code>/<code>q</code>는 별개로, 터미널에서 직접 읽기 때문에 Wayland·헤드리스·SSH에서도 동작합니다.)</p></div></div>
 <p>저장소에 포함된 간단한 키보드 텔레오퍼레이션 예제도 참고하세요.</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python scripts/so101_keyboard_teleop.py --port /dev/ttyACM0 --id my_follower_arm</code></pre></div>
@@ -226,7 +249,7 @@ while True:
 <div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch10.html">10장 카메라 연동과 시각화</a> — 모방학습에서 가장 중요한 입력인 카메라를 붙입니다.</p></div></div>
       <nav class="pager"><a class="pager-prev" href="ch08.html"><span>이전</span>로봇 캘리브레이션</a><a class="pager-next" href="ch10.html"><span>다음</span>카메라 연동과 시각화</a></nav>
     </div>
-    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#텔레오퍼레이션이란">텔레오퍼레이션이란</a><a class="toc-l2" href="#먼저-시뮬레이터에서-체험하기">먼저 시뮬레이터에서 체험하기</a><a class="toc-l2" href="#실물-텔레오퍼레이션-실행">실물 텔레오퍼레이션 실행</a><a class="toc-l3" href="#기본-명령">기본 명령</a><a class="toc-l3" href="#이-명령이-하는-일">이 명령이 하는 일</a><a class="toc-l3" href="#파이썬-api-버전">파이썬 API 버전</a><a class="toc-l2" href="#첫-실행-안전-수칙">첫 실행 안전 수칙</a><a class="toc-l3" href="#정상-동작-판정">정상 동작 판정</a><a class="toc-l2" href="#그리퍼-동작">그리퍼 동작</a><a class="toc-l2" href="#시각화와-함께-보기-rerun">시각화와 함께 보기 (`rerun`)</a><a class="toc-l2" href="#대안-리더-암-없이-조종하기">대안 — 리더 암 없이 조종하기</a><a class="toc-l2" href="#문제-해결">문제 해결</a></div></aside>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#텔레오퍼레이션이란">텔레오퍼레이션이란</a><a class="toc-l2" href="#먼저-시뮬레이터에서-체험하기">먼저 시뮬레이터에서 체험하기</a><a class="toc-l2" href="#실기-리더-암을-시뮬레이터에-연결하기">실기 리더 암을 시뮬레이터에 연결하기</a><a class="toc-l3" href="#준비물">준비물</a><a class="toc-l3" href="#연결-순서">연결 순서</a><a class="toc-l3" href="#방향과-영점-맞추기">방향과 영점 맞추기</a><a class="toc-l3" href="#읽기-속도">읽기 속도</a><a class="toc-l3" href="#문제-해결">문제 해결</a><a class="toc-l2" href="#실물-텔레오퍼레이션-실행">실물 텔레오퍼레이션 실행</a><a class="toc-l3" href="#기본-명령">기본 명령</a><a class="toc-l3" href="#이-명령이-하는-일">이 명령이 하는 일</a><a class="toc-l3" href="#파이썬-api-버전">파이썬 API 버전</a><a class="toc-l2" href="#첫-실행-안전-수칙">첫 실행 안전 수칙</a><a class="toc-l3" href="#정상-동작-판정">정상 동작 판정</a><a class="toc-l2" href="#그리퍼-동작">그리퍼 동작</a><a class="toc-l2" href="#시각화와-함께-보기-rerun">시각화와 함께 보기 (`rerun`)</a><a class="toc-l2" href="#대안-리더-암-없이-조종하기">대안 — 리더 암 없이 조종하기</a><a class="toc-l2" href="#문제-해결">문제 해결</a></div></aside>
   </div>
 </article>
 

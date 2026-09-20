@@ -142,6 +142,34 @@
         <button class="s-btn" id="btnLeaderSync" type="button">리더를 현재 자세로</button>
       </div>
       <div class="warn-box" id="limitWarn" hidden></div>
+
+      <div class="sub-title">실기 리더 암 연결 (Web Serial)</div>
+      <div class="warn-box" id="serialUnsupported" hidden></div>
+      <div class="field-grid two">
+        <label>보레이트
+          <select id="serialBaud">
+            <option value="1000000" selected>1,000,000</option>
+            <option value="500000">500,000</option>
+            <option value="115200">115,200</option>
+          </select>
+        </label>
+        <label>읽기 주기 (Hz)
+          <input type="number" id="serialHz" value="50" min="5" max="120" step="5"></label>
+      </div>
+      <div class="panel-actions">
+        <button class="s-btn primary" id="btnSerial" type="button">리더 암 연결</button>
+        <button class="s-btn" id="btnZeroCapture" type="button" disabled>영점 캡처</button>
+        <label class="s-btn file-btn" for="calibFile">캘리브레이션 JSON</label>
+        <input type="file" id="calibFile" accept=".json,application/json" hidden>
+      </div>
+      <div class="kv">
+        <div><span>상태</span><code id="serialState">미연결</code></div>
+        <div><span>읽기 속도</span><code id="serialRate">-</code></div>
+      </div>
+      <div class="table-wrap"><table class="servo-table"><thead><tr>
+        <th>조인트</th><th>ID</th><th>틱</th><th>각도</th><th>반전</th>
+      </tr></thead><tbody id="servoRows"></tbody></table></div>
+
       <p class="hint">
         반투명한 쪽이 <b>리더</b>, 불투명한 쪽이 <b>팔로워</b>입니다.
         지연을 올리면 빠른 동작에서 팔로워가 뒤처지는 실제 현상을 볼 수 있습니다.
@@ -206,6 +234,15 @@
       <li><b>G 키</b> — 그리퍼 열기/닫기</li>
       <li><b>R 키</b> — 녹화 시작/정지</li>
     </ul>
+    <h3>실기 리더 암 연결</h3>
+    <p>
+      텔레오퍼 탭의 <b>실기 리더 암 연결</b>에서 Web Serial 로 드라이버 보드에 붙으면,
+      진짜 리더를 손으로 움직이는 대로 화면 속 팔이 따라옵니다.
+      <b>읽기 전용</b>이라 서보에 아무 명령도 쓰지 않습니다.
+      Chrome·Edge 에서 <code>localhost</code> 또는 <code>https</code> 로 열어야 하고,
+      <code>lerobot-*</code> 명령과 동시에 쓸 수 없습니다.
+      자세한 절차는 <a href="../lessons/ch09.html">9장</a>에 있습니다.
+    </p>
     <h3>알아 둘 점</h3>
     <p>
       이 시뮬레이터는 <b>기구학만</b> 계산합니다. 중력·마찰·관성 같은 물리는 없습니다.
@@ -229,6 +266,7 @@
 </div>
 
 <script src="../assets/js/so101-kinematics.js"></script>
+<script src="../assets/js/feetech-webserial.js"></script>
 <script src="../assets/js/robot-canvas.js"></script>
 <script src="../assets/js/simulator.js"></script>
 </body>

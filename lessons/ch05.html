@@ -87,7 +87,7 @@
 <hr>
 <h2 id="방법-선택">방법 선택<a class="anchor" href="#방법-선택">#</a></h2>
 <p>세 가지 경로가 있습니다. 편한 것 하나를 고르세요.</p>
-<div class="table-wrap"><table><thead><tr><th>방법</th><th>플랫폼</th><th>장점</th><th>단점</th></tr></thead><tbody><tr><td><strong>A. LeRobot CLI</strong> (<code>lerobot-setup-motors</code>)</td><td>전 플랫폼</td><td>가장 간단, 자동 진행</td><td>LeRobot 설치 필요 (<a href="../lessons/ch06.html">6장</a>)</td></tr><tr><td><strong>B. FD 디버그 툴</strong></td><td>Windows</td><td>서보 제조사 공식, 기능 풍부</td><td>Windows 전용</td></tr><tr><td><strong>C. 웹 브라우저 도구</strong></td><td>전 플랫폼</td><td>설치 불필요</td><td>크롬 계열 브라우저 필요</td></tr><tr><td><strong>D. Juxi ServoController</strong></td><td>Win/Ubuntu/macOS</td><td>GUI + 백업/복원 + 이중 포트</td><td>별도 다운로드</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>방법</th><th>플랫폼</th><th>장점</th><th>단점</th></tr></thead><tbody><tr><td><strong>A. LeRobot CLI</strong> (<code>lerobot-setup-motors</code>)</td><td>전 플랫폼</td><td>가장 간단, 자동 진행</td><td>LeRobot 설치 필요 (<a href="../lessons/ch06.html">6장</a>)</td></tr><tr><td><strong>B. FD 디버그 툴</strong></td><td>Windows</td><td>서보 제조사 공식, 기능 풍부</td><td>Windows 전용</td></tr><tr><td><strong>C. 웹 브라우저 도구</strong></td><td>전 플랫폼</td><td>설치 불필요</td><td>크롬 계열 브라우저 필요</td></tr><tr><td><strong>D. Juxi ServoController</strong></td><td>Windows / Ubuntu</td><td>GUI + 백업/복원 + 이중 포트</td><td>별도 다운로드</td></tr></tbody></table></div>
 <div class="callout callout-tip"><div class="callout-title">추천</div><div class="callout-body"><p>LeRobot을 어차피 설치할 것이므로 **A안(<code>lerobot-setup-motors</code>)** 이 가장 깔끔합니다. 다만 Windows에서 드라이버 문제가 있거나 서보 상태를 세밀하게 보고 싶다면 B/D를 병행하세요.</p></div></div>
 <hr>
 <h2 id="방법-a-lerobot-cli-권장">방법 A — LeRobot CLI (권장)<a class="anchor" href="#방법-a-lerobot-cli-권장">#</a></h2>
@@ -212,7 +212,7 @@ leader.setup_motors()</code></pre></div>
 <p>원문 위키가 배포하는 <code>Juxi_ServoController.zip</code> 도구입니다. Seeed Studio의 <code>Seeed_RoboController</code>(MIT)를 기반으로 GUI를 재구성하고 FT 디버거, xdat 파라미터 백업/복원, 크로스 플랫폼 지원, 중/영 전환을 추가한 버전입니다.</p>
 <div class="callout callout-warn"><div class="callout-title">호환성</div><div class="callout-body"><p><strong>Feetech STS3215 계열 전용</strong>입니다. 레지스터 표, xdat 파라미터 포맷, 보레이트 표 모두 STS3215에 맞춰져 있습니다.</p></div></div>
 <h3 id="주요-기능">주요 기능<a class="anchor" href="#주요-기능">#</a></h3>
-<div class="table-wrap"><table><thead><tr><th>기능</th><th>설명</th></tr></thead><tbody><tr><td>자동 포트 감지</td><td>USB 시리얼을 지능적으로 인식하고 가상 장치를 자동 제외</td></tr><tr><td>크로스 플랫폼</td><td>Windows / Ubuntu / macOS</td></tr><tr><td>이중 포트 동기화</td><td>좌·우 두 시리얼 포트를 독립 조작, 리더-팔로워 동기 원격조작 지원</td></tr><tr><td>중위 캘리브레이션</td><td>현재 위치를 2048 중위로 EEPROM에 기록</td></tr><tr><td>중위 테스트</td><td>토크를 켜고 중위로 이동시켜 캘리브레이션 결과 검증</td></tr><tr><td>모터 토크 해제 (失能电机)</td><td>전 서보 토크를 한 번에 꺼서 손으로 자유롭게 움직일 수 있게 함</td></tr><tr><td>자동 스캔</td><td>ID 1~20 범위의 온라인 서보 자동 탐지</td></tr><tr><td>FT 디버거</td><td>파라미터 읽기/쓰기, 위치 제어, 보레이트 변경, 공장 초기화, xdat 백업</td></tr><tr><td>LeRobot 캘리브레이션</td><td>LeRobot 포맷 JSON 캘리브레이션 파일 생성</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>기능</th><th>설명</th></tr></thead><tbody><tr><td>자동 포트 감지</td><td>USB 시리얼을 지능적으로 인식하고 가상 장치를 자동 제외</td></tr><tr><td>크로스 플랫폼</td><td>Windows / Ubuntu</td></tr><tr><td>이중 포트 동기화</td><td>좌·우 두 시리얼 포트를 독립 조작, 리더-팔로워 동기 원격조작 지원</td></tr><tr><td>중위 캘리브레이션</td><td>현재 위치를 2048 중위로 EEPROM에 기록</td></tr><tr><td>중위 테스트</td><td>토크를 켜고 중위로 이동시켜 캘리브레이션 결과 검증</td></tr><tr><td>모터 토크 해제 (失能电机)</td><td>전 서보 토크를 한 번에 꺼서 손으로 자유롭게 움직일 수 있게 함</td></tr><tr><td>자동 스캔</td><td>ID 1~20 범위의 온라인 서보 자동 탐지</td></tr><tr><td>FT 디버거</td><td>파라미터 읽기/쓰기, 위치 제어, 보레이트 변경, 공장 초기화, xdat 백업</td></tr><tr><td>LeRobot 캘리브레이션</td><td>LeRobot 포맷 JSON 캘리브레이션 파일 생성</td></tr></tbody></table></div>
 <h3 id="설치와-실행">설치와 실행<a class="anchor" href="#설치와-실행">#</a></h3>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">cd Juxi_ServoController
 python -m venv .venv</code></pre></div>
@@ -228,11 +228,6 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python -m src.gui.factory_calibration_tool</code></pre></div>
-<p>macOS — <code>/dev/tty.*</code> 대신 **논블로킹인 <code>/dev/cu.usbserial-*</code>** 를 쓰는 것이 좋습니다:</p>
-<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">brew install python
-ls /dev/cu.*
-python -m src.gui.factory_calibration_tool \
-  --port1 /dev/cu.usbserial-0001 --port2 /dev/cu.usbmodem141101</code></pre></div>
 <p>포트를 수동 지정하려면:</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">python -m src.gui.factory_calibration_tool --port1 COM3 --port2 COM4</code></pre></div>
 <h3 id="gui-화면-구성">GUI 화면 구성<a class="anchor" href="#gui-화면-구성">#</a></h3>

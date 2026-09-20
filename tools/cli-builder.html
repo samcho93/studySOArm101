@@ -39,7 +39,6 @@
         <label>운영체제
           <select id="os">
             <option value="linux">Linux (Ubuntu)</option>
-            <option value="mac">macOS</option>
             <option value="win">Windows</option>
           </select>
         </label>
@@ -110,8 +109,7 @@
         </label>
         <label>디바이스
           <select id="device">
-            <option value="cuda">cuda (NVIDIA)</option>
-            <option value="mps">mps (Apple Silicon)</option>
+            <option value="cuda">cuda (NVIDIA GPU)</option>
             <option value="cpu">cpu</option>
           </select>
         </label>
@@ -226,14 +224,6 @@
         desc: '영구 설정은 dialout 그룹 가입입니다. 로그아웃 후 다시 로그인해야 적용됩니다.',
         lang: 'bash',
         code: 'sudo usermod -a -G dialout $USER\n\n# 또는 임시로\nsudo chmod 666 ' + cfg.fPort + ' ' + cfg.lPort
-      });
-    } else if (cfg.os === 'mac') {
-      sections.push({
-        step: '1b',
-        title: '포트 권한 (macOS)',
-        desc: '시리얼 장치에 읽기/쓰기 권한을 부여합니다.',
-        lang: 'bash',
-        code: 'chmod 666 /dev/tty.*'
       });
     }
 
@@ -490,10 +480,7 @@
     var f = document.getElementById('fPort');
     var l = document.getElementById('lPort');
     if (os === 'linux') { f.value = '/dev/ttyACM0'; l.value = '/dev/ttyACM1'; }
-    else if (os === 'mac') {
-      f.value = '/dev/tty.usbmodem5AAF2193061';
-      l.value = '/dev/tty.usbmodem5AAF2194741';
-    } else { f.value = 'COM3'; l.value = 'COM4'; }
+    else { f.value = 'COM3'; l.value = 'COM4'; }
     render();
   });
 

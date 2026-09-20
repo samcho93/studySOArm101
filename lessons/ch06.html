@@ -83,7 +83,7 @@
 <hr>
 <h2 id="공통-절차">공통 절차<a class="anchor" href="#공통-절차">#</a></h2>
 <h3 id="1-miniconda-miniforge-설치">1. Miniconda / Miniforge 설치<a class="anchor" href="#1-miniconda-miniforge-설치">#</a></h3>
-<ul><li>배포 페이지: <a href="https://www.anaconda.com/download" target="_blank" rel="noopener">anaconda.com/download</a></li><li>Windows 직접 다운로드: <code>https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe</code></li><li>Linux/macOS는 miniforge도 좋습니다.</li></ul>
+<ul><li>배포 페이지: <a href="https://www.anaconda.com/download" target="_blank" rel="noopener">anaconda.com/download</a></li><li>Windows 직접 다운로드: <code>https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe</code></li><li>Linux에서는 miniforge도 좋습니다.</li></ul>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">wget &quot;https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh&quot;
 bash Miniforge3-$(uname)-$(uname -m).sh</code></pre></div>
 <div class="callout callout-info"><div class="callout-title">uv를 선호한다면</div><div class="callout-body"><p><code>conda</code> 대신 <code>uv</code>나 <code>venv</code>를 써도 됩니다. <strong>Python ≥ 3.12</strong>, <strong>PyTorch ≥ 2.10</strong> 을 만족하면 됩니다.</p>
@@ -100,7 +100,7 @@ conda activate lerobot</code></pre></div>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">ffmpeg</code></pre></div>
 <div class="callout callout-info"><div class="callout-title">버전을 왜 7.1.1로 고정하나</div><div class="callout-body"><p><code>conda install ffmpeg -c conda-forge</code>는 보통 ffmpeg 8.x(libsvtav1 인코더 포함)를 설치합니다. 하지만 torchcodec과 버전이 어긋나거나 <code>libsvtav1</code>이 빠지는 사례가 있어, 원문 튜토리얼은 <strong>7.1.1 고정</strong>을 권장합니다. <code>ffmpeg -encoders</code>로 <code>libsvtav1</code> 존재를 확인할 수 있습니다.</p>
 <p>PyTorch ≥ 2.10 (TorchCodec ≥ 0.10)부터는 시스템 ffmpeg에 동적 링크가 가능해서 <code>sudo apt install ffmpeg</code>로도 됩니다. 그 이전 버전은 반드시 conda 쪽 ffmpeg를 쓰세요.</p>
-<p>TorchCodec을 지원하지 않는 플랫폼(macOS Intel, Linux ARM, PyTorch &lt; 2.8인 Windows)에서는 LeRobot이 자동으로 <code>pyav</code>로 폴백하므로 ffmpeg 설치를 건너뛰어도 됩니다.</p></div></div>
+<p>TorchCodec을 지원하지 않는 플랫폼(Linux ARM, PyTorch &lt; 2.8인 Windows)에서는 LeRobot이 자동으로 <code>pyav</code>로 폴백하므로 ffmpeg 설치를 건너뛰어도 됩니다.</p></div></div>
 <h3 id="4-lerobot-소스-받기">4. LeRobot 소스 받기<a class="anchor" href="#4-lerobot-소스-받기">#</a></h3>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">git clone https://github.com/huggingface/lerobot.git
 cd lerobot</code></pre></div>
@@ -144,10 +144,6 @@ usbipd attach --wsl --busid &lt;BUSID&gt;</code></pre></div></div></div>
 <p>uv 사용 시:</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">sudo apt install libevdev-dev
 uv pip install evdev</code></pre></div>
-<h3 id="macos">macOS<a class="anchor" href="#macos">#</a></h3>
-<ul><li>시리얼 장치 권한을 먼저 부여합니다.</li></ul>
-<div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">chmod 666 /dev/tty.*</code></pre></div>
-<ul><li>Apple Silicon에서는 학습 시 <code>--policy.device=mps</code>를 사용합니다.</li><li>키보드 원격조작은 <strong>시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용 / 입력 모니터링</strong> 권한을 터미널에 부여해야 동작합니다.</li></ul>
 <h3 id="jetson-orin-nano-nx">Jetson (Orin Nano / NX)<a class="anchor" href="#jetson-orin-nano-nx">#</a></h3>
 <ul><li>JetPack에 포함된 PyTorch를 쓰거나 NVIDIA가 배포하는 aarch64 휠을 설치하세요. PyPI의 기본 torch는 Jetson에서 동작하지 않습니다.</li><li>Linux ARM(aarch64)은 TorchCodec 미지원이므로 <code>pyav</code>로 자동 폴백됩니다.</li></ul>
 <hr>
@@ -155,7 +151,7 @@ uv pip install evdev</code></pre></div>
 <p>중국 등 특정 지역에서 패키지 다운로드가 느릴 때 쓰는 설정입니다. 국내(한국)에서는 보통 필요 없습니다.</p>
 <p>pip 미러:</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">pip config set global.index-url https://mirrors.aliyun.com/pypi/simple</code></pre></div>
-<p>conda 미러 (Linux/macOS):</p>
+<p>conda 미러 (Linux):</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">echo &quot;&quot; &gt; ~/.condarc
 cat &lt;&lt; EOF &gt; ~/.condarc
 channels:
@@ -198,7 +194,7 @@ pip install -e &quot;.[all]&quot;</code></pre></div>
 <div class="callout callout-check"><div class="callout-title">다음 장에서 할 일</div><div class="callout-body"><p><a href="../lessons/ch07.html">7장 시리얼 포트 확인과 권한 설정</a>에서 리더와 팔로워의 포트를 구분합니다.</p></div></div>
       <nav class="pager"><a class="pager-prev" href="ch05.html"><span>이전</span>STS3215 서보 ID와 보레이트 설정</a><a class="pager-next" href="ch07.html"><span>다음</span>시리얼 포트 확인과 권한 설정</a></nav>
     </div>
-    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#설치-전략">설치 전략</a><a class="toc-l2" href="#공통-절차">공통 절차</a><a class="toc-l3" href="#1-miniconda-miniforge-설치">1. Miniconda / Miniforge 설치</a><a class="toc-l3" href="#2-가상환경-생성과-활성화">2. 가상환경 생성과 활성화</a><a class="toc-l3" href="#3-ffmpeg-설치-영상-디코딩">3. ffmpeg 설치 (영상 디코딩)</a><a class="toc-l3" href="#4-lerobot-소스-받기">4. LeRobot 소스 받기</a><a class="toc-l3" href="#5-설치">5. 설치</a><a class="toc-l3" href="#6-설치-검증">6. 설치 검증</a><a class="toc-l2" href="#플랫폼별-추가-사항">플랫폼별 추가 사항</a><a class="toc-l3" href="#ubuntu">Ubuntu</a><a class="toc-l3" href="#windows">Windows</a><a class="toc-l3" href="#wsl-windows-subsystem-for-linux">WSL (Windows Subsystem for Linux)</a><a class="toc-l3" href="#macos">macOS</a><a class="toc-l3" href="#jetson-orin-nano-nx">Jetson (Orin Nano / NX)</a><a class="toc-l2" href="#네트워크가-느릴-때-미러-설정-선택">네트워크가 느릴 때 — 미러 설정 (선택)</a><a class="toc-l2" href="#hugging-face-계정-연동-선택-11장-이후-필요">Hugging Face 계정 연동 (선택, 11장 이후 필요)</a><a class="toc-l2" href="#설치-문제-해결">설치 문제 해결</a></div></aside>
+    <aside class="lesson-toc"><div class="toc-title">이 장의 내용</div><div class="toc-links"><a class="toc-l2" href="#설치-전략">설치 전략</a><a class="toc-l2" href="#공통-절차">공통 절차</a><a class="toc-l3" href="#1-miniconda-miniforge-설치">1. Miniconda / Miniforge 설치</a><a class="toc-l3" href="#2-가상환경-생성과-활성화">2. 가상환경 생성과 활성화</a><a class="toc-l3" href="#3-ffmpeg-설치-영상-디코딩">3. ffmpeg 설치 (영상 디코딩)</a><a class="toc-l3" href="#4-lerobot-소스-받기">4. LeRobot 소스 받기</a><a class="toc-l3" href="#5-설치">5. 설치</a><a class="toc-l3" href="#6-설치-검증">6. 설치 검증</a><a class="toc-l2" href="#플랫폼별-추가-사항">플랫폼별 추가 사항</a><a class="toc-l3" href="#ubuntu">Ubuntu</a><a class="toc-l3" href="#windows">Windows</a><a class="toc-l3" href="#wsl-windows-subsystem-for-linux">WSL (Windows Subsystem for Linux)</a><a class="toc-l3" href="#jetson-orin-nano-nx">Jetson (Orin Nano / NX)</a><a class="toc-l2" href="#네트워크가-느릴-때-미러-설정-선택">네트워크가 느릴 때 — 미러 설정 (선택)</a><a class="toc-l2" href="#hugging-face-계정-연동-선택-11장-이후-필요">Hugging Face 계정 연동 (선택, 11장 이후 필요)</a><a class="toc-l2" href="#설치-문제-해결">설치 문제 해결</a></div></aside>
   </div>
 </article>
 

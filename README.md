@@ -73,7 +73,7 @@ VS Code Live Server 같은 정적 서버로 폴더를 열어도 됩니다.
   진짜 리더를 움직이면 시뮬레이터 팔이 그대로 따라옵니다 (읽기 전용)
 - 궤적 녹화 / 재생 / JSON·CSV 내보내기
 - 손목·전역 카메라 뷰
-- 작업영역 점구름
+- 작업영역 — 도달 가능 부피를 반투명 껍질로 (어깨 회전 ±110° 부채꼴 형상 그대로)
 - `sensor_msgs/JointState`, `trajectory_msgs/JointTrajectory`, TF 체인 실시간 출력
 - three.js 가 없으면 의존성 없는 2D 캔버스 렌더러로 자동 전환
 

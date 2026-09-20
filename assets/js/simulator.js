@@ -752,27 +752,155 @@
     bin.position.set(0.10, 0.20, 0.022);
     scene.add(bin);
 
-    // ── 작업영역 점구름 ──
-    var cloud = null;
-    function buildCloud() {
-      if (cloud) return cloud;
-      var N = 3000;
-      var pos = new Float32Array(N * 3);
-      for (var i = 0; i < N; i++) {
-        var q = K.JOINTS.map(function (j) {
-          return j.lower + Math.random() * (j.upper - j.lower);
-        });
+    // ── 작업영역 (도달 가능 부피) ──
+    //
+    // shoulder_pan 은 팔 전체를 Z축으로 돌리기만 하므로, pan=0 으로 (반지름 r,
+    // 높이 z) 단면만 구한 뒤 어깨 회전 범위(±110°)만큼 회전시키면 실제 부피가
+    // 그대로 나옵니다. 무작위 점을 흩뿌리는 것보다 형태가 훨씬 잘 보입니다.
+    var workspace = null;
+
+    function workspaceProfile(cell, samples) {
+      var J = K.JOINTS;
+      var maxR = {};
+      var topIdx = 0;
+
+      for (var s = 0; s < samples; s++) {
+        var q = [0, 0, 0, 0, 0, 0];
+        for (var k = 1; k <= 4; k++) {
+          q[k] = J[k].lower + Math.random() * (J[k].upper - J[k].lower);
+        }
         var p = K.toolPosition(q);
-        pos[i * 3] = p[0]; pos[i * 3 + 1] = p[1]; pos[i * 3 + 2] = p[2];
+        if (p[2] < 0) continue;               // 테이블 아래는 그리지 않는다
+        var zi = Math.floor(p[2] / cell);
+        var r = Math.hypot(p[0], p[1]);
+        if (!(zi in maxR) || r > maxR[zi]) maxR[zi] = r;
+        if (zi > topIdx) topIdx = zi;
       }
+
+      // 비어 있는 높이 행을 메우고 살짝 평활한다
+      var raw = [];
+      var last = 0;
+      for (var i = 0; i <= topIdx; i++) {
+        last = (i in maxR) ? maxR[i] : last;
+        raw.push(last);
+      }
+      var prof = raw.map(function (v, i) {
+        var a = raw[Math.max(0, i - 1)];
+        var b = raw[Math.min(raw.length - 1, i + 1)];
+        return (a + v + b) / 3;
+      });
+
+      var pts = prof.map(function (r, i) { return [r, i * cell]; });
+      pts.push([0, (prof.length - 1) * cell + cell * 0.5]);   // 꼭대기를 닫는다
+      return pts;
+    }
+
+    function buildWorkspace() {
+      if (workspace) return workspace;
+
+      var pts = workspaceProfile(0.012, 60000);
+      var SEG = 56;
+      var a0 = K.JOINTS[0].lower, a1 = K.JOINTS[0].upper;
+
+      var pos = [];
+      var idx = [];
+
+      function vert(r, z, th) {
+        pos.push(r * Math.cos(th), r * Math.sin(th), z);
+        return pos.length / 3 - 1;
+      }
+      function angleAt(j) { return a0 + (a1 - a0) * (j / SEG); }
+
+      // 바깥 옆면
+      var grid = [];
+      for (var i = 0; i < pts.length; i++) {
+        var row = [];
+        for (var j = 0; j <= SEG; j++) row.push(vert(pts[i][0], pts[i][1], angleAt(j)));
+        grid.push(row);
+      }
+      for (var i2 = 0; i2 + 1 < pts.length; i2++) {
+        for (var j2 = 0; j2 < SEG; j2++) {
+          idx.push(grid[i2][j2], grid[i2][j2 + 1], grid[i2 + 1][j2 + 1]);
+          idx.push(grid[i2][j2], grid[i2 + 1][j2 + 1], grid[i2 + 1][j2]);
+        }
+      }
+
+      // 바닥 부채꼴
+      var hub = vert(0, 0, 0);
+      for (var j3 = 0; j3 < SEG; j3++) idx.push(hub, grid[0][j3 + 1], grid[0][j3]);
+
+      // 양쪽 끝 단면 — 회전축(r=0)과 프로파일 사이를 메운다
+      [0, SEG].forEach(function (j) {
+        var th = angleAt(j);
+        var axis = [];
+        for (var i = 0; i < pts.length; i++) axis.push(vert(0, pts[i][1], th));
+        for (var i = 0; i + 1 < pts.length; i++) {
+          if (j === 0) {
+            idx.push(axis[i], grid[i][j], grid[i + 1][j]);
+            idx.push(axis[i], grid[i + 1][j], axis[i + 1]);
+          } else {
+            idx.push(axis[i], grid[i + 1][j], grid[i][j]);
+            idx.push(axis[i], axis[i + 1], grid[i + 1][j]);
+          }
+        }
+      });
+
       var geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      cloud = new THREE.Points(geo, new THREE.PointsMaterial({
-        color: 0x4ade9a, size: 0.0035, transparent: true, opacity: 0.45
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      geo.setIndex(idx);
+      geo.computeVertexNormals();
+
+      var shell = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+        color: 0x4ade9a,
+        transparent: true,
+        opacity: 0.085,
+        side: THREE.DoubleSide,
+        depthWrite: false
       }));
-      cloud.visible = false;
-      scene.add(cloud);
-      return cloud;
+
+      // 형태가 읽히도록 윤곽선을 얹는다
+      var lines = [];
+      function seg(r1, z1, t1, r2, z2, t2) {
+        lines.push(r1 * Math.cos(t1), r1 * Math.sin(t1), z1,
+                   r2 * Math.cos(t2), r2 * Math.sin(t2), z2);
+      }
+      // 양 끝 단면의 윤곽
+      [0, SEG].forEach(function (j) {
+        var th = angleAt(j);
+        for (var i = 0; i + 1 < pts.length; i++) {
+          seg(pts[i][0], pts[i][1], th, pts[i + 1][0], pts[i + 1][1], th);
+        }
+        seg(0, 0, th, pts[0][0], pts[0][1], th);
+      });
+      // 높이별 수평 호
+      for (var i3 = 0; i3 < pts.length; i3 += 6) {
+        for (var j4 = 0; j4 < SEG; j4++) {
+          seg(pts[i3][0], pts[i3][1], angleAt(j4),
+              pts[i3][0], pts[i3][1], angleAt(j4 + 1));
+        }
+      }
+      var lineGeo = new THREE.BufferGeometry();
+      lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lines, 3));
+      var edges = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+        color: 0x4ade9a, transparent: true, opacity: 0.35, depthWrite: false
+      }));
+
+      workspace = new THREE.Group();
+      workspace.add(shell);
+      workspace.add(edges);
+      workspace.visible = false;
+      workspace.renderOrder = -1;
+      scene.add(workspace);
+
+      var top = pts[pts.length - 2];
+      var reach = Math.max.apply(null, pts.map(function (p) { return p[0]; }));
+
+      // 처음 켜면 부피 전체가 화면에 들어오도록 카메라를 물린다
+      orbit.dist = Math.max(orbit.dist, 1.55);
+      orbit.target.set(0, 0, top[1] * 0.45);
+      setStatus('작업영역 — 최대 반경 ' + (reach * 100).toFixed(0) +
+                'cm · 최고 높이 ' + (top[1] * 100).toFixed(0) + 'cm');
+      return workspace;
     }
 
     // ── 보조 카메라 ──
@@ -932,8 +1060,8 @@
       bin.visible = state.cube;
       if (state.cube) cube.position.set(state.cubePos[0], state.cubePos[1], state.cubePos[2]);
 
-      if (state.workspace) buildCloud().visible = true;
-      else if (cloud) cloud.visible = false;
+      if (state.workspace) buildWorkspace().visible = true;
+      else if (workspace) workspace.visible = false;
 
       applyCamera();
       renderer.render(scene, camera);

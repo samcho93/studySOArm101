@@ -312,7 +312,7 @@ def split_front_matter(text: str):
 def sidebar_html(curriculum: dict, current, rel: str) -> str:
     out = ['<nav class="sidebar-nav">']
     out.append('<a class="brand" href="%sindex.html"><span class="brand-mark">SO</span>'
-               '<span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>' % rel)
+               '<span class="brand-text">SO-ARM101</span></a>' % rel)
     out.append('<div class="side-tools">'
                '<a class="side-tool" href="%ssim/index.html">3D 시뮬레이터</a>'
                '<a class="side-tool" href="%stools/urdf-viewer.html">URDF 뷰어</a>'
@@ -444,7 +444,7 @@ def index_page(curriculum: dict) -> str:
 <header class="hero">
   <div class="hero-inner">
     <div class="hero-tag">오픈소스 6자유도 로봇팔 &middot; LeRobot &middot; ROS 2</div>
-    <h1>SO-ARM101<br><span>한국어 실습 강좌</span></h1>
+    <h1>SO-ARM101</h1>
     <p class="hero-lede">
       3D 프린팅 부품 조립부터 서보 캘리브레이션, LeRobot 텔레오퍼레이션과 모방학습,
       그리고 ROS 2 / MoveIt 2 / Gazebo 연동까지. 실제 장비가 없어도 브라우저에서
@@ -505,7 +505,7 @@ def index_page(curriculum: dict) -> str:
 """.format(total=total, cards="".join(cards))
 
     return PAGE.format(
-        title="SO-ARM101 한국어 실습 강좌",
+        title="SO-ARM101",
         desc="SO-ARM101 6자유도 오픈소스 로봇팔을 조립·캘리브레이션부터 "
              "LeRobot 모방학습, ROS 2/MoveIt 2 연동까지 배우는 한국어 강좌.",
         rel="", bodyclass="home",

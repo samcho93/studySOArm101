@@ -7,6 +7,12 @@ numpy>=1.24
 # LeRobot 을 설치했다면 이미 포함되어 있습니다.
 feetech-servo-sdk>=1.0 ; python_version >= "3.9"
 
+# URDF 뷰어 (rerun_view_so101.py)
+# 0.38 부터 URDF 지원이 rerun 에 내장되어 있습니다.
+# 그보다 낮은 버전을 써야 한다면 외부 로더를 따로 설치하세요.
+#   pip install git+https://github.com/rerun-io/rerun-loader-python-example-urdf.git
+rerun-sdk>=0.38
+
 # 키보드 텔레오퍼레이션 (so101_keyboard_teleop.py)
 pynput>=1.7
 

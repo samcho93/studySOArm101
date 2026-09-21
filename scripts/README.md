@@ -15,6 +15,7 @@
 | `eval_success_rate.py` | 표준 라이브러리만 |
 | `lerobot_ros2_bridge.py` | ROS 2, lerobot, torch, cv_bridge |
 | `rosbag_to_lerobot.py` | ROS 2(rosbag2_py), lerobot, cv_bridge |
+| `rerun_view_so101.py` | numpy, rerun-sdk (0.38+ 권장 — URDF 지원 내장) |
 
 ```bash
 pip install -r requirements.txt
@@ -51,6 +52,12 @@ python eval_success_rate.py --root ./datasets/rollout_so101_pick --annotate
 python lerobot_ros2_bridge.py --ros-args \
     -p policy_path:=outputs/train/act_so101/checkpoints/last/pretrained_model \
     -p dry_run:=true
+
+# 15장 — rerun + URDF visualizer 플러그인으로 보기
+python rerun_view_so101.py --urdf SO-ARM100/Simulation/SO101/so101_new_calib.urdf
+python rerun_view_so101.py --urdf .../so101_new_calib.urdf --sweep
+python rerun_view_so101.py --urdf .../so101_new_calib.urdf     --trajectory so101_trajectory.json
+python rerun_view_so101.py --sweep --save sweep.rrd     # URDF 없이 뼈대만
 
 # 20장 — rosbag → LeRobot
 python rosbag_to_lerobot.py --bag ./rosbag2_xxx \

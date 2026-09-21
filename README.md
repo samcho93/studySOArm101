@@ -16,6 +16,7 @@ studySO-ARM101/
 ├── sim/index.html          # 3D 시뮬레이터
 ├── tools/urdf-viewer.html  # URDF 뷰어 (URDF·STL 을 직접 읽어 3D 로)
 ├── tools/cli-builder.html  # LeRobot 명령어 생성기
+├── assets/mesh/            # URDF 실제 메시 번들 (1.47MB)
 ├── assets/                 # CSS · JS (기구학, 렌더러, 시뮬레이터)
 ├── scripts/                # 파이썬 실습 예제 (FK/IK, 서보 스캔, ROS 2 브릿지…)
 └── ros2_ws/                # ROS 2 패키지 (description · moveit_config · bringup)
@@ -93,6 +94,9 @@ VS Code Live Server 같은 정적 서버로 폴더를 열어도 됩니다.
 - 작업영역 — 도달 가능 부피를 반투명 껍질로 (어깨 회전 ±110° 부채꼴 형상 그대로)
 - `sensor_msgs/JointState`, `trajectory_msgs/JointTrajectory`, TF 체인 실시간 출력
 - 밝게/어둡게 테마에 따라 바닥·격자·조명 색이 함께 바뀝니다
+- 로봇 형상은 `so101_new_calib.urdf` 의 **실제 메시**입니다
+  (`assets/mesh/so101-meshes.bin`, 1.47MB / 삼각형 163,157개).
+  번들을 못 읽으면 상자 근사로 되돌아가 계속 동작합니다
 - three.js 가 없으면 의존성 없는 2D 캔버스 렌더러로 자동 전환
 
 3D 모드에서는 콘솔에 `window.__so101` 로 장면·카메라·픽킹 함수가 노출되어 있어

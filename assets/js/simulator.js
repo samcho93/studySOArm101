@@ -10,6 +10,17 @@
   var K = window.SO101;
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
 
+  // 실제 URDF 메시 번들 — 이 스크립트 위치를 기준으로 찾습니다
+  var MESH_URL = (function () {
+    try {
+      var me = document.currentScript && document.currentScript.src;
+      return me ? new URL('../mesh/so101-meshes.bin', me).href
+                : '../assets/mesh/so101-meshes.bin';
+    } catch (e) {
+      return '../assets/mesh/so101-meshes.bin';
+    }
+  })();
+
   // ------------------------------------------------------------------ 상태
   var state = {
     q: K.POSES.home.q.slice(),          // 팔로워 조인트
@@ -723,12 +734,30 @@
     document.addEventListener('themechange', applySceneTheme);
 
     // ── 로봇 ──
-    var matPrint = new THREE.MeshStandardMaterial({ color: 0xf0c020, roughness: 0.6, metalness: 0.05 });
-    var matServo = new THREE.MeshStandardMaterial({ color: 0x2b3542, roughness: 0.5, metalness: 0.35 });
+    // flatShading 을 켜는 이유 — 메시 번들에는 법선이 없습니다. 픽셀 셰이더가
+    // 면 법선을 직접 구하므로 CAD 부품의 모서리가 뭉개지지 않습니다.
+    // 상자 형상은 어차피 면이 평평해서 보이는 결과가 같습니다.
+    var matPrint = new THREE.MeshStandardMaterial({
+      color: 0xf0c020, roughness: 0.6, metalness: 0.05, flatShading: true });
+    var matServo = new THREE.MeshStandardMaterial({
+      color: 0x2b3542, roughness: 0.5, metalness: 0.35, flatShading: true });
     var matGhost = new THREE.MeshStandardMaterial({
-      color: 0x69c5ff, roughness: 0.5, metalness: 0.1,
+      color: 0x69c5ff, roughness: 0.5, metalness: 0.1, flatShading: true,
       transparent: true, opacity: 0.28, depthWrite: false
     });
+
+    var meshData = null;      // 번들이 도착하면 채워집니다
+    var meshGeoms = [];       // 팔로워와 리더가 같은 지오메트리를 나눠 씁니다
+
+    function geometryFor(i) {
+      if (meshGeoms[i]) return meshGeoms[i];
+      var m = meshData.meshes[i];
+      var g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(m.position, 3));
+      g.setIndex(new THREE.BufferAttribute(m.index, 1));
+      meshGeoms[i] = g;
+      return g;
+    }
 
     function buildRobot(ghost) {
       var groups = {};
@@ -737,19 +766,62 @@
       K.LINK_ORDER.forEach(function (link) {
         var g = new THREE.Group();
         g.matrixAutoUpdate = false;
-        (K.LINK_SHAPES[link] || []).forEach(function (s) {
-          var mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(s.size[0], s.size[1], s.size[2]),
-            ghost ? matGhost : (s.mat === 'servo' ? matServo : matPrint));
-          mesh.position.set(s.pos[0], s.pos[1], s.pos[2]);
-          mesh.userData.link = link;          // Ctrl 드래그로 집을 때 쓴다
-          g.add(mesh);
-          if (!ghost) meshes.push(mesh);
-        });
+        var parts = meshData && meshData.links[link];
+
+        if (parts) {
+          // URDF 의 실제 메시 — <visual> 의 origin 을 그대로 적용합니다
+          parts.forEach(function (v) {
+            var mesh = new THREE.Mesh(geometryFor(v.mesh),
+              ghost ? matGhost : (v.mat === 'servo' ? matServo : matPrint));
+            mesh.matrixAutoUpdate = false;
+            mesh.matrix.fromArray(K.matFromRpyXyz(v.rpy, v.xyz));
+            mesh.userData.link = link;
+            g.add(mesh);
+            if (!ghost) meshes.push(mesh);
+          });
+        } else {
+          // 번들이 없을 때의 상자 근사
+          (K.LINK_SHAPES[link] || []).forEach(function (s) {
+            var mesh = new THREE.Mesh(
+              new THREE.BoxGeometry(s.size[0], s.size[1], s.size[2]),
+              ghost ? matGhost : (s.mat === 'servo' ? matServo : matPrint));
+            mesh.position.set(s.pos[0], s.pos[1], s.pos[2]);
+            mesh.userData.link = link;        // Ctrl 드래그로 집을 때 쓴다
+            g.add(mesh);
+            if (!ghost) meshes.push(mesh);
+          });
+        }
+
         groups[link] = g;
         root.add(g);
       });
       return { root: root, groups: groups, meshes: meshes };
+    }
+
+    /** 상자로 지은 로봇을 버리고 실제 메시로 다시 짓습니다. */
+    function disposeRobot(robot) {
+      scene.remove(robot.root);
+      robot.root.traverse(function (o) {
+        if (o.isMesh && o.geometry && meshGeoms.indexOf(o.geometry) < 0) {
+          o.geometry.dispose();               // 상자만 버립니다 (메시는 공용)
+        }
+      });
+    }
+
+    function useMeshes(data) {
+      meshData = data;
+      var wasVisible = leader.root.visible;
+      disposeRobot(follower);
+      disposeRobot(leader);
+      follower = buildRobot(false);
+      leader = buildRobot(true);
+      leader.root.visible = wasVisible;
+      scene.add(follower.root);
+      scene.add(leader.root);
+      pickables = follower.meshes;
+      window.__so101.follower = follower;
+      window.__so101.pickables = pickables;
+      window.__so101.meshData = data;
     }
 
     var follower = buildRobot(false);
@@ -1211,6 +1283,18 @@
       else if (name === 'top') { orbit.yaw = -Math.PI / 2; orbit.pitch = 1.42; }
       else { orbit.yaw = -1.05; orbit.pitch = 0.55; }
       orbit.dist = 0.72;
+    }
+
+    // 실제 메시를 받아 옵니다. 실패하면 상자 그대로 둡니다.
+    if (window.SO101Meshes) {
+      window.SO101Meshes.load(MESH_URL).then(function (data) {
+        useMeshes(data);
+        setStatus('URDF 실제 메시 적용 — 삼각형 ' +
+                  data.triangles.toLocaleString() + '개');
+      }).catch(function (err) {
+        console.warn('메시 번들을 불러오지 못했습니다 — 상자 근사로 그립니다.', err);
+        setStatus('메시를 불러오지 못해 상자 근사로 그립니다', 'warn');
+      });
     }
 
     // 콘솔에서 내부를 들여다보거나 확장할 때 쓰는 핸들

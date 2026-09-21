@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SO-ARM101 URDF 뷰어</title>
+<meta name="description" content="설치 없이 브라우저에서 URDF를 열어 링크·조인트 구조를 확인하고 조인트를 직접 움직여 보는 뷰어. STL 메시와 충돌 형상까지 읽습니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
+<link rel="stylesheet" href="../assets/css/main.css">
+<script src="../assets/js/theme.js"></script>
+<link rel="stylesheet" href="../assets/css/sim.css">
+</head>
+<body class="sim-page">
+
+<header class="sim-top">
+  <a class="sim-back" href="../index.html">&larr; 강좌</a>
+  <div class="sim-title">
+    <strong>URDF 뷰어</strong>
+    <span>URDF를 읽어 그대로 그립니다 &middot; 조인트 조작 가능</span>
+  </div>
+  <div class="sim-top-actions">
+    <a class="sim-back" href="../sim/index.html">3D 시뮬레이터</a>
+    <button class="theme-btn" type="button" data-theme-toggle aria-label="테마 전환">테마</button>
+    <button class="icon-btn" id="btnFit" type="button" title="화면에 맞추기">&#9974;</button>
+  </div>
+</header>
+
+<div class="sim-layout">
+
+  <!-- ─────────────────────────── 3D 뷰포트 ─────────────────────────── -->
+  <section class="sim-stage">
+    <div id="viewport" class="viewport"></div>
+
+    <div class="stage-overlay stage-tl">
+      <div class="pose-readout">
+        <div class="pr-row"><span>모델</span><code id="robotName">—</code></div>
+        <div class="pr-row"><span id="tipName">말단</span><code id="tipPos">—</code></div>
+        <div class="pr-row"><span>출처</span><code id="robotSource">—</code></div>
+      </div>
+    </div>
+
+    <div class="stage-overlay stage-bl">
+      <div class="view-chips">
+        <label class="chk"><input type="checkbox" id="optVisual" checked> visual</label>
+        <label class="chk"><input type="checkbox" id="optCollision"> collision</label>
+        <label class="chk"><input type="checkbox" id="optFrames"> 링크 좌표계</label>
+        <label class="chk"><input type="checkbox" id="optGrid" checked> 격자</label>
+        <label class="chk"><input type="checkbox" id="optSpin"> 회전</label>
+      </div>
+      <div class="drop-hint">드래그 회전 &middot; 휠 확대 &middot; Shift+드래그 이동</div>
+    </div>
+
+    <div class="fallback-note" id="noThree" hidden>
+      3D 엔진(three.js)을 불러오지 못했습니다. 이 페이지는 CDN에서 three.js를 받아
+      동작하므로 <b>인터넷 연결이 필요</b>합니다.
+    </div>
+  </section>
+
+  <!-- ─────────────────────────── 패널 ─────────────────────────── -->
+  <aside class="sim-panel">
+    <div class="tabs">
+      <button type="button" class="active" data-tab="load">불러오기</button>
+      <button type="button" data-tab="joints">조인트</button>
+      <button type="button" data-tab="tree">구조</button>
+      <button type="button" data-tab="help">도움말</button>
+    </div>
+
+    <!-- ── 불러오기 ───────────────────────────────────────────── -->
+    <div class="tab-body active" id="tab-load">
+      <p class="vstat ok" id="viewerStatus">준비 중…</p>
+
+      <h3 class="sub-title">1. 바로 보기</h3>
+      <p class="hint">
+        강좌에 들어 있는 기구학 값으로 URDF를 즉석에서 만들어 띄웁니다.
+        인터넷도 파일도 필요 없지만, 형상은 <b>상자로 근사</b>한 것입니다.
+      </p>
+      <div class="panel-actions">
+        <button class="s-btn primary" id="btnBuiltin" type="button">내장 모델 열기</button>
+      </div>
+
+      <h3 class="sub-title">2. 저장소에서 받아 보기</h3>
+      <p class="hint">
+        TheRobotStudio 저장소의 URDF를 그대로 받아옵니다. 진짜 STL 메시까지 그려집니다.
+      </p>
+      <div class="panel-actions">
+        <button class="s-btn" type="button" data-url="SO101/so101_new_calib.urdf">SO-101 new_calib</button>
+        <button class="s-btn" type="button" data-url="SO101/so101_old_calib.urdf">old_calib</button>
+        <button class="s-btn" type="button" data-url="SO101/so101_new_calib_camera.urdf">+ 손목 카메라</button>
+        <button class="s-btn" type="button" data-url="SO100/so100.urdf">SO-100 (구형)</button>
+      </div>
+      <label class="fld-label" for="urlInput">직접 주소 입력</label>
+      <div class="url-row">
+        <input type="text" id="urlInput" placeholder="https://…/so101_new_calib.urdf"
+               spellcheck="false">
+        <button class="s-btn" id="btnUrl" type="button">불러오기</button>
+      </div>
+      <p class="hint">
+        메시는 URDF 주소를 기준으로 상대 경로를 따라갑니다. 서버가 CORS를 막아 두면
+        실패하며, 그때는 아래 3번을 쓰세요.
+      </p>
+
+      <h3 class="sub-title">3. 내 컴퓨터에서 열기</h3>
+      <p class="hint">
+        저장소를 clone 했다면 <code>Simulation/SO101</code> 폴더를 통째로 고르세요.
+        URDF와 <code>assets/</code> 안의 STL을 함께 읽습니다. 3D 화면에
+        <b>끌어다 놓아도</b> 됩니다.
+      </p>
+      <div class="panel-actions">
+        <label class="s-btn file-btn">폴더 열기
+          <input type="file" id="dirInput" webkitdirectory directory multiple hidden></label>
+        <label class="s-btn file-btn">파일 고르기
+          <input type="file" id="fileInput" accept=".urdf,.stl" multiple hidden></label>
+      </div>
+      <div class="panel-actions" id="urdfPick" hidden></div>
+
+      <div class="warn-box" id="meshWarn" hidden>
+        <b>메시를 읽지 못했습니다.</b>
+        <div class="mesh-fail" id="meshWarnList"></div>
+        URDF만 따로 받으면 생기는 일입니다. <code>assets/</code> 폴더가 URDF 옆에 있어야
+        합니다. 형상 없이도 링크·조인트 구조와 좌표계는 그대로 확인할 수 있습니다.
+      </div>
+
+      <div class="kv">
+        <div><span>링크</span><code id="robotLinks">—</code></div>
+        <div><span>조인트</span><code id="robotJoints">—</code></div>
+        <div><span>visual</span><code id="robotGeom">—</code></div>
+        <div><span>collision</span><code id="robotCollision">—</code></div>
+      </div>
+    </div>
+
+    <!-- ── 조인트 ───────────────────────────────────────────── -->
+    <div class="tab-body" id="tab-joints">
+      <h3 class="sub-title">조인트 값</h3>
+      <p class="hint">
+        슬라이더 범위는 <b>URDF에 적힌 한계 그대로</b>입니다. 행에 마우스를 올리면
+        그 조인트가 움직이는 링크가 3D 화면에서 밝아집니다.
+      </p>
+      <div class="panel-actions">
+        <button class="s-btn" id="btnZero" type="button">모두 0으로</button>
+        <button class="s-btn" id="btnRandom" type="button">무작위 자세</button>
+      </div>
+      <div class="sliders" id="sliders"></div>
+    </div>
+
+    <!-- ── 구조 ───────────────────────────────────────────── -->
+    <div class="tab-body" id="tab-tree">
+      <h3 class="sub-title">링크 트리</h3>
+      <ul class="link-tree" id="linkTree"></ul>
+
+      <h3 class="sub-title">조인트 표</h3>
+      <div class="table-wrap">
+        <table class="servo-table" id="jointTable"></table>
+      </div>
+    </div>
+
+    <!-- ── 도움말 ───────────────────────────────────────────── -->
+    <div class="tab-body" id="tab-help">
+      <h3 class="sub-title">이 페이지가 하는 일</h3>
+      <p class="hint">
+        URDF 파일을 직접 파싱해 링크 트리를 만들고, 각 링크의
+        <code>&lt;visual&gt;</code>·<code>&lt;collision&gt;</code> 형상을 그립니다.
+        STL은 바이너리·ASCII 둘 다 읽습니다. rerun의 URDF visualizer가 하는 일과 같지만,
+        여기서는 <b>조인트를 직접 움직여 볼 수 있습니다.</b>
+      </p>
+
+      <h3 class="sub-title">화면 조작</h3>
+      <ul class="help-list">
+        <li><b>드래그</b> — 시점 회전</li>
+        <li><b>휠</b> — 확대 / 축소</li>
+        <li><b>Shift + 드래그</b> — 시점 이동</li>
+        <li><b>우측 상단 &#9974;</b> — 모델이 화면에 꽉 차도록 맞추기</li>
+      </ul>
+
+      <h3 class="sub-title">무엇을 확인하게 되나</h3>
+      <ul class="help-list">
+        <li><b>메시 경로</b> — 빨간 경고가 뜨면 <code>filename</code>이 실제 파일과 어긋난 것입니다</li>
+        <li><b>축 방향</b> — "링크 좌표계"를 켜면 각 링크의 x(빨강)·y(초록)·z(파랑)가 보입니다</li>
+        <li><b>충돌 형상</b> — visual을 끄고 collision만 켜면 실제로 충돌 검사에 쓰이는
+          모양이 드러납니다. SO-101 URDF는 베이스에도 충돌 메시가 있고, MJCF에는 없습니다
+          (<a href="../lessons/ch15.html">15장</a>)</li>
+        <li><b>조인트 한계</b> — 슬라이더 양 끝이 URDF의 <code>lower</code>/<code>upper</code>입니다</li>
+      </ul>
+
+      <h3 class="sub-title">old_calib을 열어 보세요</h3>
+      <p class="hint">
+        같은 로봇인데 <b>링크 이름이 전부 다르고</b>
+        (<code>base_link</code> → <code>base</code>),
+        TCP 프레임인 <code>gripper_frame_link</code>가 아예 없습니다.
+        구형 자료를 그대로 가져다 쓰면 왜 깨지는지 눈으로 확인할 수 있습니다.
+      </p>
+
+      <h3 class="sub-title">데스크톱 도구가 필요하다면</h3>
+      <p class="hint">
+        rerun과 URDF visualizer 플러그인, 그리고 궤적을 재생하는
+        <code>scripts/rerun_view_so101.py</code> 사용법은
+        <a href="../lessons/ch15.html">15장</a>에 있습니다.
+      </p>
+    </div>
+  </aside>
+</div>
+
+<script src="../assets/js/so101-kinematics.js"></script>
+<script src="../assets/js/urdf-viewer.js"></script>
+</body>
+</html>

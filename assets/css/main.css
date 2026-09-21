@@ -922,3 +922,19 @@ h2:hover .anchor, h3:hover .anchor { opacity: 1; }
   .lesson-card { padding: 13px 14px; gap: 12px; }
   .code-block pre { font-size: 12.2px; padding: 12px 13px; }
 }
+
+/* 본문 속 버튼 링크  @btn[주소] 라벨 */
+.cta-row { margin: 18px 0 22px; }
+.ghost-btn.cta {
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 650;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.ghost-btn.cta:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+  color: var(--on-accent);
+}

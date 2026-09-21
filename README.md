@@ -14,6 +14,7 @@ studySO-ARM101/
 │   └── figures/            #   도해 SVG (+ 계산으로 그리는 생성기)
 ├── build.py                # content/ → HTML 정적 사이트 빌더
 ├── sim/index.html          # 3D 시뮬레이터
+├── tools/urdf-viewer.html  # URDF 뷰어 (URDF·STL 을 직접 읽어 3D 로)
 ├── tools/cli-builder.html  # LeRobot 명령어 생성기
 ├── assets/                 # CSS · JS (기구학, 렌더러, 시뮬레이터)
 ├── scripts/                # 파이썬 실습 예제 (FK/IK, 서보 스캔, ROS 2 브릿지…)
@@ -97,6 +98,20 @@ VS Code Live Server 같은 정적 서버로 폴더를 열어도 됩니다.
 3D 모드에서는 콘솔에 `window.__so101` 로 장면·카메라·픽킹 함수가 노출되어 있어
 직접 확장하거나 들여다보기 쉽습니다.
 
+### URDF 뷰어 (`tools/urdf-viewer.html`)
+
+설치 없이 브라우저에서 URDF 를 열어 보는 뷰어입니다. rerun 의 URDF visualizer 와
+같은 일을 하되 **조인트를 직접 움직여 볼 수 있습니다.**
+
+- URDF XML 을 직접 파싱해 링크 트리·조인트 한계·재질까지 읽습니다
+- STL 은 **바이너리·ASCII 둘 다** 지원. `<box>` `<cylinder>` `<sphere>` 도 그립니다
+- 세 가지 경로 — **내장 모델**(인터넷 불필요) / **저장소에서 받기**(진짜 STL 메시) /
+  **폴더 열기·드래그 앤 드롭**(`Simulation/SO101` 을 통째로)
+- `visual` / `collision` 토글, 링크 좌표계 표시, 조인트 슬라이더, 링크 트리와 조인트 표
+- 메시를 못 읽으면 경고를 띄우고 **링크 좌표계로 구조만이라도** 보여 줍니다
+
+콘솔에 `window.__urdfViewer` 로 파서와 장면이 노출됩니다.
+
 ### 명령어 생성기 (`tools/cli-builder.html`)
 
 포트·ID·카메라·데이터셋 설정을 한 번 입력하면 `lerobot-find-port` 부터
@@ -106,7 +121,8 @@ VS Code Live Server 같은 정적 서버로 폴더를 열어도 됩니다.
 ### 파이썬 스크립트 (`scripts/`)
 
 `scripts/README.md` 참고. FK/IK 계산, 서보 스캔, 캘리브레이션 점검,
-키보드 텔레오퍼레이션, 궤적 변환, ROS 2 브릿지, rosbag 변환, 성공률 집계.
+키보드 텔레오퍼레이션, 궤적 변환, ROS 2 브릿지, rosbag 변환, 성공률 집계,
+그리고 rerun 으로 URDF 를 띄우는 `rerun_view_so101.py`.
 
 ### ROS 2 패키지 (`ros2_ws/`)
 

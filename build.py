@@ -118,6 +118,16 @@ class MarkdownRenderer:
                     i += 1
                     continue
 
+            # 버튼 링크  @btn[주소] 라벨
+            if stripped.startswith("@btn["):
+                m = re.match(r"@btn\[([^\]]+)\]\s*(.*)", stripped)
+                if m:
+                    out.append('<p class="cta-row"><a class="ghost-btn cta" href="%s">%s</a></p>'
+                               % (html.escape(self._href(m.group(1))),
+                                  html.escape(m.group(2).strip() or "열기")))
+                    i += 1
+                    continue
+
             # 콜아웃  :::tip 제목
             if stripped.startswith(":::"):
                 m = re.match(r":::\s*(\w+)\s*(.*)", stripped)
@@ -305,10 +315,11 @@ def sidebar_html(curriculum: dict, current, rel: str) -> str:
                '<span class="brand-text">SO-ARM101<small>한국어 실습 강좌</small></span></a>' % rel)
     out.append('<div class="side-tools">'
                '<a class="side-tool" href="%ssim/index.html">3D 시뮬레이터</a>'
+               '<a class="side-tool" href="%stools/urdf-viewer.html">URDF 뷰어</a>'
                '<a class="side-tool" href="%stools/cli-builder.html">명령어 생성기</a>'
                '<button class="theme-btn" type="button" data-theme-toggle '
                'aria-label="테마 전환">테마</button>'
-               "</div>" % (rel, rel))
+               "</div>" % (rel, rel, rel))
     for part in curriculum["parts"]:
         out.append('<div class="nav-part"><span class="nav-part-no">%s</span>%s</div>'
                    % (html.escape(part["no"]), html.escape(part["title"])))
@@ -379,6 +390,7 @@ def lesson_page(curriculum: dict, slug: str, meta: dict, body_md: str) -> str:
     <div class="lesson-actions">
       <label class="done-toggle"><input type="checkbox" id="doneCheck"><span>학습 완료로 표시</span></label>
       <a class="ghost-btn" href="../sim/index.html">시뮬레이터 열기</a>
+      <a class="ghost-btn" href="../tools/urdf-viewer.html">URDF 뷰어</a>
       <a class="ghost-btn" href="../tools/cli-builder.html">명령어 생성기</a>
     </div>
   </div>
@@ -441,6 +453,7 @@ def index_page(curriculum: dict) -> str:
     <div class="hero-cta">
       <a class="btn primary" href="lessons/ch01.html">강좌 시작하기</a>
       <a class="btn" href="sim/index.html">3D 시뮬레이터 체험</a>
+      <a class="btn" href="tools/urdf-viewer.html">URDF 뷰어</a>
       <a class="btn" href="tools/cli-builder.html">명령어 생성기</a>
     </div>
     <div class="progress-wrap">

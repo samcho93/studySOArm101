@@ -382,7 +382,9 @@ python scripts/build_meshes.py --repo ../SO-ARM100</code></pre></div>
 <ol><li>정점을 <strong>0.2mm 격자</strong>로 반올림해 같은 점을 하나로 합칩니다 (STL은 삼각형마다 정점을 중복 저장합니다)</li><li>좌표를 메시 최소점 기준 <strong>uint16</strong> 정수로 저장합니다 — 정점당 12바이트가 6바이트로</li><li>법선을 아예 빼고 브라우저에서 <code>flatShading</code>으로 그립니다</li></ol>
 <div class="table-wrap"><table><thead><tr><th>형식</th><th>삼각형</th><th>크기</th></tr></thead><tbody><tr><td>원본 STL 13개</td><td>322,564</td><td>16.13MB</td></tr><tr><td>정점 중복만 제거</td><td>322,564</td><td>3.86MB</td></tr><tr><td><strong>0.2mm 번들 (사용 중)</strong></td><td>163,157</td><td><strong>1.47MB</strong></td></tr></tbody></table></div>
 <div class="callout callout-warn"><div class="callout-title">0.5mm까지 줄이면 안 됩니다</div><div class="callout-body"><p>같은 방식으로 0.5mm 격자까지 밀면 1.04MB가 되지만, <strong>평평해야 할 면이 눈에 띄게 울퉁불퉁해집니다.</strong> 0.2mm는 화면에서 원본과 구분되지 않습니다. 직접 확인해 보려면 <a href="../tools/urdf-viewer.html">URDF 뷰어</a>에 원본과 줄인 파일을 번갈아 넣어 보세요.</p></div></div>
-<p>번들을 못 읽으면 시뮬레이터는 <strong>예전 상자 근사로 되돌아가</strong> 계속 동작합니다. 기구학은 어느 쪽이든 같으므로 숫자는 달라지지 않습니다.</p>
+<div class="callout callout-info"><div class="callout-title">같은 데이터를 두 벌로 내보냅니다</div><div class="callout-body"><p><code>build_meshes.py</code> 는 <code>.bin</code> 과 함께 **<code>so101-meshes.b64.js</code>(1.96MB)** 도 만듭니다. 내용은 같고 base64로 담았을 뿐입니다.</p>
+<p>Artifact처럼 **<code>.bin</code> 확장자를 서빙하지 않는 곳**이 있어서입니다. 로더는 <code>.bin</code> 을 먼저 받아 보고, 실패하면 이 스크립트를 불러옵니다. 평소에는 받지 않으므로 느려지지 않습니다.</p></div></div>
+<p>번들을 둘 다 못 읽으면 시뮬레이터는 <strong>예전 상자 근사로 되돌아가</strong> 계속 동작합니다. 기구학은 어느 쪽이든 같으므로 숫자는 달라지지 않습니다.</p>
 <h3 id="강좌-스크립트로-움직여-보기">강좌 스크립트로 움직여 보기<a class="anchor" href="#강좌-스크립트로-움직여-보기">#</a></h3>
 <p>뷰어로 URDF를 여는 것만으로는 <strong>자세를 바꿀 수 없습니다.</strong> 강좌에 포함된 스크립트가 이 부분을 채웁니다.</p>
 <div class="code-block"><div class="code-head"><span class="code-lang">bash</span><button class="copy-btn" type="button">복사</button></div><pre><code class="lang-bash">cd scripts

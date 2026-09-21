@@ -62,9 +62,38 @@
     return meta;
   }
 
+  function b64ToBuffer(s) {
+    var bin = atob(s);
+    var u8 = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return u8.buffer;
+  }
+
+  /**
+   * base64 사본을 <script> 로 불러옵니다.
+   * Artifact 처럼 .bin 을 서빙하지 않는 곳에서만 쓰입니다.
+   */
+  function loadB64(url) {
+    return new Promise(function (resolve, reject) {
+      if (global.SO101MeshData) return resolve(global.SO101MeshData);
+      var node = document.createElement('script');
+      node.src = url;
+      node.onload = function () {
+        if (global.SO101MeshData) resolve(global.SO101MeshData);
+        else reject(new Error('base64 사본이 비어 있습니다'));
+      };
+      node.onerror = function () {
+        reject(new Error('base64 사본도 받지 못했습니다'));
+      };
+      document.head.appendChild(node);
+    });
+  }
+
   /**
    * 번들을 받아 해석합니다. 두 번 부르면 같은 Promise 를 돌려줍니다.
-   * @param {string} url
+   * `.bin` 을 못 받으면 같은 이름의 `.b64.js` 를 시도합니다.
+   *
+   * @param {string} url  .bin 주소
    * @returns {Promise<Object>} {unit, meshes:[{name,min,vcount,icount,position,index}],
    *                             links:{링크이름:[{mesh,xyz,rpy,mat}]}, triangles}
    */
@@ -73,6 +102,9 @@
     cache = fetch(url).then(function (r) {
       if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
       return r.arrayBuffer();
+    }).catch(function (err) {
+      console.info('메시 .bin 을 받지 못해 base64 사본을 시도합니다 —', err.message);
+      return loadB64(url.replace(/[.]bin$/, '.b64.js')).then(b64ToBuffer);
     }).then(parse).catch(function (err) {
       cache = null;                 // 실패는 기억하지 않습니다 — 다시 시도 가능
       throw err;

@@ -16,7 +16,7 @@ studySO-ARM101/
 ├── sim/index.html          # 3D 시뮬레이터
 ├── tools/urdf-viewer.html  # URDF 뷰어 (URDF·STL 을 직접 읽어 3D 로)
 ├── tools/cli-builder.html  # LeRobot 명령어 생성기
-├── assets/mesh/            # URDF 실제 메시 번들 (1.47MB)
+├── assets/mesh/            # URDF 실제 메시 번들 (.bin 1.47MB + base64 사본)
 ├── assets/                 # CSS · JS (기구학, 렌더러, 시뮬레이터)
 ├── scripts/                # 파이썬 실습 예제 (FK/IK, 서보 스캔, ROS 2 브릿지…)
 └── ros2_ws/                # ROS 2 패키지 (description · moveit_config · bringup)

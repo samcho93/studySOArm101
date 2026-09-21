@@ -94,6 +94,8 @@ VS Code Live Server 같은 정적 서버로 폴더를 열어도 됩니다.
 - 작업영역 — 도달 가능 부피를 반투명 껍질로 (어깨 회전 ±110° 부채꼴 형상 그대로)
 - `sensor_msgs/JointState`, `trajectory_msgs/JointTrajectory`, TF 체인 실시간 출력
 - 밝게/어둡게 테마에 따라 바닥·격자·조명 색이 함께 바뀝니다
+- 홈 화면 미니 뷰어도 같은 메시를 씁니다. 2D 캔버스로 먼저 그린 뒤
+  페이지 로드가 끝나면 WebGL 로 갈아끼웁니다 (실패하면 2D 유지)
 - 로봇 형상은 `so101_new_calib.urdf` 의 **실제 메시**입니다
   (`assets/mesh/so101-meshes.bin`, 1.47MB / 삼각형 163,157개).
   번들을 못 읽으면 상자 근사로 되돌아가 계속 동작합니다

@@ -514,6 +514,7 @@ def index_page(curriculum: dict) -> str:
         sidebar=sidebar_html(curriculum, None, ""),
         content=hero,
         extra='<script src="assets/js/so101-kinematics.js"></script>\n'
+              '<script src="assets/js/so101-meshes.js"></script>\n'
               '<script src="assets/js/robot-canvas.js"></script>\n'
               '<script src="assets/js/hero.js"></script>')
 

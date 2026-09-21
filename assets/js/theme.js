@@ -23,6 +23,21 @@
     dark: '테마 — 항상 어둡게 (눌러서 자동으로)'
   };
 
+  // 아이콘 버튼용 — data-theme-icon 속성이 붙은 버튼에만 그립니다
+  var SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+            'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ' +
+            'aria-hidden="true">';
+  var ICON = {
+    system: SVG + '<rect x="3" y="4.5" width="18" height="12" rx="2"/>' +
+            '<path d="M9 20h6M12 16.5V20"/></svg>',
+    light:  SVG + '<circle cx="12" cy="12" r="4.2"/>' +
+            '<path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2' +
+            'M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6' +
+            'M6.8 17.2l-1.6 1.6"/></svg>',
+    dark:   SVG + '<path d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5' +
+            'a8.6 8.6 0 1 0 10.9 10.9z"/></svg>'
+  };
+
   var root = document.documentElement;
   var mode = 'system';
 
@@ -63,7 +78,11 @@
   function paint() {
     var btns = document.querySelectorAll('[data-theme-toggle]');
     for (var i = 0; i < btns.length; i++) {
-      btns[i].textContent = LABEL[mode];
+      if (btns[i].hasAttribute('data-theme-icon')) {
+        btns[i].innerHTML = ICON[mode];
+      } else {
+        btns[i].textContent = LABEL[mode];
+      }
       btns[i].title = TITLE[mode];
       btns[i].setAttribute('aria-label', TITLE[mode]);
     }

@@ -311,14 +311,16 @@ def split_front_matter(text: str):
 
 def sidebar_html(curriculum: dict, current, rel: str) -> str:
     out = ['<nav class="sidebar-nav">']
-    out.append('<a class="brand" href="%sindex.html"><span class="brand-mark">SO</span>'
-               '<span class="brand-text">SO-ARM101</span></a>' % rel)
+    out.append('<div class="brand-row">'
+               '<a class="brand" href="%sindex.html"><span class="brand-mark">SO</span>'
+               '<span class="brand-text">SO-ARM101</span></a>'
+               '<button class="theme-icon" type="button" data-theme-toggle data-theme-icon '
+               'aria-label="테마 전환"></button>'
+               "</div>" % rel)
     out.append('<div class="side-tools">'
                '<a class="side-tool" href="%ssim/index.html">3D 시뮬레이터</a>'
                '<a class="side-tool" href="%stools/urdf-viewer.html">URDF 뷰어</a>'
                '<a class="side-tool" href="%stools/cli-builder.html">명령어 생성기</a>'
-               '<button class="theme-btn" type="button" data-theme-toggle '
-               'aria-label="테마 전환">테마</button>'
                "</div>" % (rel, rel, rel))
     for part in curriculum["parts"]:
         out.append('<div class="nav-part"><span class="nav-part-no">%s</span>%s</div>'

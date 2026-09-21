@@ -151,15 +151,43 @@ a:hover { text-decoration: underline; }
 .sidebar::-webkit-scrollbar { width: 8px; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
+/* 브랜드 줄 — 왼쪽은 강좌 이름, 오른쪽 끝은 테마 아이콘 */
+.brand-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-soft);
+}
+
 .brand {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 11px;
-  padding: 20px 18px 16px;
-  border-bottom: 1px solid var(--border-soft);
+  padding: 20px 10px 16px 18px;
   color: var(--text);
 }
 .brand:hover { text-decoration: none; }
+
+.theme-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px; height: 32px;
+  margin: 4px 14px 0 0;
+  padding: 0;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.theme-icon:hover {
+  color: var(--accent);
+  border-color: var(--border);
+  background: var(--bg-elev-2);
+}
+.theme-icon svg { display: block; width: 17px; height: 17px; }
 
 .brand-mark {
   display: grid;

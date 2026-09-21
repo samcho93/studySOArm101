@@ -540,7 +540,21 @@ def main() -> int:
         import functools
         import http.server
         import socketserver
-        handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(ROOT))
+
+        class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
+            """원고를 고치고 새로고침했는데 옛날 CSS/JS 가 나오는 일을 막는다."""
+
+            def end_headers(self):
+                self.send_header("Cache-Control", "no-store, must-revalidate")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Expires", "0")
+                super().end_headers()
+
+            def log_message(self, fmt, *args):
+                pass
+
+        handler = functools.partial(NoCacheHandler, directory=str(ROOT))
+        socketserver.TCPServer.allow_reuse_address = True
         with socketserver.TCPServer(("", 8000), handler) as httpd:
             print("미리보기: http://localhost:8000  (Ctrl+C 로 종료)")
             httpd.serve_forever()

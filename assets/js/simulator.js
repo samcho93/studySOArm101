@@ -37,6 +37,13 @@
   var leaderBuffer = [];   // {t, q} — 지연 추종용
 
   var el = function (id) { return document.getElementById(id); };
+
+  /** 받침 유무에 따라 조사를 고른다. 한글이 아니면 받침 있는 쪽을 쓴다. */
+  function josa(word, withBatchim, without) {
+    var c = word.charCodeAt(word.length - 1);
+    var hangul = c >= 0xAC00 && c <= 0xD7A3;
+    return word + ((!hangul || (c - 0xAC00) % 28 !== 0) ? withBatchim : without);
+  }
   var THREE = null;
   var view = null;         // 렌더러 어댑터 (3D 또는 2D)
 
@@ -702,6 +709,7 @@
 
     function buildRobot(ghost) {
       var groups = {};
+      var meshes = [];
       var root = new THREE.Group();
       K.LINK_ORDER.forEach(function (link) {
         var g = new THREE.Group();
@@ -711,12 +719,14 @@
             new THREE.BoxGeometry(s.size[0], s.size[1], s.size[2]),
             ghost ? matGhost : (s.mat === 'servo' ? matServo : matPrint));
           mesh.position.set(s.pos[0], s.pos[1], s.pos[2]);
+          mesh.userData.link = link;          // Ctrl 드래그로 집을 때 쓴다
           g.add(mesh);
+          if (!ghost) meshes.push(mesh);
         });
         groups[link] = g;
         root.add(g);
       });
-      return { root: root, groups: groups };
+      return { root: root, groups: groups, meshes: meshes };
     }
 
     var follower = buildRobot(false);
@@ -729,6 +739,17 @@
     var axes = new THREE.AxesHelper(0.055);
     axes.matrixAutoUpdate = false;
     scene.add(axes);
+
+    // ── Ctrl 드래그로 집은 지점 ──
+    var pickables = follower.meshes;
+    var grabMarker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.012, 18, 14),
+      new THREE.MeshBasicMaterial({
+        color: 0x69c5ff, transparent: true, opacity: 0.85, depthTest: false
+      }));
+    grabMarker.renderOrder = 20;
+    grabMarker.visible = false;
+    scene.add(grabMarker);
 
     // ── IK 목표 ──
     var targetMesh = new THREE.Mesh(
@@ -943,7 +964,31 @@
     var drag = null;
 
     dom.addEventListener('pointerdown', function (e) {
-      dom.setPointerCapture(e.pointerId);
+      // 포인터가 이미 놓였거나 합성 이벤트면 캡처가 실패할 수 있다 — 무시해도 된다
+      try { dom.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+
+      // Ctrl(또는 Cmd) + 왼쪽 드래그 → 팔을 직접 집어 끌기
+      if ((e.ctrlKey || e.metaKey) && e.button === 0) {
+        var grab = pickRobot(e);
+        if (grab && grab.joints.length) {
+          drag = {
+            mode: 'joint',
+            link: grab.link,
+            joints: grab.joints,
+            local: grab.local,
+            plane: new THREE.Plane().setFromNormalAndCoplanarPoint(
+              camera.getWorldDirection(new THREE.Vector3()).negate(), grab.point)
+          };
+          grabMarker.position.copy(grab.point);
+          grabMarker.visible = true;
+          dom.style.cursor = 'grabbing';
+          setStatus(josa(K.LINK_LABELS[grab.link] || grab.link, '을', '를') +
+                    ' 잡았습니다 — 끌어 보세요');
+          return;
+        }
+        if (grab) setStatus('베이스는 고정되어 있어 끌 수 없습니다', 'warn');
+      }
+
       if (state.ikDrag && e.button === 0 && hitTarget(e)) {
         drag = { mode: 'target', x: e.clientX, y: e.clientY };
         return;
@@ -956,7 +1001,9 @@
 
     dom.addEventListener('pointermove', function (e) {
       if (!drag) {
-        dom.style.cursor = (state.ikDrag && hitTarget(e)) ? 'move' : 'grab';
+        var over = (e.ctrlKey || e.metaKey) ? pickRobot(e) : null;
+        if (over && over.joints.length) dom.style.cursor = 'move';
+        else dom.style.cursor = (state.ikDrag && hitTarget(e)) ? 'move' : 'grab';
         return;
       }
       var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -974,11 +1021,19 @@
         orbit.target.addScaledVector(up, dy * orbit.dist * 0.0016);
       } else if (drag.mode === 'target') {
         dragTarget(e);
+      } else if (drag.mode === 'joint') {
+        dragJoint(e);
       }
     });
 
     ['pointerup', 'pointercancel'].forEach(function (evt) {
-      dom.addEventListener(evt, function () { drag = null; });
+      dom.addEventListener(evt, function () {
+        if (drag && drag.mode === 'joint') {
+          grabMarker.visible = false;
+          dom.style.cursor = 'grab';
+        }
+        drag = null;
+      });
     });
 
     dom.addEventListener('wheel', function (e) {
@@ -1006,6 +1061,48 @@
 
     var plane = new THREE.Plane();
     var hitPoint = new THREE.Vector3();
+    var invMat = new THREE.Matrix4();
+
+    /**
+     * 화면 좌표에서 로봇을 집는다.
+     * @returns {{link:string, joints:number[], point:Vector3, local:number[]}|null}
+     */
+    function pickRobot(e) {
+      raycaster.setFromCamera(toNdc(e), camera);
+      var hits = raycaster.intersectObjects(pickables, false);
+      if (!hits.length) return null;
+
+      var hit = hits[0];
+      var link = hit.object.userData.link;
+      var joints = K.jointsForLink(link);   // 빈 배열이면 고정 링크(베이스)
+
+      // 집은 지점을 링크 좌표계로 옮겨 둔다 — 그래야 그 지점이 마우스를 따라온다
+      invMat.copy(follower.groups[link].matrixWorld).invert();
+      var lp = hit.point.clone().applyMatrix4(invMat);
+      return {
+        link: link,
+        joints: joints,
+        point: hit.point.clone(),
+        local: [lp.x, lp.y, lp.z]
+      };
+    }
+
+    function dragJoint(e) {
+      raycaster.setFromCamera(toNdc(e), camera);
+      if (!raycaster.ray.intersectPlane(drag.plane, hitPoint)) return;
+
+      var target = [hitPoint.x, hitPoint.y, Math.max(0, hitPoint.z)];
+      var res = K.inverseLink(drag.link, drag.local, target, state.q,
+                              { joints: drag.joints, iterations: 60 });
+      state.q = res.q;
+      if (!state.teleop) state.qLeader = res.q.slice();
+      syncSliders();
+
+      // 마커는 실제로 도달한 지점에 둔다 — 못 따라오면 마우스와 벌어진다
+      var p = K.xformPoint(K.forward(state.q).links[drag.link], drag.local);
+      grabMarker.position.set(p[0], p[1], p[2]);
+      grabMarker.material.color.setHex(res.converged ? 0x69c5ff : 0xf87171);
+    }
 
     function dragTarget(e) {
       var normal = camera.getWorldDirection(new THREE.Vector3()).negate();
@@ -1092,6 +1189,12 @@
       else { orbit.yaw = -1.05; orbit.pitch = 0.55; }
       orbit.dist = 0.72;
     }
+
+    // 콘솔에서 내부를 들여다보거나 확장할 때 쓰는 핸들
+    window.__so101 = {
+      scene: scene, camera: camera, renderer: renderer,
+      follower: follower, pickables: pickables, pickRobot: pickRobot, orbit: orbit
+    };
 
     return { frame: frame, setView: setView, resize: resize, mode: '3d' };
   }

@@ -290,7 +290,10 @@
 <p>시뮬레이터와 <code>scripts/so101_fk_ik.py</code>는 <strong>감쇠 최소자승법(Damped Least Squares, Levenberg-Marquardt)</strong> 을 씁니다. 개념은 간단합니다.</p>
 <ol><li>현재 자세에서 FK를 계산해 <strong>목표까지의 오차 e</strong>를 구한다.</li><li>각 조인트를 아주 조금 움직였을 때 TCP가 얼마나 움직이는지 표로 만든다 → <strong>야코비안 J</strong>.</li><li><code>Δq = (JᵀJ + λ²I)⁻¹ Jᵀ e</code> 만큼 조인트를 움직인다. λ는 특이점 근처에서 해가 폭주하지 않게 잡아주는 <strong>감쇠 계수</strong>입니다.</li><li>오차가 충분히 작아질 때까지 반복한다.</li></ol>
 <div class="callout callout-task"><div class="callout-title">실습 2 — IK 만져보기</div><div class="callout-body"><p>시뮬레이터의 <strong>&quot;IK&quot; 탭</strong>을 켜고 빨간 목표 구(球)를 드래그해 보세요.</p>
-<ol><li>팔이 닿는 범위에서는 부드럽게 따라옵니다.</li><li>베이스에서 멀리 끌면 팔이 쭉 뻗은 채 <strong>더는 따라오지 못합니다</strong> → 작업영역의 경계입니다. 상태 표시에 &quot;도달 불가&quot;가 뜹니다.</li><li>목표를 베이스 바로 위로 끌어 보세요. 해가 여러 개라 팔이 <strong>덜덜 떨리거나 갑자기 자세가 뒤집히는</strong> 현상을 볼 수 있습니다 → 특이점입니다.</li></ol></div></div>
+<ol><li>팔이 닿는 범위에서는 부드럽게 따라옵니다.</li><li>베이스에서 멀리 끌면 팔이 쭉 뻗은 채 <strong>더는 따라오지 못합니다</strong> → 작업영역의 경계입니다. 상태 표시에 &quot;도달 불가&quot;가 뜹니다.</li><li>목표를 베이스 바로 위로 끌어 보세요. 해가 여러 개라 팔이 <strong>덜덜 떨리거나 갑자기 자세가 뒤집히는</strong> 현상을 볼 수 있습니다 → 특이점입니다.</li></ol>
+<p><strong>더 직관적인 방법</strong> — <strong>Ctrl 키를 누른 채 3D 화면에서 팔을 직접 집어 끌어</strong> 보세요. 집은 지점이 마우스를 따라오도록 IK가 실시간으로 풀립니다.</p>
+<ul><li><strong>그리퍼</strong>를 집으면 다섯 관절이 모두 움직입니다.</li><li><strong>손목</strong>을 집으면 손목 회전은 그대로 두고 아래 세 관절만 풀립니다.</li><li><strong>전완</strong>을 집으면 어깨 두 관절과 팔꿈치만 움직입니다.</li></ul>
+<p>집은 지점보다 <strong>베이스 쪽에 있는 관절만</strong> 쓸 수 있기 때문입니다. 더 끌 수 없는 지점에서는 마커가 빨갛게 바뀌는데, 그 자리가 바로 <strong>해가 없는 곳</strong>입니다.</p></div></div>
 <div class="callout callout-tip"><div class="callout-title">MoveIt 2와의 관계</div><div class="callout-body"><p>18장에서 쓸 MoveIt 2는 IK 솔버(KDL/TRAC-IK)와 <strong>충돌 회피 경로 계획(OMPL)</strong> 까지 함께 제공합니다. 여기서 배운 IK는 그 내부에서 벌어지는 일을 이해하기 위한 것입니다.</p></div></div>
 <hr>
 <h2 id="작업영역-workspace">작업영역 (Workspace)<a class="anchor" href="#작업영역-workspace">#</a></h2>

@@ -90,6 +90,18 @@
   var LINK_ORDER = ['base_link', 'shoulder_link', 'upper_arm_link', 'lower_arm_link',
     'wrist_link', 'gripper_link', 'moving_jaw_so101_v1_link'];
 
+  /** 화면에 보여 줄 링크 이름 */
+  var LINK_LABELS = {
+    base_link: '베이스',
+    shoulder_link: '어깨',
+    upper_arm_link: '상완',
+    lower_arm_link: '전완',
+    wrist_link: '손목',
+    gripper_link: '그리퍼',
+    moving_jaw_so101_v1_link: '집게',
+    gripper_frame_link: 'TCP'
+  };
+
   /** IK 에 사용할 조인트(그리퍼 제외) */
   var IK_JOINTS = [0, 1, 2, 3, 4];
 
@@ -200,29 +212,110 @@
   // ------------------------------------------------------------------ 역기구학
 
   /**
-   * 감쇠 최소자승(DLS, Levenberg-Marquardt) 방식 수치 역기구학.
-   * 위치 3자유도를 우선 맞추고, 옵션으로 툴 Z축 방향(접근 방향)도 함께 맞춥니다.
+   * 감쇠 최소자승(DLS, Levenberg-Marquardt) 공용 솔버.
    *
-   * @param {number[]} target [x,y,z] (m)
-   * @param {number[]} qInit  시작 자세
-   * @param {Object}   opt    {iterations, lambda, approach:[x,y,z], approachWeight}
-   * @returns {{q:number[], error:number, converged:boolean}}
+   * residual(q) 가 "0에 가까워져야 하는 값들"을 돌려주면, 지정한 조인트만
+   * 움직여 그 값을 줄입니다. 조인트 한계는 매 반복마다 클램프합니다.
+   *
+   * @param {(q:number[])=>number[]} residual
+   * @param {number[]} jointIdx  움직여도 되는 조인트 인덱스
+   * @param {number[]} qInit
+   * @param {Object}   opt  {iterations, lambda, step}
    */
-  function inverse(target, qInit, opt) {
+  function solveDls(residual, jointIdx, qInit, opt) {
     opt = opt || {};
-    var iterations = opt.iterations || 120;
+    var iterations = opt.iterations || 140;
     var lambda = opt.lambda || 0.06;
-    var approach = opt.approach || null;
-    var aw = opt.approachWeight != null ? opt.approachWeight : 0.35;
     var step = opt.step || 0.6;
     var h = 1e-5;
 
     var q = (qInit || [0, 0, 0, 0, 0, 0]).slice();
-    var rows = approach ? 6 : 3;
-    var n = IK_JOINTS.length;
-    var err = 1e9;
+    var n = jointIdx.length;
+    if (!n) return { q: q, error: Infinity, converged: false };
 
-    function residual(qq) {
+    for (var it = 0; it < iterations; it++) {
+      var e = residual(q);
+      if (Math.hypot(e[0], e[1], e[2]) < 5e-5) break;
+
+      // 수치 야코비안 (rows x n)
+      var rows = e.length;
+      var J = [];
+      for (var r0 = 0; r0 < rows; r0++) J.push(new Array(n).fill(0));
+      for (var k = 0; k < n; k++) {
+        var qp = q.slice();
+        qp[jointIdx[k]] += h;
+        var ep = residual(qp);
+        for (var r1 = 0; r1 < rows; r1++) J[r1][k] = (ep[r1] - e[r1]) / h;
+      }
+
+      var JtJ = [];
+      for (var a = 0; a < n; a++) {
+        JtJ.push(new Array(n).fill(0));
+        for (var b = 0; b < n; b++) {
+          var sa = 0;
+          for (var rr = 0; rr < rows; rr++) sa += J[rr][a] * J[rr][b];
+          JtJ[a][b] = sa + (a === b ? lambda * lambda : 0);
+        }
+      }
+      var Jte = new Array(n).fill(0);
+      for (var a2 = 0; a2 < n; a2++) {
+        var sb = 0;
+        for (var rr2 = 0; rr2 < rows; rr2++) sb += J[rr2][a2] * (-e[rr2]);
+        Jte[a2] = sb;
+      }
+
+      var dq = solveLinear(JtJ, Jte);
+      if (!dq) break;
+      // dq = (AᵀA + λ²I)⁻¹ Aᵀe  (A = ∂p/∂q) → 오차를 줄이는 방향이므로 더한다
+      for (var k2 = 0; k2 < n; k2++) {
+        var ji = jointIdx[k2];
+        q[ji] = clamp(q[ji] + step * dq[k2], JOINTS[ji].lower, JOINTS[ji].upper);
+      }
+    }
+
+    var fin = residual(q);
+    var err = Math.hypot(fin[0], fin[1], fin[2]);
+    return { q: q, error: err, converged: err < 5e-3 };
+  }
+
+  /** 4x4 행렬로 점 하나를 변환 */
+  function xformPoint(m, p) {
+    return [
+      m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12],
+      m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13],
+      m[2] * p[0] + m[6] * p[1] + m[10] * p[2] + m[14]
+    ];
+  }
+
+  /**
+   * 그 링크를 움직일 수 있는 조인트들. 사슬이 직선이라 조상 조인트가 전부입니다.
+   * 그리퍼 조인트(5)는 물건을 잡는 용도이므로 끌기에서 제외합니다.
+   */
+  function jointsForLink(name) {
+    var ci = (name === 'gripper_frame_link')
+      ? LINK_ORDER.length
+      : LINK_ORDER.indexOf(name);
+    if (ci < 0) return [];
+    var n = Math.min(ci, IK_JOINTS.length);
+    var out = [];
+    for (var i = 0; i < n; i++) out.push(i);
+    return out;
+  }
+
+  /**
+   * TCP 를 목표 위치로 가져가는 역기구학.
+   *
+   * @param {number[]} target [x,y,z] (m)
+   * @param {number[]} qInit  시작 자세
+   * @param {Object}   opt    {iterations, lambda, step, approach, approachWeight}
+   * @returns {{q:number[], error:number, converged:boolean}}
+   */
+  function inverse(target, qInit, opt) {
+    opt = opt || {};
+    var approach = opt.approach || null;
+    var aw = opt.approachWeight != null ? opt.approachWeight : 0.35;
+
+    return solveDls(function (qq) {
       var fk = forward(qq);
       var p = matPos(fk.tool);
       var r = [target[0] - p[0], target[1] - p[1], target[2] - p[2]];
@@ -233,52 +326,30 @@
         r.push(aw * (approach[2] - z[2]));
       }
       return r;
-    }
+    }, IK_JOINTS, qInit, opt);
+  }
 
-    for (var it = 0; it < iterations; it++) {
-      var e = residual(q);
-      err = Math.hypot(e[0], e[1], e[2]);
-      if (err < 1e-4 && !approach) break;
-      if (err < 5e-5) break;
+  /**
+   * 링크 위의 한 점을 목표 위치로 끌어당기는 역기구학.
+   * 마우스로 팔을 직접 집어 끌 때 씁니다 — 집은 지점이 마우스를 따라옵니다.
+   *
+   * @param {string}   linkName   집은 링크
+   * @param {number[]} localPoint 링크 좌표계에서 집은 지점
+   * @param {number[]} target     목표 위치 (월드)
+   * @param {number[]} qInit
+   * @param {Object}   opt        {joints, iterations, lambda, step}
+   */
+  function inverseLink(linkName, localPoint, target, qInit, opt) {
+    opt = opt || {};
+    var idx = opt.joints || jointsForLink(linkName);
+    var lp = localPoint || [0, 0, 0];
 
-      // 수치 야코비안 (rows x n)
-      var J = [];
-      for (var r0 = 0; r0 < rows; r0++) J.push(new Array(n).fill(0));
-      for (var k = 0; k < n; k++) {
-        var idx = IK_JOINTS[k];
-        var qp = q.slice();
-        qp[idx] += h;
-        var ep = residual(qp);
-        for (var r1 = 0; r1 < rows; r1++) J[r1][k] = (ep[r1] - e[r1]) / h;
-      }
-
-      var JtJ = [];
-      for (var a = 0; a < n; a++) {
-        JtJ.push(new Array(n).fill(0));
-        for (var b = 0; b < n; b++) {
-          var s = 0;
-          for (var rr = 0; rr < rows; rr++) s += J[rr][a] * J[rr][b];
-          JtJ[a][b] = s + (a === b ? lambda * lambda : 0);
-        }
-      }
-      var Jte = new Array(n).fill(0);
-      for (var a2 = 0; a2 < n; a2++) {
-        var s2 = 0;
-        for (var rr2 = 0; rr2 < rows; rr2++) s2 += J[rr2][a2] * (-e[rr2]);
-        Jte[a2] = s2;
-      }
-      var dq = solveLinear(JtJ, Jte);
-      if (!dq) break;
-      // dq = (AᵀA + λ²I)⁻¹ Aᵀe  (A = ∂p/∂q) → 오차를 줄이는 방향이므로 더한다
-      for (var k2 = 0; k2 < n; k2++) {
-        var ji = IK_JOINTS[k2];
-        q[ji] = clamp(q[ji] + step * dq[k2], JOINTS[ji].lower, JOINTS[ji].upper);
-      }
-    }
-
-    var fin = residual(q);
-    err = Math.hypot(fin[0], fin[1], fin[2]);
-    return { q: q, error: err, converged: err < 5e-3 };
+    return solveDls(function (qq) {
+      var m = forward(qq).links[linkName];
+      if (!m) return [0, 0, 0];
+      var p = xformPoint(m, lp);
+      return [target[0] - p[0], target[1] - p[1], target[2] - p[2]];
+    }, idx, qInit, opt);
   }
 
   /** 가우스 소거법 (작은 정방행렬용) */
@@ -343,6 +414,11 @@
     POSES: POSES,
     forward: forward,
     inverse: inverse,
+    inverseLink: inverseLink,
+    solveDls: solveDls,
+    jointsForLink: jointsForLink,
+    xformPoint: xformPoint,
+    LINK_LABELS: LINK_LABELS,
     toolPosition: toolPosition,
     clampToLimits: clampToLimits,
     matIdentity: matIdentity,

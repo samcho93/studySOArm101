@@ -306,6 +306,8 @@ def sidebar_html(curriculum: dict, current, rel: str) -> str:
     out.append('<div class="side-tools">'
                '<a class="side-tool" href="%ssim/index.html">3D 시뮬레이터</a>'
                '<a class="side-tool" href="%stools/cli-builder.html">명령어 생성기</a>'
+               '<button class="theme-btn" type="button" data-theme-toggle '
+               'aria-label="테마 전환">테마</button>'
                "</div>" % (rel, rel))
     for part in curriculum["parts"]:
         out.append('<div class="nav-part"><span class="nav-part-no">%s</span>%s</div>'
@@ -323,7 +325,7 @@ def sidebar_html(curriculum: dict, current, rel: str) -> str:
 
 
 PAGE = """<!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -331,6 +333,7 @@ PAGE = """<!DOCTYPE html>
 <meta name="description" content="{desc}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
 <link rel="stylesheet" href="{rel}assets/css/main.css">
+<script src="{rel}assets/js/theme.js"></script>
 </head>
 <body class="{bodyclass}">
 <button class="nav-toggle" id="navToggle" aria-label="목차 열기">&#9776;</button>
@@ -553,8 +556,10 @@ def main() -> int:
             def log_message(self, fmt, *args):
                 pass
 
+        # allow_reuse_address 는 Windows 에서 같은 포트에 여러 서버가 붙어
+        # 요청이 엉키게 만듭니다. 기본값(끔) 그대로 두어 중복 실행이
+        # 곧바로 오류로 드러나게 합니다.
         handler = functools.partial(NoCacheHandler, directory=str(ROOT))
-        socketserver.TCPServer.allow_reuse_address = True
         with socketserver.TCPServer(("", 8000), handler) as httpd:
             print("미리보기: http://localhost:8000  (Ctrl+C 로 종료)")
             httpd.serve_forever()

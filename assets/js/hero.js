@@ -75,6 +75,8 @@
     });
   });
 
+  document.addEventListener('themechange', function () { view.syncTheme(); });
+
   var resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);

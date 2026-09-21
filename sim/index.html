@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 <meta name="description" content="URDF 기구학 그대로 동작하는 SO-ARM101 브라우저 시뮬레이터. FK/IK, 텔레오퍼레이션, 궤적 녹화, 카메라 뷰, ROS 2 메시지 출력.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129470;</text></svg>">
 <link rel="stylesheet" href="../assets/css/main.css">
+<script src="../assets/js/theme.js"></script>
 <link rel="stylesheet" href="../assets/css/sim.css">
 </head>
 <body class="sim-page">
@@ -24,6 +25,7 @@
       <button type="button" data-unit="norm">LeRobot</button>
       <button type="button" data-unit="tick">서보 틱</button>
     </div>
+    <button class="theme-btn" type="button" data-theme-toggle aria-label="테마 전환">테마</button>
     <button class="icon-btn" id="btnHelp" type="button" title="도움말">?</button>
   </div>
 </header>

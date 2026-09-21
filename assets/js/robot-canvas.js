@@ -67,6 +67,7 @@
       grid: 'rgba(120,160,200,0.16)',
       ghost: 'rgba(120,200,255,0.30)'
     };
+    this.syncTheme();
     this.light = norm([-0.4, -0.7, 0.9]);
     this._resize();
   }
@@ -85,6 +86,15 @@
   };
 
   RobotCanvas.prototype.resize = function () { this._resize(); };
+
+  /** 격자 색을 현재 테마의 CSS 토큰에서 읽어 온다. */
+  RobotCanvas.prototype.syncTheme = function () {
+    try {
+      var css = getComputedStyle(document.documentElement);
+      var border = css.getPropertyValue('--border').trim();
+      if (border) this.palette.grid = border;
+    } catch (e) { /* 계산 스타일을 못 읽는 환경 */ }
+  };
 
   /** 월드 좌표 → 화면 좌표 (직교 투영) */
   RobotCanvas.prototype.project = function (p) {

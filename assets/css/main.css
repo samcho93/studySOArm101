@@ -17,6 +17,9 @@
   --accent:        #4ade9a;
   --accent-dim:    #2f9d6d;
   --accent-soft:   rgba(74, 222, 154, 0.12);
+  --on-accent:     #06140d;   /* 강조색 위에 얹는 글자색 */
+  --overlay:       rgba(10, 14, 19, 0.82);   /* 3D 화면 위에 띄우는 칩 */
+  --overlay-strong: rgba(10, 14, 19, 0.88);
   --link:          #6fb5ff;
 
   --warn:          #fbbf5a;
@@ -36,11 +39,17 @@
           SFMono-Regular, Menlo, Consolas, monospace;
   --sans: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo",
           "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
-}
 
-:root:not([data-theme="dark"]) {
   color-scheme: dark;
 }
+
+/* ──────────────────────────────────────────────────────────────────────
+   테마는 세 가지 상태입니다.
+     data-theme 없음  → 운영체제 설정을 따릅니다 (기본값)
+     data-theme="light" → 항상 밝게
+     data-theme="dark"  → 항상 어둡게
+   아래 두 라이트 블록은 **같은 값을 유지**해야 합니다.
+   ────────────────────────────────────────────────────────────────────── */
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
@@ -48,28 +57,64 @@
     --bg-elev:     #ffffff;
     --bg-elev-2:   #eef2f8;
     --bg-code:     #10151c;
-    --border:      #d5deeb;
-    --border-soft: #e4ebf4;
+    --border:      #ccd7e6;
+    --border-soft: #e2e9f3;
 
     --text:        #17202e;
-    --text-dim:    #51607a;
-    --text-faint:  #8695ad;
+    --text-dim:    #4c5b73;
+    --text-faint:  #78869d;
 
-    --accent:      #12875c;
-    --accent-dim:  #0e6b49;
-    --accent-soft: rgba(18, 135, 92, 0.10);
-    --link:        #1560c4;
+    --accent:      #0f7a52;
+    --accent-dim:  #0b5e3e;
+    --accent-soft: rgba(15, 122, 82, 0.10);
+    --on-accent:   #ffffff;
+    --overlay:     rgba(255, 255, 255, 0.88);
+    --overlay-strong: rgba(255, 255, 255, 0.94);
+    --link:        #1457b8;
 
-    --warn:        #a16207;
-    --warn-soft:   rgba(161, 98, 7, 0.08);
-    --danger:      #c2342f;
-    --danger-soft: rgba(194, 52, 47, 0.08);
-    --info:        #0369a1;
-    --info-soft:   rgba(3, 105, 161, 0.08);
-    --task:        #7c3aed;
-    --task-soft:   rgba(124, 58, 237, 0.08);
+    --warn:        #8a5308;
+    --warn-soft:   rgba(138, 83, 8, 0.09);
+    --danger:      #b32b26;
+    --danger-soft: rgba(179, 43, 38, 0.09);
+    --info:        #06638f;
+    --info-soft:   rgba(6, 99, 143, 0.09);
+    --task:        #6d31d6;
+    --task-soft:   rgba(109, 49, 214, 0.09);
+
     color-scheme: light;
   }
+}
+
+:root[data-theme="light"] {
+  --bg:          #f7f9fc;
+  --bg-elev:     #ffffff;
+  --bg-elev-2:   #eef2f8;
+  --bg-code:     #10151c;
+  --border:      #ccd7e6;
+  --border-soft: #e2e9f3;
+
+  --text:        #17202e;
+  --text-dim:    #4c5b73;
+  --text-faint:  #78869d;
+
+  --accent:      #0f7a52;
+  --accent-dim:  #0b5e3e;
+  --accent-soft: rgba(15, 122, 82, 0.10);
+  --on-accent:   #ffffff;
+  --overlay:     rgba(255, 255, 255, 0.88);
+  --overlay-strong: rgba(255, 255, 255, 0.94);
+  --link:        #1457b8;
+
+  --warn:        #8a5308;
+  --warn-soft:   rgba(138, 83, 8, 0.09);
+  --danger:      #b32b26;
+  --danger-soft: rgba(179, 43, 38, 0.09);
+  --info:        #06638f;
+  --info-soft:   rgba(6, 99, 143, 0.09);
+  --task:        #6d31d6;
+  --task-soft:   rgba(109, 49, 214, 0.09);
+
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -123,7 +168,7 @@ a:hover { text-decoration: underline; }
   flex: none;
   border-radius: 9px;
   background: linear-gradient(135deg, var(--accent), var(--accent-dim));
-  color: #06140d;
+  color: var(--on-accent);
   font-weight: 800;
   font-size: 15px;
   letter-spacing: -0.3px;
@@ -158,6 +203,21 @@ a:hover { text-decoration: underline; }
   color: var(--accent); border-color: var(--accent-dim);
   text-decoration: none;
 }
+
+.theme-btn {
+  flex: none;
+  padding: 7px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.theme-btn:hover { color: var(--accent); border-color: var(--accent-dim); }
 
 .nav-part {
   display: flex; align-items: baseline; gap: 8px;
@@ -290,9 +350,9 @@ a:hover { text-decoration: underline; }
 }
 .btn:hover { border-color: var(--accent-dim); color: var(--accent); text-decoration: none; }
 .btn.primary {
-  background: var(--accent); border-color: var(--accent); color: #06140d;
+  background: var(--accent); border-color: var(--accent); color: var(--on-accent);
 }
-.btn.primary:hover { background: var(--accent-dim); border-color: var(--accent-dim); color: #06140d; }
+.btn.primary:hover { background: var(--accent-dim); border-color: var(--accent-dim); color: var(--on-accent); }
 
 .progress-wrap { max-width: 420px; }
 .progress-bar {
@@ -462,7 +522,7 @@ a:hover { text-decoration: underline; }
   content: "✓";
   position: absolute; inset: 0;
   display: grid; place-items: center;
-  color: #06140d; font-size: 12px; font-weight: 800;
+  color: var(--on-accent); font-size: 12px; font-weight: 800;
 }
 .lesson-card.done .lc-no { color: var(--accent); }
 

@@ -58,7 +58,9 @@
   border-right: 1px solid var(--border-soft);
 }
 .unit-toggle button:last-child { border-right: none; }
-.unit-toggle button.active { background: var(--accent); color: #06140d; }
+.unit-toggle button.active { background: var(--accent); color: var(--on-accent); }
+
+.sim-top .theme-btn { padding: 6px 11px; background: var(--bg); }
 
 .icon-btn {
   width: 30px; height: 30px;
@@ -103,7 +105,7 @@
 .stage-br { bottom: 14px; right: 14px; display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
 
 .pose-readout {
-  background: rgba(10, 14, 19, 0.82);
+  background: var(--overlay);
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -129,7 +131,7 @@
 
 .view-chips {
   display: flex; gap: 4px;
-  background: rgba(10, 14, 19, 0.82);
+  background: var(--overlay);
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -150,7 +152,7 @@
   display: inline-flex; align-items: center; gap: 7px;
   font-size: 12px;
   color: var(--text-dim);
-  background: rgba(10, 14, 19, 0.82);
+  background: var(--overlay);
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -169,7 +171,7 @@
 }
 
 .cam-box {
-  background: rgba(10, 14, 19, 0.88);
+  background: var(--overlay-strong);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 6px;
@@ -331,8 +333,8 @@
 }
 .s-btn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent-dim); }
 .s-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.s-btn.primary { background: var(--accent); border-color: var(--accent); color: #06140d; }
-.s-btn.primary:hover:not(:disabled) { background: var(--accent-dim); border-color: var(--accent-dim); color: #06140d; }
+.s-btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.s-btn.primary:hover:not(:disabled) { background: var(--accent-dim); border-color: var(--accent-dim); color: var(--on-accent); }
 .s-btn.rec { background: var(--danger); border-color: var(--danger); color: #fff; }
 
 /* --- 키-값 --- */

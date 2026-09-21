@@ -677,7 +677,8 @@
     container.appendChild(renderer.domElement);
 
     // ── 조명 ──
-    scene.add(new THREE.HemisphereLight(0xdceaff, 0x202a36, 1.5));
+    var hemi = new THREE.HemisphereLight(0xdceaff, 0x202a36, 1.5);
+    scene.add(hemi);
     var key = new THREE.DirectionalLight(0xffffff, 2.0);
     key.position.set(0.4, -0.6, 0.9);
     scene.add(key);
@@ -685,19 +686,41 @@
     rim.position.set(-0.5, 0.4, 0.3);
     scene.add(rim);
 
-    // ── 바닥/격자 ──
-    var grid = new THREE.GridHelper(1.0, 40, 0x3b5068, 0x222c3a);
-    grid.rotation.x = Math.PI / 2;
-    scene.add(grid);
+    // ── 바닥/격자 (테마에 따라 색이 바뀝니다) ──
+    var grid = null;
 
     var table = new THREE.Mesh(
       new THREE.PlaneGeometry(1.0, 1.0),
       new THREE.MeshStandardMaterial({
-        color: 0x161d27, roughness: 0.95, metalness: 0.0,
-        transparent: true, opacity: 0.85
+        roughness: 0.95, metalness: 0.0, transparent: true, opacity: 0.85
       }));
     table.position.z = -0.001;
     scene.add(table);
+
+    // 로봇 자체(노란 프린팅 부품 + 짙은 서보)는 두 테마에서 모두 잘 보이므로
+    // 바닥·격자·조명만 테마를 따라가게 합니다.
+    function applySceneTheme() {
+      var isLight = (window.SOTheme ? window.SOTheme.resolved() : 'dark') === 'light';
+
+      if (grid) {
+        scene.remove(grid);
+        grid.geometry.dispose();
+        grid.material.dispose();
+      }
+      grid = new THREE.GridHelper(1.0, 40,
+        isLight ? 0x8fa6c0 : 0x3b5068,
+        isLight ? 0xc9d6e6 : 0x222c3a);
+      grid.rotation.x = Math.PI / 2;
+      grid.visible = state.grid;
+      scene.add(grid);
+
+      table.material.color.setHex(isLight ? 0xe9eef6 : 0x161d27);
+      hemi.color.setHex(isLight ? 0xffffff : 0xdceaff);
+      hemi.groundColor.setHex(isLight ? 0xbfcddd : 0x202a36);
+    }
+
+    applySceneTheme();
+    document.addEventListener('themechange', applySceneTheme);
 
     // ── 로봇 ──
     var matPrint = new THREE.MeshStandardMaterial({ color: 0xf0c020, roughness: 0.6, metalness: 0.05 });

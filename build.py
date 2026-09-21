@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SO-ARM101 한국어 강좌 정적 사이트 빌더
+SO-ARM101 강좌 정적 사이트 빌더
   content/*.md + content/curriculum.json  ->  index.html, lessons/*.html
 
 표준 라이브러리만 사용합니다. 사용법:
@@ -408,7 +408,7 @@ def lesson_page(curriculum: dict, slug: str, meta: dict, body_md: str) -> str:
            prev=nav_prev, next=nav_next, toc=toc)
 
     return PAGE.format(
-        title="%s. %s · SO-ARM101 한국어 강좌" % (info["no"], info["title"]),
+        title="%s. %s · SO-ARM101" % (info["no"], info["title"]),
         desc=html.escape(info.get("summary", "")),
         rel="../", bodyclass="lesson-page",
         sidebar=sidebar_html(curriculum, slug, "../"),
@@ -507,7 +507,7 @@ def index_page(curriculum: dict) -> str:
     return PAGE.format(
         title="SO-ARM101",
         desc="SO-ARM101 6자유도 오픈소스 로봇팔을 조립·캘리브레이션부터 "
-             "LeRobot 모방학습, ROS 2/MoveIt 2 연동까지 배우는 한국어 강좌.",
+             "LeRobot 모방학습, ROS 2/MoveIt 2 연동까지 다루는 실습 강좌.",
         rel="", bodyclass="home",
         sidebar=sidebar_html(curriculum, None, ""),
         content=hero,

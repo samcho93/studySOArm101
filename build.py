@@ -348,7 +348,7 @@ PAGE = """<!DOCTYPE html>
 <link rel="stylesheet" href="{rel}assets/css/main.css">
 <link rel="stylesheet" href="{rel}assets/css/so-theme.css">
 <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
 <script src="{rel}assets/js/theme.js"></script>
 </head>
 <body class="{bodyclass}">

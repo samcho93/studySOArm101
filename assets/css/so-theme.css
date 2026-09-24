@@ -38,7 +38,8 @@
   --radius: 10px;
   --radius-sm: 8px;
   --mono: 'JetBrains Mono', 'D2Coding', Consolas, 'Courier New', monospace;
-  --sans: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  /* Pretendard 가 막히는 환경(Artifact CSP 등)에서는 Noto Sans KR 로 떨어집니다 */
+  --sans: 'Pretendard Variable', Pretendard, 'Noto Sans KR', -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
   color-scheme: light;
 }
 

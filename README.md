@@ -56,9 +56,14 @@ VS Code Live Server 같은 정적 서버로 폴더를 열어도 됩니다.
 저장됩니다. 아무것도 누르지 않으면 **운영체제 설정을 따릅니다.**
 
 색은 전부 CSS 변수로 정의되어 있어 도해(SVG)와 3D 장면의 바닥·격자·조명까지
-함께 따라옵니다. 팔레트를 바꾸려면 `assets/css/main.css` 맨 위의 세 블록
-(`:root` = 어둡게, `@media (prefers-color-scheme: light)`, `:root[data-theme="light"]`)
+함께 따라옵니다. 팔레트를 바꾸려면 `assets/css/so-theme.css` 맨 위의 세 블록
+(`:root:root:root` = 밝게, `[data-theme="dark"]`, `@media (prefers-color-scheme: dark)`)
 을 고치면 됩니다. 뒤의 두 블록은 **같은 값을 유지**해야 합니다.
+
+`so-theme.css` 는 `main.css`·`sim.css` 뒤에 실려 토큰과 컴포넌트 모양만 덮어쓰는
+한 장짜리 오버레이입니다 (레이아웃은 그대로). [studyDeltaRobot](https://github.com/samcho93/studyDeltaRobot)
+과 같은 분위기를 내려고 두 저장소가 같은 방식을 씁니다 — 그쪽은 `ml-theme.css`
+입니다. 이 파일을 빼면 `main.css` 의 원래 팔레트(어둡게 기본·초록 강조)로 돌아갑니다.
 
 ---
 

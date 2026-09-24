@@ -185,3 +185,28 @@
     if (top > 0) sidebar.scrollTop = top;
   }
 })();
+
+/* ---- 가벼운 파이썬 색칠 (studyDeltaRobot 과 같은 모양) ---- */
+(function () {
+  'use strict';
+  var KW = /^(False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)$/;
+  var BI = /^(print|range|len|round|min|max|sum|abs|sorted|enumerate|zip|list|dict|set|tuple|int|float|str|next|isinstance|open|super|any|all)$/;
+  var TOKEN = /("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\.|[^"\\n])*"|'(?:\.|[^'\\n])*'|#[^\n]*|\b\d+(?:\.\d+)?(?:e[-+]?\d+)?\b|\b[A-Za-z_]\w*\b)/g;
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function paint(code) {
+    var src = code.textContent, out = '', last = 0, m;
+    TOKEN.lastIndex = 0;
+    while ((m = TOKEN.exec(src))) {
+      var t = m[0], cls = null;
+      if (t[0] === '#') cls = 'tk-c';
+      else if (t[0] === '"' || t[0] === "'") cls = 'tk-s';
+      else if (/^\d/.test(t)) cls = 'tk-n';
+      else if (KW.test(t)) cls = 'tk-k';
+      else if (BI.test(t) || src[TOKEN.lastIndex] === '(') cls = 'tk-f';
+      out += esc(src.slice(last, m.index)) + (cls ? '<span class="' + cls + '">' + esc(t) + '</span>' : esc(t));
+      last = TOKEN.lastIndex;
+    }
+    code.innerHTML = out + esc(src.slice(last));
+  }
+  document.querySelectorAll('.code-block code.lang-python').forEach(paint);
+})();
